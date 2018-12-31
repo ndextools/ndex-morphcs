@@ -1,0 +1,38 @@
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# Maven
+!target/morphcx.jar
+target/maven-archiver/
+target/maven-status/
+target/surefire-reports/
+target/sample-networks/EMPTY_LIST.json
+target/sample-networks/LBC_FILTERED_ERK_AKT.csv
+src/test/resources/LBC_FILTERED_ERK_AKT.csv
+
+# IntelliJ project files
+*.iml
+*.iws
+*.ipr
+.idea/
+.attach_pid*
+
+# OS
+.DS_Storear
+
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
