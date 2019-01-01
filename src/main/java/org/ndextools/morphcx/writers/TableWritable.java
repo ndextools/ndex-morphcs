@@ -17,6 +17,6 @@ public interface TableWritable extends AutoCloseable {
      *                as a single unorderedListOfCells by the writer.
      * @throws IOException
      */
-    void outputRow(List<String> columns) throws IOException;
+    void outputRow(List<String> columns) throws Exception;
 
 }
