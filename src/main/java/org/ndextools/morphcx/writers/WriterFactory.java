@@ -65,19 +65,22 @@ public final class WriterFactory {
                         .withRecordSeparator(cfg.getNewline());
             }
 
+            // values below fetched and passed to writer for use in class @override toString()
+            char csvDelimiter = csvFormat.getDelimiter();
+            String csvNewline = csvFormat.getRecordSeparator();
 
             // Determine whether the output is to a file or stdout.
             if (streamAsStdout)
             {
                 printStream = new PrintStream(System.out, true);
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer);
+                return new TableToCSV(printer, csvDelimiter, csvNewline);
             }
             else if (streamAsFile)
             {
                 printStream = new PrintStream(cfg.getOutputFilespec());
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer);
+                return new TableToCSV(printer, csvDelimiter, csvNewline);
             }
             else if (streamAsStdout)
             {

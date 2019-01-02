@@ -1,12 +1,14 @@
 package org.ndextools.morphcx.writers;
 
+import org.ndextools.morphcx.shared.Configuration;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
 /**
  * Concrete class that formats and outputs a single row of a table using the PrintStream class.  It acts as a
- * replacement to the Apache Commons CSV library functions.
+ * substitute to using the Apache Commons CSV library functions.  Typically used when debugging this application.
  */
 public final class TableToStream implements TableWritable, AutoCloseable {
     private final PrintStream out;
@@ -15,25 +17,26 @@ public final class TableToStream implements TableWritable, AutoCloseable {
 
     /**
      * Class constructor
+     *
      * @param delimiter character used to separate column data (typically comma or tab character)
      * @param newline string of characters used when overriding the JVM line separator system property.
      */
     public TableToStream(final PrintStream out, final char delimiter, final String newline) {
         this.out = out;
         this.delimiter = delimiter;
-        this.newline = System.setProperty("line.separator", newline);
+        this.newline = newline;
     }
 
     /**
-     * Refer to the corresponding method in the TableWriteable interface for more details.
+     * Refer to the corresponding method in the TableWritable interface for more details.
      *
-     * @param allColumnsInRow an ordered list of column data that will be output as a single row by the writer.
-     * @throws IOException
+     * @param rowOfColumns is a list of ordered columns/cells that are output as a single and complete row.
+     * @throws Exception likely caused by an IOException when when writing to the underlying output stream.
      */
     @Override
-    public void outputRow(final List<String> allColumnsInRow) throws Exception {
-        String[] columns = new String[allColumnsInRow.size()];
-        allColumnsInRow.toArray(columns);
+    public void outputRow(final List<String> rowOfColumns) throws Exception {
+        String[] columns = new String[rowOfColumns.size()];
+        rowOfColumns.toArray(columns);
 
         StringBuilder row = new StringBuilder();
         for (String column : columns) {
@@ -48,14 +51,55 @@ public final class TableToStream implements TableWritable, AutoCloseable {
             String msg = String.format("%s: Error when writing to underlying output stream", this.getClass().getSimpleName());
             throw new IOException(msg);
         }
-
     }
 
     @Override
     public void close() {
         if (out != null) {
+            out.flush();
+        }
+        if (out != null) {
             out.close();
         }
+    }
+
+    @Override
+    public String toString() {
+
+        String stringDelimiter;
+        switch (this.delimiter) {
+            case ',':
+                stringDelimiter = ",";
+                break;
+            case '\t':
+                stringDelimiter = "\t";
+                break;
+            default:
+                int intDelimiter = this.delimiter;
+                stringDelimiter = String.valueOf(intDelimiter);
+                break;
+        }
+
+        String stringNewline;
+        switch (this.newline) {
+            case Configuration.OptionConstants.ESCAPE_R_ESCAPE_N:
+                stringNewline = Configuration.OptionConstants.ESCAPE_R_ESCAPE_N;
+                break;
+            case Configuration.OptionConstants.ESCAPE_N:
+                stringNewline = Configuration.OptionConstants.ESCAPE_N;
+                break;
+            case Configuration.OptionConstants.ESCAPE_R:
+                stringNewline = Configuration.OptionConstants.ESCAPE_R;
+                break;
+            default:
+                stringNewline = this.newline;
+                break;
+        }
+
+        return String.format("thisWriter=%s, delimiter='%s', newline='%s'",
+                this.getClass().getSimpleName(),
+                stringDelimiter,
+                stringNewline);
     }
 
 }

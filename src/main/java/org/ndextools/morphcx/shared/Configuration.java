@@ -466,7 +466,7 @@ public final class Configuration {
         this.newline = newline;
     }
 
-    private static class OptionConstants {
+    public static class OptionConstants {
         private static final String OPT_CONVERT =  "c";
         private static final String LONG_OPT_CONVERT =  "convert";
 
@@ -502,14 +502,14 @@ public final class Configuration {
         private static final String RFC4180 = "RFC4180";
         private static final String EXCEL = "EXCEL";
 
-        private static final String WINDOWS = "WINDOWS";
-        private static final String LINUX = "LINUX";
-        private static final String OSX = "OSX";
-        private static final String OLDMAC = "OLDMAC";
-        private static final String SYSTEM = "SYSTEM";
-        private static final String ESCAPE_N = "\n";
-        private static final String ESCAPE_R = "\r";
-        private static final String ESCAPE_R_ESCAPE_N = "\r\n";
+        public static final String WINDOWS = "WINDOWS";
+        public static final String LINUX = "LINUX";
+        public static final String OSX = "OSX";
+        public static final String OLDMAC = "OLDMAC";
+        public static final String SYSTEM = "SYSTEM";
+        public static final String ESCAPE_N = "\n";
+        public static final String ESCAPE_R = "\r";
+        public static final String ESCAPE_R_ESCAPE_N = "\r\n";
     }
 
 }
