@@ -495,8 +495,8 @@ public final class Configuration {
         private static final String TSV = "TSV";
         private static final String TSV_EXT = ".tsv";
 
-        private static final char TAB = '\t';
-        private static final char COMMA = ',';
+        public static final char TAB = '\t';
+        public static final char COMMA = ',';
 
         private static final String DEFAULT = "DEFAULT";
         private static final String RFC4180 = "RFC4180";

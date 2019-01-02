@@ -68,36 +68,8 @@ public final class TableToStream implements TableWritable, AutoCloseable {
 
     @Override
     public String toString() {
-
-        String stringDelimiter;
-        switch (this.delimiter) {
-            case ',':
-                stringDelimiter = ",";
-                break;
-            case '\t':
-                stringDelimiter = "\t";
-                break;
-            default:
-                int intDelimiter = this.delimiter;
-                stringDelimiter = String.valueOf(intDelimiter);
-                break;
-        }
-
-        String stringNewline;
-        switch (this.newline) {
-            case Configuration.OptionConstants.ESCAPE_R_ESCAPE_N:
-                stringNewline = Configuration.OptionConstants.ESCAPE_R_ESCAPE_N;
-                break;
-            case Configuration.OptionConstants.ESCAPE_N:
-                stringNewline = Configuration.OptionConstants.ESCAPE_N;
-                break;
-            case Configuration.OptionConstants.ESCAPE_R:
-                stringNewline = Configuration.OptionConstants.ESCAPE_R;
-                break;
-            default:
-                stringNewline = this.newline;
-                break;
-        }
+        String stringDelimiter = Utilities.delimiterToStringConvert(this.delimiter);
+        String stringNewline = Utilities.newlineToStringConvert(this.newline);
 
         return String.format("thisWriter=%s, delimiter='%s', newline='%s'",
                 this.getClass().getSimpleName(),

@@ -6,15 +6,14 @@ import org.apache.commons.csv.CSVPrinter;
 import org.ndextools.morphcx.shared.Configuration;
 import org.ndextools.morphcx.shared.Utilities;
 
-
 /**
  * Concrete class that formats and writes character separated values to an output stream by using
  * the Apache Commons CSV dependency.
  */
 public class TableToCSV implements TableWritable, AutoCloseable {
-    private static CSVPrinter printer;
-    private static char delimiter;
-    private static String newline;
+    private final CSVPrinter printer;
+    private final char delimiter;
+    private final String newline;
 
     /**
      * Class constructor
@@ -53,7 +52,13 @@ public class TableToCSV implements TableWritable, AutoCloseable {
 
     @Override
     public String toString() {
-        return String.format("thisWriter=%s", this.getClass().getSimpleName());
+        String stringDelimiter = Utilities.delimiterToStringConvert(this.delimiter);
+        String stringNewline = Utilities.newlineToStringConvert(newline);
+
+        return String.format("thisWriter=%s, delimiter='%s, newline='%s'",
+                    this.getClass().getSimpleName(),
+                    stringDelimiter,
+                    stringNewline);
     }
 
 }
