@@ -1,6 +1,5 @@
 package org.ndextools.morphcx.writers;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -9,13 +8,10 @@ import java.util.List;
 public interface TableWritable extends AutoCloseable {
 
     /**
-     * The outputRow method outputs the unorderedListOfCells of columns/cells. The data contained in the
-     * columns/cells are expected to be aligned with their corresponding column headers
-     * which are output in first unorderedListOfCells.
+     * The outputRow method outputs the row of a table.
      *
-     * @param columns is a list of ordered columns/cell data that will be output
-     *                as a single unorderedListOfCells by the writer.
-     * @throws IOException
+     * @param columns is a list of ordered columns/cells that are output as a single and complete row.
+     * @throws Exception base class exception when there is an IO or other processing error.
      */
     void outputRow(List<String> columns) throws Exception;
 

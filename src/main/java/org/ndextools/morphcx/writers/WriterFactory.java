@@ -82,8 +82,8 @@ public final class WriterFactory {
             else if (streamAsStdout)
             {
                 printStream = new PrintStream(System.out, true);
-
-                return new TableToConsole(printStream, cfg.getColumnSeparator());
+                // TODO: 1/1/19 line separator property is temporary.
+                return new TableToStream(printStream, cfg.getColumnSeparator(), System.getProperty("line.separator"));
             }
             else {
                 String msg = "WriterFactory: Unable to create writer";

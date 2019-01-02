@@ -42,6 +42,7 @@ public class TableToCSV implements TableWritable, AutoCloseable {
     @Override
     public void close() throws IOException {
         if (printer != null) {
+            System.out.println("**************Auto CLOSING************");
             printer.flush();
             printer.close();
         }
