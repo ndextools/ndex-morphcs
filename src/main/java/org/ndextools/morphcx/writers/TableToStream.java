@@ -1,6 +1,7 @@
 package org.ndextools.morphcx.writers;
 
 import org.ndextools.morphcx.shared.Configuration;
+import org.ndextools.morphcx.shared.Utilities;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -22,6 +23,8 @@ public final class TableToStream implements TableWritable, AutoCloseable {
      * @param newline string of characters used when overriding the JVM line separator system property.
      */
     public TableToStream(final PrintStream out, final char delimiter, final String newline) {
+        Utilities.nullReferenceCheck(out, Configuration.class.getSimpleName());
+        Utilities.nullReferenceCheck(newline, Configuration.class.getSimpleName());
         this.out = out;
         this.delimiter = delimiter;
         this.newline = newline;

@@ -3,6 +3,8 @@ package org.ndextools.morphcx.writers;
 import java.io.IOException;
 import java.util.List;
 import org.apache.commons.csv.CSVPrinter;
+import org.ndextools.morphcx.shared.Configuration;
+import org.ndextools.morphcx.shared.Utilities;
 
 
 /**
@@ -20,6 +22,8 @@ public class TableToCSV implements TableWritable, AutoCloseable {
      * @param printer reference to output stream used by CSVPrinter.
      */
     public TableToCSV(final CSVPrinter printer, char delimiter, String newline) throws IllegalArgumentException {
+        Utilities.nullReferenceCheck(printer, Configuration .class.getSimpleName());
+        Utilities.nullReferenceCheck(newline, Configuration.class.getSimpleName());
         this.printer = printer;
         this.delimiter = delimiter;
         this.newline = newline;
