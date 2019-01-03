@@ -5,14 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.*;
-import org.ndextools.morphcx.MorphCX;
 
 /**
  * The Configuration class validates command-line parameters used when starting this application, and
- * the runtime configuration used by the application is finalized.
+ * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    private String[] args;
+    private static String[] args;
     private static Options helpOptions;
 
     private static boolean isHelp = false;
@@ -105,6 +104,13 @@ public final class Configuration {
                         .build()
         );
         getHelpOptions().addOption(
+                Option.builder(OptionConstants.OPT_FORMAT)
+                        .longOpt(OptionConstants.LONG_OPT_FORMAT)
+                        .hasArg()
+                        .desc("Output format as defined by the Apache Commons CSV library. Other options: RFC4180 and EXCEL. < DEFAULT | TDF | RFC4180 | EXCEL >  Default: 'DEFAULT'.")
+                        .build()
+        );
+        getHelpOptions().addOption(
                  Option.builder(OptionConstants.OPT_HELP)
                         .longOpt(OptionConstants.LONG_OPT_HELP)
                         .desc("Displays this help information.")
@@ -131,22 +137,10 @@ public final class Configuration {
                         .desc("Full output path and file specification. Default: output sent to STDOUT rather than a file.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_FORMAT)
-                        .longOpt(OptionConstants.LONG_OPT_FORMAT)
-                        .hasArg()
-                        .desc("Output format as defined by the Apache Commons CSV library. Other options: RFC4180 and EXCEL. < DEFAULT | TDF | RFC4180 | EXCEL >  Default: 'DEFAULT'.")
-                        .build()
-        );
+
         getHelpOptions().addOption(
                 Option.builder(OptionConstants.OPT_SERVER)
                         .desc("Program to run as server process. IO is forced to STDIN and STDOUT.")
-                        .build()
-        );
-
-        getHelpOptions().addOption(
-                 Option.builder(OptionConstants.OPT_DEBUG)
-                        .desc("Used for development and purposes where log messages are output to STDERR.")
                         .build()
         );
 
@@ -173,13 +167,9 @@ public final class Configuration {
             setIsHelp(true);
         }
 
-        if (parsed.hasOption(OptionConstants.OPT_DEBUG)) {
-            setIsDebug(true);
-        }
-
         if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
-            String export = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
-            switch (export) {
+            String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
+            switch (convert) {
                 case OptionConstants.CSV:
                     setProducesCSV(true);
                     setColumnSeparator(OptionConstants.COMMA);
@@ -489,8 +479,6 @@ public final class Configuration {
         private static final String LONG_OPT_OUTPUT = "output";
 
         private static final String OPT_SERVER = "S";
-
-        private static final String OPT_DEBUG = "X";
 
         private static final String CSV = "CSV";
         private static final String CSV_EXT = ".csv";

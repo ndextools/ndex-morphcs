@@ -1,45 +1,20 @@
 package org.ndextools.morphcx.shared;
 
-import java.io.IOException;
-import org.ndexbio.model.cx.NiceCXNetwork;
-import org.ndextools.morphcx.shared.CXReader;
-import org.ndextools.morphcx.shared.Configuration;
-import org.ndextools.morphcx.tables.Webapp;
-import org.ndextools.morphcx.writers.TableWritable;
-import org.ndextools.morphcx.writers.WriterFactory;
+
+import org.ndextools.morphcx.tables.CSVRoot;
 
 /**
- * The Root class acts as the controller once the configuration has been decided.
+ * The Dispatcher class is a factory that instantiates the class that will do the morphing.
  */
 public class Dispatcher {
+    private Configuration cfg;
 
-    /**
-     * Converts the JSON-format NDEx CX Network into a NiceNetworkCX object, then uses a factory
-     * class to instantiate the appropriate writer.  Finally the NiceNetworkCX object is morphed to
-     * the desired output format.
-     *
-     * @param cfg
-     * @throws Exception
-     */
-    public void execute(final Configuration cfg) throws Exception {
-
-        NiceCXNetwork niceCX = LoadInputCxNetwork(cfg);
-        try ( TableWritable writer = setupOutputDestination(cfg) ) {
-            Webapp morph = new Webapp( cfg, niceCX, writer);
-            morph.morphThisNiceCX();
-        } catch (Exception e) {
-            throw new Exception(e);
-        }
+    public Dispatcher(Configuration cfg) {
+        this.cfg = cfg;
     }
 
-    final static NiceCXNetwork LoadInputCxNetwork(Configuration cfg) throws IOException {
-        CXReader cxReader = new CXReader(cfg);
-        return cxReader.produceNiceCX();
+    public void dispatch() throws Exception {
+        CSVRoot root = new CSVRoot();
+        root.execute(cfg);
     }
-
-    final static TableWritable setupOutputDestination(Configuration cfg) {
-        WriterFactory wf = new WriterFactory(cfg);
-        return wf.getWriter();
-    }
-
 }

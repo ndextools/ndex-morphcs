@@ -2,6 +2,7 @@ package org.ndextools.morphcx;
 
 import org.ndextools.morphcx.shared.Dispatcher;
 import org.ndextools.morphcx.shared.Configuration;
+import org.ndextools.morphcx.tables.CSVRoot;
 
 /**
  * The MorphCX class's main method is the application's entry point.  Its simple function is to call for
@@ -40,8 +41,8 @@ public class MorphCX {
         if (cfg.isHelp()) {
             cfg.printHelpText();
         } else {
-            Dispatcher root = new Dispatcher();
-            root.execute(cfg);
+            Dispatcher dpatch = new Dispatcher(cfg);
+            dpatch.dispatch();
         }
         return;
     }
