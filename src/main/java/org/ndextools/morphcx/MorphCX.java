@@ -1,6 +1,6 @@
 package org.ndextools.morphcx;
 
-import org.ndextools.morphcx.tables.CSVRoot;
+import org.ndextools.morphcx.shared.Dispatcher;
 import org.ndextools.morphcx.shared.Configuration;
 
 /**
@@ -40,7 +40,7 @@ public class MorphCX {
         if (cfg.isHelp()) {
             cfg.printHelpText();
         } else {
-            CSVRoot root = new CSVRoot();
+            Dispatcher root = new Dispatcher();
             root.execute(cfg);
         }
         return;

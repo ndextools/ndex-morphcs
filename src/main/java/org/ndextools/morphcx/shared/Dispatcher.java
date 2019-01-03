@@ -1,16 +1,17 @@
-package org.ndextools.morphcx.tables;
+package org.ndextools.morphcx.shared;
 
 import java.io.IOException;
 import org.ndexbio.model.cx.NiceCXNetwork;
 import org.ndextools.morphcx.shared.CXReader;
 import org.ndextools.morphcx.shared.Configuration;
+import org.ndextools.morphcx.tables.Webapp;
 import org.ndextools.morphcx.writers.TableWritable;
 import org.ndextools.morphcx.writers.WriterFactory;
 
 /**
  * The Root class acts as the controller once the configuration has been decided.
  */
-public class CSVRoot {
+public class Dispatcher {
 
     /**
      * Converts the JSON-format NDEx CX Network into a NiceNetworkCX object, then uses a factory

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class CSVRootTest {
+public class DispatcherTest {
     private final String RAW_CX_NETWORK_LBC = "src/test/resources/LBC_FILTERED_ERK_AKT.json";
 
     @Test
