@@ -14,10 +14,8 @@ public final class Configuration {
     private static String[] args;
     private static Options helpOptions;
 
-    private static boolean isHelp = false;
-    private static boolean isDebug = false;
-    private static boolean producesCSV = false;
-    private static boolean producesTSV = false;
+    private static boolean isHelp;
+    private static Operation operation;
 
     private boolean inputIsFile = false;
     private boolean outputFilespecGiven = false;
@@ -37,6 +35,10 @@ public final class Configuration {
     private String outputFilespec;
     private char columnSeparator;
     private String newline;
+
+    enum Operation {
+        TSV, CSV
+    }
 
     enum ColumnSeparator {
         COMMA(','), TAB('\t');
@@ -170,18 +172,19 @@ public final class Configuration {
         if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
             String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
             switch (convert) {
-                case OptionConstants.CSV:
-                    setProducesCSV(true);
+                case OptionConstants.CONVERT_CSV:
+                    setOperation(Operation.CSV);
                     setColumnSeparator(OptionConstants.COMMA);
                     break;
-                case OptionConstants.TSV:
+                case OptionConstants.CONVERT_TSV:
                 default:
-                    setProducesTSV(true);
+                    setOperation(Operation.TSV);
                     setColumnSeparator(OptionConstants.TAB);
                     break;
             }
         } else {
-            setProducesTSV(true);
+            setOperation(Operation.TSV);
+            setColumnSeparator(OptionConstants.TAB);
         }
 
         if (parsed.hasOption(OptionConstants.OPT_FORMAT)) {
@@ -248,7 +251,7 @@ public final class Configuration {
         }
 
         if (!outputFilespecGiven) {
-            if (producesTSV) {
+            if (operation == Operation.TSV) {
                 setOutputFilespec( buildOutputFilespec(getInputFilespec(), OptionConstants.TSV_EXT) );
             } else {
                 setOutputFilespec( buildOutputFilespec(getInputFilespec(), OptionConstants.CSV_EXT) );
@@ -300,29 +303,30 @@ public final class Configuration {
 
     public String[] getArgs() { return this.args; }
 
-    public static Options getHelpOptions() {
+    public static Options getHelpOptions() { // TODO: 1/3/19 KEEP THIS
         return helpOptions;
     }
 
-    void setHelpOptions(Options helpOptions) {
+    void setHelpOptions(Options helpOptions) { // TODO: 1/3/19 KEEP THIS
         this.helpOptions = helpOptions;
     }
 
-    public boolean isHelp() {
+    public boolean isHelp() { // TODO: 1/3/19 KEEP THIS
         return this.isHelp;
     }
 
-    void setIsHelp(boolean value) {
+    void setIsHelp(boolean value) { // TODO: 1/3/19 KEEP THIS
         this.isHelp = value;
     }
 
-    public boolean isDebug() {
-        return this.isDebug;
+    public static Operation getOperation() {
+        return operation;
     }
 
-    void setIsDebug(boolean value) {
-        this.isDebug = value;
+    public static void setOperation(Operation operation) {
+        Configuration.operation = operation;
     }
+
     public boolean getInputIsFile() {
         return this.inputIsFile;
     }
@@ -337,22 +341,6 @@ public final class Configuration {
 
     void setOutputFilespecGiven(boolean value) {
         this.outputFilespecGiven = value;
-    }
-
-    public boolean getProducesCSV() {
-        return this.producesCSV;
-    }
-
-    void setProducesCSV(boolean producesCSV) {
-        this.producesCSV = producesCSV;
-    }
-
-    public boolean getProducesTSV() {
-        return this.producesTSV;
-    }
-
-    void setProducesTSV(boolean producesTSV) {
-        this.producesTSV = producesTSV;
     }
 
     public boolean isFormatDefault() {
@@ -480,10 +468,10 @@ public final class Configuration {
 
         private static final String OPT_SERVER = "S";
 
-        private static final String CSV = "CSV";
+        private static final String CONVERT_CSV = "CSV";
         private static final String CSV_EXT = ".csv";
 
-        private static final String TSV = "TSV";
+        private static final String CONVERT_TSV = "TSV";
         private static final String TSV_EXT = ".tsv";
 
         public static final char TAB = '\t';

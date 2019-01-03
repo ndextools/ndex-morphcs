@@ -18,27 +18,6 @@ public class ConfigurationTest {
     }
 
     @Ignore
-    public void _Default_Debug_Mode_Should_Be_False() throws Exception {
-        String[] args = {"tocsv"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isDebug());
-    }
-
-    @Ignore
-    public void _Should_Enable_Debug_Mode_1() throws Exception {
-        String[] args = {"tocsv", "-X"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.isDebug());
-    }
-
-    @Ignore
-    public void _Should_Enable_Debug_Mode_2() throws Exception {
-        String[] args = {"tocsv", "--debug"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.isDebug());
-    }
-
-    @Ignore
     public void _Default_Input_Stream_Should_Not_Be_A_File() throws Exception {
         String[] args = {"tocsv"};
         Configuration cfg = performConfiguration(args);
