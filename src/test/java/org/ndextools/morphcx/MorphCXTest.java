@@ -2,6 +2,7 @@ package org.ndextools.morphcx;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
+import org.ndextools.morphcx.shared.Utilities;
 
 /**
  * Unit tests for MorphCX class
@@ -14,7 +15,7 @@ public class MorphCXTest {
     @Test
     public void _ShouldThrowNullPointerException() {
         thrown.expect(NullPointerException.class);
-        MorphCX.nullReferenceCheck(null, "MorphCXTest");
+        Utilities.nullReferenceCheck(null, "MorphCXTest");
     }
 
 }

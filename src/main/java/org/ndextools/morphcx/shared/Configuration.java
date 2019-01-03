@@ -13,7 +13,7 @@ import org.ndextools.morphcx.MorphCX;
  */
 public final class Configuration {
     private String[] args;
-    private Options helpOptions;
+    private static Options helpOptions;
 
     private static boolean isHelp = false;
     private static boolean isDebug = false;
@@ -76,11 +76,14 @@ public final class Configuration {
 
     public final void configure() throws Exception {
 
-        MorphCX.nullReferenceCheck(this.args, Configuration.class.getSimpleName());
+        Utilities.nullReferenceCheck(this.args, Configuration.class.getSimpleName());
 
         CommandLine parsedParams = defineParams();
         resolve(parsedParams);
-        validate();
+
+        if (!isHelp()) {
+            validate();
+        }
     }
 
     /**
@@ -249,14 +252,6 @@ public final class Configuration {
     }
 
     private final void validate()throws IOException, SecurityException {
-        if (isHelp()) {
-            String prefix = "java -jar morphcx.jar";
-            String header = "where parameter options are:";
-            String footer = "";
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp(132, prefix, header, getHelpOptions(), footer, true);
-            return;
-        }
 
         if (getInputIsFile()) {
             fileExists(getInputFilespec());
@@ -305,10 +300,18 @@ public final class Configuration {
 
     }
 
+    public static void printHelpText() {
+        String prefix = "java -jar morphcx.jar";
+        String header = "where parameter options are:";
+        String footer = "";
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(132, prefix, header, getHelpOptions(), footer, true);
+    }
+
     public String[] getArgs() { return this.args; }
 
-    public Options getHelpOptions() {
-        return this.helpOptions;
+    public static Options getHelpOptions() {
+        return helpOptions;
     }
 
     void setHelpOptions(Options helpOptions) {

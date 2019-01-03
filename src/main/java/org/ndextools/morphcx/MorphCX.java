@@ -1,14 +1,15 @@
 package org.ndextools.morphcx;
 
-import org.apache.commons.cli.HelpFormatter;
 import org.ndextools.morphcx.tables.CSVRoot;
 import org.ndextools.morphcx.shared.Configuration;
 
 /**
- * The MorphCX class behaves as the MorphCX application entry point.
+ * The MorphCX class's main method is the application's entry point.  Its simple function is to call for
+ * the creation of a configuration object, then passes it to the class responsible for dispatching the class
+ * that does the actual morphing operation.
  *
- * This class provides a backstop to any uncaught exceptions, in which event a stack trace is printed to stderr
- * and a non-zero status code is returned.
+ * This class also provides a backstop to any uncaught exceptions, in which event a stack trace is printed
+ * to stderr and a non-zero status code is returned.
  */
 public class MorphCX {
 
@@ -20,7 +21,6 @@ public class MorphCX {
         Configuration cfg;
 
         try {
-//            nullReferenceCheck(args, MorphCX.class.getSimpleName());
             cfg = configureApp(args);
             dispatchByOperation(cfg);
             System.exit(0);
@@ -37,20 +37,13 @@ public class MorphCX {
     }
 
     static void dispatchByOperation(final Configuration cfg) throws Exception {
-
-        if (!cfg.isHelp()) {
+        if (cfg.isHelp()) {
+            cfg.printHelpText();
+        } else {
             CSVRoot root = new CSVRoot();
             root.execute(cfg);
         }
-
         return;
-    }
-
-    public static void nullReferenceCheck(Object reference, String classname) throws NullPointerException {
-        if (reference == null) {
-            String msg = String.format("%s: Reference parameter expected !=null, actual=null", classname);
-            throw new NullPointerException(msg);
-        }
     }
 
 }
