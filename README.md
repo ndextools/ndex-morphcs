@@ -66,6 +66,12 @@ It is a feature that is quite useful when executing this program within Shell or
 scripts.
 * [IO Redirection](docs/io-redirection.md) 
 
+### Running as an NDEx Server Process
+An IT server administrator will normally be responsible for configuring NDEx servers.  That 
+individual can install this application as one or more NDEx server configuration commmands.
+Instructions are found in the link below. 
+* [NDEx Server Process](docs/as-server-process.md) 
+
 ### Notes for Developers
 A fully built executable binary .jar file is found in the `` directory of this repository.  However, for
 those who prefer to build their own executables from scratch, instructions to do this are found at the

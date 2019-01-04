@@ -1,7 +1,7 @@
 # Notes For Developers
 
-This classes and interfaces in this application are not (yet!) designed to be extended.  They are subject to
-change at any time. In fact, they will most likely be changed in the future without notice.
+This classes and interfaces in this application are not (yet!) designed to be extended.  They are 
+subject to change at any time. In fact, they will change in the future without notice.
 
 ### Development Requirements
 * [Oracle Java SE 8.0](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -17,14 +17,15 @@ change at any time. In fact, they will most likely be changed in the future with
 
 1. Insure that Java and Maven programs are installed.
 
-2. Download the `ndex-object-model` and `ndndex-java-client` dependencies into their own 
-project directories. From each respective project directory, enter the following command 
+2. Download the `ndex-object-model` and `ndndex-java-client` dependencies 
+from their respective GitHub repositories and placed into their own project directories. 
+From each respective project directory, enter the following command 
 from a Terminal or Command Shell. Start first with the ndex-object-model dependency, and next with the
 ndex-java-client dependency.
 ```text
 mvn clean install
 ```
-This should result in these two NDEx Maven dependencies to be installed into the Maven .M2 local
+This should result in the two NDEx dependencies to be installed into the Maven .M2 local
 repository.
 
 3. Clone or download this application's GitHub repository to yet another project directory. 
@@ -34,9 +35,25 @@ command:
 ```text
 mvn clean package
 ```
-The executable binary files are found in the ${project_dir/src/target} directory.
-The file named `morphcx.jar` contains a fully-formed executable packaged with all dependencies.  
+The two Apache Commons dependencies will be automatically downloaded by Maven into it's local .M2
+repository.
 
-Sample CX networks aree placed into the ${project_dir/src/target/sample-networks} directory. It is
+After execution of the above Maven command, the resulting executable binary files are found 
+in the ${project_dir/src/target} directory.
+The file named `morphcx.jar` contains a fully-formed executable packaged with all dependencies.
+That is the file that needs to be placed in a directory pointed to by the Java PATH or CLASSPATH
+environment variables, or in the present/current working directory from which you invoke the
+application.
+
+Sample CX networks are placed into the ${project_dir/src/target/sample-networks} directory. It is
 possible -- even likely -- that these networks are not the most up to-date CX network.  They are 
 only intended to be used for quickly testing the application.
+
+A immediate way to test the application is to...
+* Insure the project directory is make the target directory the current directory and enter
+the following command:
+```text
+java -jar morphcx.jar -c tsv -i sample-networks/LUMINAL_BREAST_CANCER.json
+```
+The above command results in converting the input file into the tab-separated value file named
+LUMINAL_BREAST_CANCER.tsv in the sample-networks folder.
