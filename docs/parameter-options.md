@@ -84,6 +84,7 @@ Comma Separated Value (CSV) and Tab Separated Value (TSV) formatted files have b
 the days of punched cards.  As such, therefore various industry-standard specifications come into
 play.  This application supports three formats of output.  In most cases, DEFAULT is satisfactory.
 
+* TDF
 * DEFAULT
 * RFC4180
 * EXCEL
