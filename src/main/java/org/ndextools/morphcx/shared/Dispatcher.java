@@ -9,12 +9,26 @@ import org.ndextools.morphcx.tables.CSVRoot;
 public class Dispatcher {
     private Configuration cfg;
 
+    /**
+     * Dispatches the class that does the dispatching the class that does the actual morphing operation.
+     *
+     * @param cfg
+     */
     public Dispatcher(Configuration cfg) {
         this.cfg = cfg;
     }
 
     public void dispatch() throws Exception {
-        CSVRoot root = new CSVRoot();
-        root.execute(cfg);
+
+        // Only --convert tsv & --convert csv are valid at this time!
+        Configuration.Operation operation = Configuration.getOperation();
+        switch (operation) {
+            case CSV:
+            case TSV:
+            default:
+                CSVRoot root = new CSVRoot();
+                root.execute(cfg);
+                break;
+        }
     }
 }
