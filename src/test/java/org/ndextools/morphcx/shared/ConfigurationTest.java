@@ -44,7 +44,7 @@ public class ConfigurationTest {
     public void _Should_Show_Output_Is_A_File_1() throws Exception {
         String[] args = {"tocsv", "-o", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getOutputFilespecGiven());
+        Assert.assertTrue(cfg.getOutputIsFile());
         Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilespec() );
     }
 
@@ -52,7 +52,7 @@ public class ConfigurationTest {
     public void _Should_Show_Output_Is_A_File_2() throws Exception {
         String[] args = {"tocsv", "--output", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getOutputFilespecGiven());
+        Assert.assertTrue(cfg.getOutputIsFile());
         Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilespec() );
     }
 

@@ -31,7 +31,7 @@ public class MorphCX {
         }
     }
 
-    private static Configuration configureApp(final String[] args) throws Exception {
+    static Configuration configureApp(final String[] args) throws Exception {
         Configuration cfg = new Configuration(args);
         cfg.configure();
         return cfg;

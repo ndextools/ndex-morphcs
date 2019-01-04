@@ -17,7 +17,7 @@ public class CXReader {
     }
 
     /**
-     * Produces a NiceCXNetwork object using the applicable input stream
+     * Produces a NiceCXNetwork object using the applicable input stream (stdin or file).
      *
      * @throws IOException if a problem occurs when producing a NiceCXNetwork object
      * @return NiceCXNetwork object containing the CX network data structure to be morphed
@@ -32,8 +32,7 @@ public class CXReader {
             {
                 cx = NdexRestClientUtilities.getCXNetworkFromStream(bufferedInput);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
                 throw new IOException(msg);
             }
@@ -43,8 +42,7 @@ public class CXReader {
             try (BufferedInputStream bufferedInput = new BufferedInputStream(System.in)) {
                 cx = NdexRestClientUtilities.getCXNetworkFromStream(bufferedInput);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
                 throw new IOException(msg);
             }

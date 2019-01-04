@@ -38,6 +38,8 @@ public final class WriterFactory {
         try {
 
             // Determine the output format based on Apache Commons CVSFormat class constants
+            // TODO: 1/3/19  NEED TO SOLVE HOW TO DO!             
+//            if (Configuration.getCSVFormat() == CSVFormat.DEFAULT)
             if (getCfg().isFormatDefault()) {
                 csvFormat = CSVFormat
                     .DEFAULT
