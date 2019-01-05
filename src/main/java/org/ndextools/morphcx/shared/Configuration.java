@@ -38,7 +38,7 @@ public final class Configuration {
     private char columnSeparator;
     private String newline;
 
-    enum Operation {
+    public enum Operation {
         TSV, CSV, NOT_SPECIFIED
     }
 

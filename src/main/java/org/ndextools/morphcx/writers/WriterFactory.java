@@ -1,10 +1,10 @@
 package org.ndextools.morphcx.writers;
 
 import java.io.PrintStream;
-
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.ndextools.morphcx.shared.Configuration;
+import org.ndextools.morphcx.shared.Utilities;
 
 /**
  * The WriterFactory class creates an output writer appropriate for the application's need,
@@ -13,12 +13,7 @@ public final class WriterFactory {
     private final Configuration cfg;
 
     public WriterFactory(Configuration cfg) throws IllegalArgumentException {
-
-        if (cfg == null) {
-            String msg = "WriterFactory: Configuration reference cannot be a null value";
-            throw new IllegalArgumentException(msg);
-        }
-
+        Utilities.nullReferenceCheck(cfg, Configuration.class.getSimpleName());
         this.cfg = cfg;
     }
 
@@ -29,73 +24,42 @@ public final class WriterFactory {
      * @throws IllegalStateException
      */
     public final TableWritable getWriter()throws IllegalStateException {
-        CSVFormat csvFormat;
         PrintStream printStream;
-
-        boolean streamAsFile = (cfg.getInputIsFile()) ? true : false;
-        boolean streamAsStdout = (cfg.getInputIsFile()) ? false : true;
+        CSVFormat csvFormat;
 
         try {
 
             // Determine the output format based on Apache Commons CVSFormat class constants
-            // TODO: 1/3/19  NEED TO SOLVE HOW TO DO!             
-//            if (Configuration.getCSVFormat() == CSVFormat.DEFAULT)
-            if (getCfg().isFormatDefault()) {
-                csvFormat = CSVFormat
-                    .DEFAULT
-                    .withDelimiter(cfg.getColumnSeparator())
-                    .withRecordSeparator(cfg.getNewline());
-            } else if (getCfg().isFormatTDF()) {
-                csvFormat = CSVFormat
-                    .TDF
-                    .withDelimiter(cfg.getColumnSeparator())
-                    .withRecordSeparator(cfg.getNewline());
-            } else if (getCfg().isFormatEXCEL()) {
-                csvFormat = CSVFormat
-                        .EXCEL
-                        .withDelimiter(cfg.getColumnSeparator())
-                        .withRecordSeparator(cfg.getNewline());
-            } else if (getCfg().isFormatRFC4180()) {
-                csvFormat = CSVFormat
-                        .RFC4180
-                        .withDelimiter(cfg.getColumnSeparator())
-                        .withRecordSeparator(cfg.getNewline());
-            } else {
-                csvFormat = CSVFormat
-                        .DEFAULT
-                        .withDelimiter(cfg.getColumnSeparator())
-                        .withRecordSeparator(cfg.getNewline());
+            Configuration.Operation operation = Configuration.getOperation();
+            switch (operation) {
+                case CSV:
+                    csvFormat = CSVFormat
+                            .DEFAULT
+                            .withDelimiter(cfg.getColumnSeparator())
+                            .withRecordSeparator(cfg.getNewline());
+                    System.err.println("** making a CSV file! **");
+                    break;
+                case TSV:
+                default:
+                    csvFormat = CSVFormat
+                            .TDF
+                            .withDelimiter(cfg.getColumnSeparator())
+                            .withRecordSeparator(cfg.getNewline());
+                    System.err.println("** making a TSV file! **");
+                    break;
             }
-
-            // values below fetched and passed to writer for use in class @override toString()
-            char csvDelimiter = csvFormat.getDelimiter();
-            String csvNewline = csvFormat.getRecordSeparator();
 
             // Determine whether the output is to a file or stdout.
-            if (streamAsStdout)
-            {
-                printStream = new PrintStream(System.out, true);
-                CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer, csvDelimiter, csvNewline);
-            }
-            else if (streamAsFile)
-            {
+            if (cfg.getOutputIsFile()) {
                 printStream = new PrintStream(cfg.getOutputFilespec());
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer, csvDelimiter, csvNewline);
-            }
-            else if (streamAsStdout)
-            {
+                return new TableToCSV(printer, cfg.getColumnSeparator(), cfg.getNewline());
+            } else {
                 printStream = new PrintStream(System.out, true);
-                // TODO: 1/1/19 line separator property is temporary.
-                return new TableToStream(printStream, cfg.getColumnSeparator(), System.getProperty("line.separator"));
+                CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
+                return new TableToCSV(printer, cfg.getColumnSeparator(), cfg.getNewline());
             }
-            else {
-                String msg = "WriterFactory: Unable to create writer";
-                throw new IllegalStateException(msg);
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error in Generating output; " + e);
         }
 
@@ -104,7 +68,4 @@ public final class WriterFactory {
         throw new IllegalStateException(msg);
     }
 
-    private Configuration getCfg() {
-        return this.cfg;
-    }
 }
