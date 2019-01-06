@@ -13,19 +13,12 @@ import org.apache.commons.cli.*;
 public final class Configuration {
     private static String[] args;
     private static Options helpOptions;
-
     private static boolean isHelp;
     private static Operation operation;
-
     private static boolean inputIsFile;
     private static boolean outputIsFile;
-
     public static CSVFormat csvFormat;
-
-    private boolean isFormatDefault = false;
-    private boolean isFormatTDF = false;
-    private boolean isFormatRFC4180 = false;
-    private boolean isFormatEXCEL = false;
+    private static boolean isServer;
 
     private boolean isWindowsNewline = false;
     private boolean isLinuxNewline = false;
@@ -43,7 +36,7 @@ public final class Configuration {
     }
 
     enum CSVFormat {
-        DEFAULT, TDF, RFC4180, EXCEL, NOT_SPECIFIED
+        DEFAULT, TDF, NOT_SPECIFIED
     }
 
     enum ColumnSeparator {
@@ -198,12 +191,6 @@ public final class Configuration {
         if (parsed.hasOption(OptionConstants.OPT_FORMAT)) {
             String format = parsed.getOptionValue(OptionConstants.OPT_FORMAT).toUpperCase();
             switch (format) {
-                case OptionConstants.FORMAT_EXCEL:
-                    setCSVFormat(CSVFormat.EXCEL);
-                    break;
-                case OptionConstants.FORMAT_RFC4180:
-                    setCSVFormat(CSVFormat.RFC4180);
-                    break;
                 case OptionConstants.FORMAT_DEFAULT:
                     setCSVFormat(CSVFormat.DEFAULT);
                     break;
@@ -221,11 +208,15 @@ public final class Configuration {
         if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
             setInputIsFile(true);
             setInputFilespec(parsed.getOptionValue(OptionConstants.OPT_INPUT));
+        } else {
+            setInputFilespec("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
             setOutputIsFile(true);
             setOutputFilespec(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
+        } else {
+            setOutputFilespec("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
@@ -256,6 +247,11 @@ public final class Configuration {
             setSystemNewline(true);
             setNewline(System.getProperty("line.separator"));
         }
+
+        if (parsed.hasOption(OptionConstants.OPT_SERVER)) {
+            setIsServer(true);
+        }
+
     }
 
     private final void postValidationAdjustments() {
@@ -272,12 +268,10 @@ public final class Configuration {
             setColumnSeparator(OptionConstants.TAB);
         }
 
-        if (!outputIsFile) {
-            if (operation == Operation.TSV) {
-                setOutputFilespec( buildOutputFilespec(getInputFilespec(), OptionConstants.TSV_EXT) );
-            } else {
-                setOutputFilespec( buildOutputFilespec(getInputFilespec(), OptionConstants.CSV_EXT) );
-            }
+        // forces stdin and stdout when -S option is specified on the command-line
+        if (isServer()) {
+            setInputIsFile(false);
+            setOutputIsFile(false);
         }
     }
 
@@ -312,16 +306,6 @@ public final class Configuration {
         return true;
     }
 
-    private static String buildOutputFilespec(String inpFilespec, String extension) {
-        int lastDot = inpFilespec.lastIndexOf(".");
-        if (lastDot != -1 && lastDot != 0) {
-            return inpFilespec.substring(0, lastDot) + extension;
-        } else {
-            return inpFilespec + extension;
-        }
-
-    }
-
     public static void printHelpText() {
         String prefix = "java -jar morphcx.jar";
         String header = "where parameter options are:";
@@ -332,83 +316,52 @@ public final class Configuration {
 
     public String[] getArgs() { return this.args; }
 
-    public static Options getHelpOptions() { // TODO: 1/3/19 KEEP THIS
+    public static Options getHelpOptions() {
         return helpOptions;
     }
 
-    void setHelpOptions(Options helpOptions) { // TODO: 1/3/19 KEEP THIS
+    void setHelpOptions(Options helpOptions) {
         this.helpOptions = helpOptions;
     }
 
-    public boolean isHelp() { // TODO: 1/3/19 KEEP THIS
+    public boolean isHelp() {
         return this.isHelp;
     }
 
-    void setIsHelp(boolean value) { // TODO: 1/3/19 KEEP THIS
+    void setIsHelp(boolean value) {
         this.isHelp = value;
     }
 
-    public static Operation getOperation() {  // TODO: 1/3/19 KEEP THIS
+    public static Operation getOperation() {
         return Configuration.operation;
     }
 
-    static void setOperation(Operation operation) {  // TODO: 1/3/19 KEEP THIs
+    static void setOperation(Operation operation) {
         Configuration.operation = operation;
     }
 
-    public static boolean getInputIsFile() {    // TODO: 1/3/19 KEEP THIS
+    public static boolean getInputIsFile() {
         return Configuration.inputIsFile;
     }
 
-    static void setInputIsFile(boolean value) {     // TODO: 1/3/19 KEEP THIS
+    static void setInputIsFile(boolean value) {
         Configuration.inputIsFile = value;
     }
 
-    public boolean getOutputIsFile() {   // TODO: 1/3/19 KEEP THIS
+    public boolean getOutputIsFile() {
         return Configuration.outputIsFile;
     }
 
-    static void setOutputIsFile(boolean value) {    // TODO: 1/3/19 KEEP THIS
+    static void setOutputIsFile(boolean value) {
         Configuration.outputIsFile = value;
     }
 
-    public static CSVFormat getCSVFormat() {  // TODO: 1/3/19 KEEP THIS
+    public static CSVFormat getCSVFormat() {
         return Configuration.csvFormat;
     }
 
-    static void setCSVFormat(CSVFormat csvFormat) {  // TODO: 1/3/19 KEEP THIs
+    static void setCSVFormat(CSVFormat csvFormat) {
         Configuration.csvFormat = csvFormat;
-    }
-    public boolean isFormatDefault() {
-        return isFormatDefault;
-    }
-
-    public void setFormatDefault(boolean formatDefault) {
-        isFormatDefault = formatDefault;
-    }
-
-    public boolean isFormatTDF() {
-        return isFormatTDF;
-    }
-
-    public void setFormatTDF(boolean formatTDF) {
-        isFormatTDF = formatTDF;
-    }
-
-    public boolean isFormatRFC4180() {
-        return isFormatRFC4180;
-    }
-
-    public void setFormatRFC4180(boolean formatRFC4180) {
-        isFormatRFC4180 = formatRFC4180;
-    }
-
-    public boolean isFormatEXCEL() {
-        return isFormatEXCEL;
-    }
-
-    public void setFormatEXCEL(boolean formatEXCEL) {
-        isFormatEXCEL = formatEXCEL;
     }
 
     public boolean isWindowsNewline() {
@@ -449,6 +402,14 @@ public final class Configuration {
 
     void setSystemNewline(boolean systemNewline) {
         isSystemNewline = systemNewline;
+    }
+
+    public boolean isServer() {
+        return Configuration.isServer;
+    }
+
+    void setIsServer(boolean value) {
+        Configuration.isServer = value;
     }
 
     public String getInputFilespec() {

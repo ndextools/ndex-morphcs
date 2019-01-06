@@ -37,7 +37,6 @@ public final class WriterFactory {
                             .DEFAULT
                             .withDelimiter(cfg.getColumnSeparator())
                             .withRecordSeparator(cfg.getNewline());
-                    System.err.println("** making a CSV file! **");
                     break;
                 case TSV:
                 default:
@@ -45,7 +44,6 @@ public final class WriterFactory {
                             .TDF
                             .withDelimiter(cfg.getColumnSeparator())
                             .withRecordSeparator(cfg.getNewline());
-                    System.err.println("** making a TSV file! **");
                     break;
             }
 
