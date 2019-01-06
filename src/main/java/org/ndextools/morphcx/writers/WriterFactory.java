@@ -23,11 +23,12 @@ public final class WriterFactory {
      * @return the writer object to be used for outputting the resulting morphed CX network
      * @throws IllegalStateException
      */
-    public final TableWritable getWriter()throws IllegalStateException {
+    public final TableWritable getWriter()throws Exception {
         PrintStream printStream;
         CSVFormat csvFormat;
 
-        try {
+        try
+        {
 
             // Determine the output format based on Apache Commons CVSFormat class constants
             Configuration.Operation operation = Configuration.getOperation();
@@ -35,15 +36,15 @@ public final class WriterFactory {
                 case CSV:
                     csvFormat = CSVFormat
                             .DEFAULT
-                            .withDelimiter(cfg.getColumnSeparator())
-                            .withRecordSeparator(cfg.getNewline());
+                            .withDelimiter(cfg.getDelimiter())
+                            .withRecordSeparator(cfg.getNewlineAsString());
                     break;
                 case TSV:
                 default:
                     csvFormat = CSVFormat
                             .TDF
-                            .withDelimiter(cfg.getColumnSeparator())
-                            .withRecordSeparator(cfg.getNewline());
+                            .withDelimiter(cfg.getDelimiter())
+                            .withRecordSeparator(cfg.getNewlineAsString());
                     break;
             }
 
@@ -51,19 +52,17 @@ public final class WriterFactory {
             if (cfg.getOutputIsFile()) {
                 printStream = new PrintStream(cfg.getOutputFilename());
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer, cfg.getColumnSeparator(), cfg.getNewline());
+                return new TableToCSV(printer, cfg.getDelimiter(), cfg.getNewlineAsString());
             } else {
                 printStream = new PrintStream(System.out, true);
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
-                return new TableToCSV(printer, cfg.getColumnSeparator(), cfg.getNewline());
+                return new TableToCSV(printer, cfg.getDelimiter(), cfg.getNewlineAsString());
             }
-        } catch (Exception e) {
-            System.out.println("Error in Generating output; " + e);
+        } catch (Exception e)
+        {
+            String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
+            throw new Exception(msg);
         }
-
-        // Execution flow should never reach here because a writer object was not returned to caller.
-        String msg = "WriterFactory: Unable to create writer";
-        throw new IllegalStateException(msg);
     }
 
 }

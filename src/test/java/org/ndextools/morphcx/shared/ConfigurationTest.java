@@ -56,140 +56,140 @@ public class ConfigurationTest {
         Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilename() );
     }
 
-    @Ignore
-    public void _Default_Newline_Should_Be_System_Property_Line_Separator() throws Exception {
-        String[] args = {"tocsv"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertTrue(cfg.isSystemNewline());
-        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_Windows_Newline_Separator_1() throws Exception {
-        String[] args = {"tocsv", "-n", "windows"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\r\n", cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_Windows_Newline_Separator_2() throws Exception {
-        String[] args = {"tocsv", "--newline", "windows"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\r\n", cfg.getNewline() );
-    }
-
-
-    @Ignore
-    public void _Should_Show_Linux_Newline_Separator_1() throws Exception {
-        String[] args = {"tocsv", "-n", "linux"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertTrue(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\n", cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_Linux_Newline_Separator_2() throws Exception {
-        String[] args = {"tocsv", "--newline", "linux"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertTrue(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\n", cfg.getNewline() );
-    }
-
-
-    @Ignore
-    public void _Should_Show_OSX_Newline_Separator_1() throws Exception {
-        String[] args = {"tocsv", "-n", "osx"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertTrue(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\n", cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_OSX_Newline_Separator_2() throws Exception {
-        String[] args = {"tocsv", "--newline", "osx"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertTrue(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\n", cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_OldMac_Newline_Separator_1() throws Exception {
-        String[] args = {"tocsv", "-n", "oldmac"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertTrue(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\r", cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_OldMac_Newline_Separator_2() throws Exception {
-        String[] args = {"tocsv", "--newline", "oldmac"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertTrue(cfg.isOldMacNewline());
-        Assert.assertFalse(cfg.isSystemNewline());
-        Assert.assertEquals( "\r", cfg.getNewline() );
-    }
-
-
-    @Ignore
-    public void _Should_Show_System_Newline_Separator_1() throws Exception {
-        String[] args = {"tocsv", "-n", "system"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertTrue(cfg.isSystemNewline());
-        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
-    }
-
-    @Ignore
-    public void _Should_Show_System_Newline_Separator_2() throws Exception {
-        String[] args = {"tocsv", "--newline", "system"};
-        Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.isWindowsNewline());
-        Assert.assertFalse(cfg.isLinuxNewline());
-        Assert.assertFalse(cfg.isOSXNewline());
-        Assert.assertFalse(cfg.isOldMacNewline());
-        Assert.assertTrue(cfg.isSystemNewline());
-        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
-    }
+//    @Ignore
+//    public void _Default_Newline_Should_Be_System_Property_Line_Separator() throws Exception {
+//        String[] args = {"tocsv"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertTrue(cfg.isSystemNewline());
+//        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_Windows_Newline_Separator_1() throws Exception {
+//        String[] args = {"tocsv", "-n", "windows"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertTrue(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\r\n", cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_Windows_Newline_Separator_2() throws Exception {
+//        String[] args = {"tocsv", "--newline", "windows"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertTrue(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\r\n", cfg.getNewline() );
+//    }
+//
+//
+//    @Ignore
+//    public void _Should_Show_Linux_Newline_Separator_1() throws Exception {
+//        String[] args = {"tocsv", "-n", "linux"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertTrue(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\n", cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_Linux_Newline_Separator_2() throws Exception {
+//        String[] args = {"tocsv", "--newline", "linux"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertTrue(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\n", cfg.getNewline() );
+//    }
+//
+//
+//    @Ignore
+//    public void _Should_Show_OSX_Newline_Separator_1() throws Exception {
+//        String[] args = {"tocsv", "-n", "osx"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertTrue(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\n", cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_OSX_Newline_Separator_2() throws Exception {
+//        String[] args = {"tocsv", "--newline", "osx"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertTrue(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\n", cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_OldMac_Newline_Separator_1() throws Exception {
+//        String[] args = {"tocsv", "-n", "oldmac"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertTrue(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\r", cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_OldMac_Newline_Separator_2() throws Exception {
+//        String[] args = {"tocsv", "--newline", "oldmac"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertTrue(cfg.isOldMacNewline());
+//        Assert.assertFalse(cfg.isSystemNewline());
+//        Assert.assertEquals( "\r", cfg.getNewline() );
+//    }
+//
+//
+//    @Ignore
+//    public void _Should_Show_System_Newline_Separator_1() throws Exception {
+//        String[] args = {"tocsv", "-n", "system"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertTrue(cfg.isSystemNewline());
+//        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
+//    }
+//
+//    @Ignore
+//    public void _Should_Show_System_Newline_Separator_2() throws Exception {
+//        String[] args = {"tocsv", "--newline", "system"};
+//        Configuration cfg = performConfiguration(args);
+//        Assert.assertFalse(cfg.isWindowsNewline());
+//        Assert.assertFalse(cfg.isLinuxNewline());
+//        Assert.assertFalse(cfg.isOSXNewline());
+//        Assert.assertFalse(cfg.isOldMacNewline());
+//        Assert.assertTrue(cfg.isSystemNewline());
+//        Assert.assertEquals( System.getProperty("line.separator"), cfg.getNewline() );
+//    }
 
     @Rule
     public ExpectedException thrown1 = ExpectedException.none();

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.*;
-import org.apache.commons.csv.CSVFormat;
 
 /**
  * The Configuration class validates command-line parameters used when starting this application, and
@@ -18,52 +17,32 @@ public final class Configuration {
     private static Operation operation;
     private static boolean inputIsFile;
     private static boolean outputIsFile;
-    public static CSVFormat csvFormat;
+    private static Newline newline;
     private static boolean isServer;
-
-    private boolean isWindowsNewline = false;
-    private boolean isLinuxNewline = false;
-    private boolean isOSXNewline = false;
-    private boolean isOldMacNewline = false;
-    private boolean isSystemNewline = false;
-
-    private String inputFilename;
-    private String outputFilename
-            ;
-    private char columnSeparator;
-    private String newline;
+    private static String inputFilename;
+    private static String outputFilename;
+    private static char delimiter;
+    private static String newlineAsString;
 
     public enum Operation {
         TSV, CSV, NOT_SPECIFIED
     }
 
-//    enum CSVFormat {
-//        DEFAULT, TDF, NOT_SPECIFIED
-//    }
+    enum Newline {
+        WINDOWS("\r\n"),
+        LINUX("\n"),
+        OSX("\n"),
+        OLDMAC("\r"),
+        SYSTEM( System.getProperty("line.separator") ),
+        NOT_SPECIFIED("not_specified");
 
-    enum ColumnSeparator {
-        COMMA(','), TAB('\t');
-
-        private char columnSeparator;
-        private char getColumnSeparator() {
-            return this.getColumnSeparator();
+        private String nl;
+        private String getNewlineValueOf() {
+            return this.nl;
         }
 
-        ColumnSeparator(char columnSeparator) {
-            this.columnSeparator = columnSeparator;
-        }
-    }
-
-    enum NewLine {
-        WINDOWS("\r\n"), LINUX("\n"), OSX("\n"), OLDMAC("\r");
-
-        private String endLine;
-        private String getEndLine() {
-            return this.endLine;
-        }
-
-        NewLine(String endLine) {
-            this.endLine = endLine;
+        Newline(String nl) {
+            this.nl = nl;
         }
     }
 
@@ -107,15 +86,8 @@ public final class Configuration {
                         .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV >  Default: 'TSV'.")
                         .build()
         );
-//        getHelpOptions().addOption(
-//                Option.builder(OptionConstants.OPT_FORMAT)
-//                        .longOpt(OptionConstants.LONG_OPT_FORMAT)
-//                        .hasArg()
-//                        .desc("Output format as defined by the Apache Commons CSV library. < DEFAULT | TDF >  Default: 'DEFAULT'.")
-//                        .build()
-//        );
         getHelpOptions().addOption(
-                 Option.builder(OptionConstants.OPT_HELP)
+                Option.builder(OptionConstants.OPT_HELP)
                         .longOpt(OptionConstants.LONG_OPT_HELP)
                         .desc("Displays this help information.")
                         .build()
@@ -131,7 +103,7 @@ public final class Configuration {
                 Option.builder(OptionConstants.OPT_NEWLINE)
                         .longOpt(OptionConstants.LONG_OPT_NEWLINE)
                         .hasArg()
-                        .desc("Platform-dependent newline characters. < WINDOWS | LINUX | OSX | OLDMAC > Default: obtained from the Java VM system runtime.")
+                        .desc("Platform-dependent newline characters. < WINDOWS | LINUX | OSX | OLDMAC | SYSTEM > Default: SYSTEM.")
                         .build()
         );
         getHelpOptions().addOption(
@@ -176,36 +148,18 @@ public final class Configuration {
             switch (convert) {
                 case OptionConstants.CONVERT_CSV:
                     setOperation(Operation.CSV);
-                    setColumnSeparator(OptionConstants.COMMA);
+                    setDelimiter(OptionConstants.COMMA);
                     break;
                 case OptionConstants.CONVERT_TSV:
                     setOperation(Operation.TSV);
-                    setColumnSeparator(OptionConstants.TAB);
+                    setDelimiter(OptionConstants.TAB);
                 default:
                     setOperation(Operation.NOT_SPECIFIED);
                     break;
             }
         } else {
-            setOperation(Operation.TSV);
-            setColumnSeparator(OptionConstants.TAB);
+            setOperation(Operation.NOT_SPECIFIED);
         }
-
-//        if (parsed.hasOption(OptionConstants.OPT_FORMAT)) {
-//            String format = parsed.getOptionValue(OptionConstants.OPT_FORMAT).toUpperCase();
-//            switch (format) {
-//                case OptionConstants.FORMAT_DEFAULT:
-//                    setCSVFormat(CSVFormat.DEFAULT);
-//                    break;
-//                case OptionConstants.FORMAT_TDF:
-//                    setCSVFormat(CSVFormat.TDF);
-//                    break;
-//                default:
-//                    setCSVFormat(CSVFormat.NOT_SPECIFIED);
-//                    break;
-//            }
-//        } else {
-//            setCSVFormat(CSVFormat.NOT_SPECIFIED);
-//        }
 
         if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
             setInputIsFile(true);
@@ -214,40 +168,43 @@ public final class Configuration {
             setInputFilename("");
         }
 
+        if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
+            String newline = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
+            switch (newline) {
+                case OptionConstants.WINDOWS:
+                    Configuration.newline = Newline.WINDOWS;
+                    Configuration.newlineAsString = Newline.WINDOWS.getNewlineValueOf();
+                    break;
+                case OptionConstants.LINUX:
+                    Configuration.newline = Newline.LINUX;
+                    Configuration.newlineAsString = Newline.LINUX.getNewlineValueOf();
+                    break;
+                case OptionConstants.OSX:
+                    Configuration.newline = Newline.OSX;
+                    Configuration.newlineAsString = Newline.OSX.getNewlineValueOf();
+                    break;
+                case OptionConstants.OLDMAC:
+                    Configuration.newline = Newline.OLDMAC;
+                    Configuration.newlineAsString = Newline.OLDMAC.getNewlineValueOf();
+                    break;
+                case OptionConstants.SYSTEM:
+                    Configuration.newline = Newline.SYSTEM;
+                    Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+                default:
+                    Configuration.newline = Newline.NOT_SPECIFIED;
+                    setNewlineAsString("");
+                    break;
+            }
+        } else {
+            Configuration.newline = Newline.NOT_SPECIFIED;
+            setNewlineAsString("");
+        }
+
         if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
             setOutputIsFile(true);
             setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
         } else {
             setOutputFilename("");
-        }
-
-        if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
-            String newline = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
-            switch (newline) {
-                case OptionConstants.WINDOWS:
-                    setWindowsNewline(true);
-                    setNewline(OptionConstants.ESCAPE_R_ESCAPE_N);
-                    break;
-                case OptionConstants.LINUX:
-                    setLinuxNewline(true);
-                    setNewline(OptionConstants.ESCAPE_N);
-                    break;
-                case OptionConstants.OSX:
-                    setOSXNewline(true);
-                    setNewline(OptionConstants.ESCAPE_N);
-                    break;
-                case OptionConstants.OLDMAC:
-                    setOldMacNewline(true);
-                    setNewline(OptionConstants.ESCAPE_R);
-                    break;
-                case OptionConstants.SYSTEM:
-                    setSystemNewline(true);
-                    setNewline(System.getProperty("line.separator"));
-                    break;
-            }
-        } else {
-            setSystemNewline(true);
-            setNewline(System.getProperty("line.separator"));
         }
 
         if (parsed.hasOption(OptionConstants.OPT_SERVER)) {
@@ -261,14 +218,14 @@ public final class Configuration {
         // operation defaults to "-c tsv" when -c or --convert isn't specified in command-line
         if (operation == Operation.NOT_SPECIFIED) {
             setOperation(Operation.TSV);
-            setColumnSeparator(OptionConstants.TAB);
+            setDelimiter(OptionConstants.TAB);
         }
 
-//        // csvFormat defaults to "-f tdf" when -f or --format isn't specified in command-line
-//        if (csvFormat == CSVFormat.NOT_SPECIFIED) {
-//            setCSVFormat(CSVFormat.TDF);
-//            setColumnSeparator(OptionConstants.TAB);
-//        }
+        // newline defaults to "-n system" when -n or --newline isn't specified in command-line
+        if (newline == Newline.NOT_SPECIFIED) {
+            Configuration.newline = Newline.SYSTEM;
+            Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+        }
 
         // forces stdin and stdout when -S option is specified on the command-line
         if (isServer()) {
@@ -350,7 +307,7 @@ public final class Configuration {
         Configuration.inputIsFile = value;
     }
 
-    public boolean getOutputIsFile() {
+    public static boolean getOutputIsFile() {
         return Configuration.outputIsFile;
     }
 
@@ -358,100 +315,49 @@ public final class Configuration {
         Configuration.outputIsFile = value;
     }
 
-//    public static CSVFormat getCSVFormat() {
-//        return Configuration.csvFormat;
-//    }
-//
-//    static void setCSVFormat(CSVFormat csvFormat) {
-//        Configuration.csvFormat = csvFormat;
-//    }
-
-    public boolean isWindowsNewline() {
-        return isWindowsNewline;
-    }
-
-    void setWindowsNewline(boolean windowsNewline) {
-        isWindowsNewline = windowsNewline;
-    }
-
-    public boolean isLinuxNewline() {
-        return isLinuxNewline;
-    }
-
-    void setLinuxNewline(boolean linuxNewline) {
-        isLinuxNewline = linuxNewline;
-    }
-
-    public boolean isOSXNewline() {
-        return isOSXNewline;
-    }
-
-    void setOSXNewline(boolean OSXNewline) {
-        isOSXNewline = OSXNewline;
-    }
-
-    public boolean isOldMacNewline() {
-        return isOldMacNewline;
-    }
-
-    void setOldMacNewline(boolean oldMacNewline) {
-        isOldMacNewline = oldMacNewline;
-    }
-
-    public boolean isSystemNewline() {
-        return isSystemNewline;
-    }
-
-    void setSystemNewline(boolean systemNewline) {
-        isSystemNewline = systemNewline;
-    }
-
-    public boolean isServer() {
+    public static boolean isServer() {
         return Configuration.isServer;
     }
 
-    void setIsServer(boolean value) {
+    static void setIsServer(boolean value) {
         Configuration.isServer = value;
     }
 
-    public String getInputFilename() {
-        return inputFilename;
+    public static String getInputFilename() {
+        return Configuration.inputFilename;
     }
 
-    void setInputFilename(String inputFilename) {
-        this.inputFilename = inputFilename;
+    static void setInputFilename(String filename) {
+        Configuration.inputFilename = filename;
     }
 
-    public String getOutputFilename() {
-        return outputFilename;
+    public static String getOutputFilename() {
+        return Configuration.outputFilename;
     }
 
-    void setOutputFilename(String outputFilename) {
-        this.outputFilename= outputFilename;
+    static void setOutputFilename(String filename) {
+        Configuration.outputFilename = filename;
     }
 
-    public char getColumnSeparator() {
-        return columnSeparator;
+    public static char getDelimiter() {
+        return Configuration.delimiter;
     }
 
-    void setColumnSeparator(char columnSeparator) {
-        this.columnSeparator = columnSeparator;
+    static void setDelimiter(char delimiter) {
+        Configuration.delimiter = delimiter;
     }
 
-    public String getNewline() {
-        return newline;
+    public static String getNewlineAsString() {
+        return Configuration.newlineAsString;
     }
 
-    void setNewline(String newline) {
-        this.newline = newline;
+    static void setNewlineAsString(String newline) {
+        Configuration.newlineAsString = newline;
     }
 
     public static class OptionConstants {
         private static final String OPT_CONVERT =  "c";
         private static final String LONG_OPT_CONVERT =  "convert";
-
-//        private static final String OPT_FORMAT = "f";
-//        private static final String LONG_OPT_FORMAT = "format";
 
         private static final String OPT_HELP =  "h";
         private static final String LONG_OPT_HELP =  "help";
@@ -468,18 +374,11 @@ public final class Configuration {
         private static final String OPT_SERVER = "S";
 
         private static final String CONVERT_CSV = "CSV";
-//        private static final String CSV_EXT = ".csv";
 
         private static final String CONVERT_TSV = "TSV";
-//        private static final String TSV_EXT = ".tsv";
 
         public static final char TAB = '\t';
         public static final char COMMA = ',';
-
-//        private static final String FORMAT_DEFAULT = "DEFAULT";
-//        private static final String FORMAT_RFC4180 = "RFC4180";
-//        private static final String FORMAT_EXCEL = "EXCEL";
-//        private static final String FORMAT_TDF = "TDF";
 
         public static final String WINDOWS = "WINDOWS";
         public static final String LINUX = "LINUX";
@@ -496,22 +395,26 @@ public final class Configuration {
 
         // TODO: 1/3/19 FINISH 
         return String.format(
+//                args
                 "helpOptions=%b, " +
-                // "operation=%s, " +
+                        // "operation=%s, " +
                 "inputIsFile=%b, " +
                 "outputIsFile=%b, " +
-//                 "cvsFormat=%s, " +
+//                newline
+                "isServer=%b, " +
                 "inputFilename=%s, " +
                 "outputFilespec=%s, ",
-                //"columnSeparator=%s",
-                //"newline=%s",
+//                delimiter
+                "newlineAsString=%s",
+//                getargs
                 getHelpOptions(),
                 // operation
                 getInputIsFile(),
                 getOutputIsFile(),
-//                 csvFormat
+//               getNewline
+                isServer(),
                 getInputFilename(),
                 getOutputFilename()
-                );
+        );
     }
 }

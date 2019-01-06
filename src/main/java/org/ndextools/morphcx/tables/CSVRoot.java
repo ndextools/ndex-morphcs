@@ -36,7 +36,7 @@ public class CSVRoot {
         return cxReader.produceNiceCX();
     }
 
-    final static TableWritable setupOutputDestination(Configuration cfg) {
+    final static TableWritable setupOutputDestination(Configuration cfg) throws Exception {
         WriterFactory wf = new WriterFactory(cfg);
         return wf.getWriter();
     }
