@@ -1,7 +1,7 @@
 # Notes For Developers
 
 This classes and interfaces in this application are not (yet!) designed to be extended.  They are 
-subject to change at any time. In fact, they will change in the future without notice.
+subject to change at any time. More likely than not they absolutely will change in the future without notice.
 
 ### Development Requirements
 * [Oracle Java SE 8.0](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -18,24 +18,22 @@ subject to change at any time. In fact, they will change in the future without n
 1. Insure that Java and Maven programs are installed.
 
 2. Download the `ndex-object-model` and `ndndex-java-client` dependencies 
-from their respective GitHub repositories and placed into their own project directories. 
+from their respective GitHub repositories and place into their own project directories. 
 From each respective project directory, enter the following command 
-from a Terminal or Command Shell. Start first with the ndex-object-model dependency, and next with the
-ndex-java-client dependency.
+from a Terminal or Command shell. Start first with the ndex-object-model dependency, and 
+follow that with the ndex-java-client dependency.
 ```text
 mvn clean install
 ```
-This should result in the two NDEx dependencies to be installed into the Maven .M2 local
-repository.
+This should result in both dependencies being installed into the Maven .M2 local repository.
 
 3. Clone or download this application's GitHub repository to yet another project directory. 
 
-4. Then using a Terminal or Command Shell from the `ndex-morphcx` project directory, enter the following
-command:
+4. Then using a Terminal or Command shell from the project directory, enter the following command:
 ```text
 mvn clean package
 ```
-The two Apache Commons dependencies will be automatically downloaded by Maven into it's local .M2
+The two Apache Commons dependencies should be automatically downloaded by Maven into it's local .M2
 repository.
 
 After execution of the above Maven command, the resulting executable binary files are found 
@@ -45,7 +43,7 @@ That is the file that needs to be placed in a directory pointed to by the Java P
 environment variables, or in the present/current working directory from which you invoke the
 application.
 
-Sample CX networks are placed into the ${project_dir/src/target/sample-networks} directory. It is
+Sample CX networks are provided in the ${project_dir/src/target/sample-networks} directory. It is
 possible -- even likely -- that these networks are not the most up to-date CX network.  They are 
 only intended to be used for quickly testing the application.
 
@@ -53,7 +51,10 @@ A immediate way to test the application is to...
 * Insure the project directory is make the target directory the current directory and enter
 the following command:
 ```text
-java -jar morphcx.jar -c tsv -i sample-networks/LUMINAL_BREAST_CANCER.json
+java -jar morphcx.jar -c tsv -i sample-networks/LUMINAL_BREAST_CANCER.json -o sample-networks/LUMINAL_BREAST_CANCER.tsv
 ```
 The above command results in converting the input file into the tab-separated value file named
 LUMINAL_BREAST_CANCER.tsv in the sample-networks folder.
+
+The -o output parameter can be altogether omitted, and this application will output tab-separated columns onto
+the console. 

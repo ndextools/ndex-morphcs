@@ -1,12 +1,23 @@
 # Parameter Options
 
+The user can pick from several command-line parser standards, which are listed below.  And although examples
+used in this documentation are given in the POSIX and GNU formats, please use whichever standard you are most
+accustomed to using.
+
+* POSIX like options (i.e. `-Sn linux`)
+* GNU like long options (i.e. `--input filename --output outfile --convert csv`)
+* Java like properties (i.e. `-Dc tsv`)
+* Short options with value attached (i.e. `-i filename`)
+* Long options with single hyphen (i.e. `-server`)
+
 ### Help
 
 ```text
 [-h | --help]
 ```
 This causes the display of all possible parameter options to `stdout` (the console, in most cases).
-The -h and --help keywords are case sensitive. 
+No other processing is done.
+The -h and --help keywords are case sensitive.
 
 Examples:
 ```text
@@ -30,9 +41,8 @@ java -jar morphcx -i sample-network/LBC_FILETERED_ERK_AKT.json
 
 The filename can be enclosed by double quotation (") marks if it contains spaces (such as a Window's filename).
 
-This option is only to be used when executing the program from the
-command line. The -i and --input keywords should not be used when executing as an
-NDEx server process.
+This option is only to be used when executing the program from a Terminal or Command shell. 
+The -i and --input keywords should never be used when executing as an NDEx server process.
 
 ### Output
 
@@ -48,30 +58,23 @@ Example:
 ```text
 -o sample-network/LBC_FILETERED_ERK_AKT.csv
 ```
-This option is only to be used when executing the program from the
-command line. The -o and --output keywords should not be used when executing as an
-NDEx server process.
 
-The filename can be enclosed by double quotation (") marks if it contains spaces (such as a Window's filename).
+The filename can be enclosed by double quotation (") marks if it contains spaces (such as in a Window's filename).
 
-In case the input option is specified and output option is
-omitted, the output file path and name will be made to match 
-the input file path and name, but the file extension will be
-changed to .csv or .tsv. Whichever extension is used depends on the specified or 
-default state of the convert option (i.e. when -c and --convert keyword parameters 
-are used).
+This option is only to be used when executing the program from a Terminal or Command shell. 
+The -o and --output keywords should never be used when executing as an NDEx server process
 
 ### Newline Characters
-Operating systems use platform-specific character strings when outputting to a new line.  
-In most circumstances the system default newline character can be used. In most cases the
-appropriate new line character will be generated and this option is not needed.  This option 
-is only intended as a means to override the platform-specific newline character string to 
-a specific OS platform.
+Operating systems use platform-specific character strings when outputting to the next line.  
+In most circumstances the system default newline character can be used. Most of the time the
+appropriate new line character will be generated and this parameter option is not needed.  It is only
+here as a means to override the platform-specific newline character string to a specific OS platform.
 
 * WINDOWS
 * OSX
 * OLDMAC (i.e. legacy Apple Mac)
 * LINUX
+* SYSTEM
 
 ```text
 [-n | --newline] OS_Platform
@@ -84,15 +87,16 @@ Example:
 ```
 where the output newline is to be forced to that used by the Apple OSX platform.
 
-When this option is omitted, the Java VM system runtime determines the newline character string.
+When this option SYSTEM or omitted, the newline character string is determined by the JAVA runtime on which
+this application is executing.
 
-### Help
+### Server
 
 ```text
 [-S | --server]
 ```
 This keyword parameter forces all IO to be forced to `stdin` and `stdout` and overrides the input and output
-options.  We recommend that his keyword option be used whenever this application is executed as an NDEx server
+options.  We recommend that this keyword option be used whenever this application is executed as an NDEx server
 process. 
 
 Examples:

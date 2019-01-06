@@ -5,7 +5,7 @@
 ```text
 java -jar <classpath>morphcx.jar -S
 ```
-In the above, the -S (USE CAPITAL LETTER!) forces `stdin` as the input stream and `stdout` 
+In the above, the -S (must use a CAPITAL LETTER!) forces `stdin` as the input stream and `stdout` 
 as the output stream.  
 
 In the above example, the application default was to produce a tab-separated value
@@ -23,3 +23,5 @@ When a comma-separated value output stream is desired, use the following instead
 ```text
 java -jar <classpath>morphcx.jar -S -c csv 
 ```
+
+The parameter options can be specified in any order.
