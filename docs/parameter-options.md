@@ -1,14 +1,15 @@
 # Parameter Options
 
-The user can pick from several command-line parser standards, which are listed below.  And although examples
-used in this documentation are given in the POSIX and GNU formats, please use whichever standard you are most
-accustomed to using.
+The user can pick from several command-line parser standards:
 
 * POSIX like options (i.e. `-Sn linux`)
 * GNU like long options (i.e. `--input filename --output outfile --convert csv`)
 * Java like properties (i.e. `-Dc tsv`)
 * Short options with value attached (i.e. `-i filename`)
 * Long options with single hyphen (i.e. `-server`)
+
+Although examplesused in this documentation are given in the POSIX and GNU formats, 
+please use whichever standard you are most accustomed to using.
 
 ### Help
 
