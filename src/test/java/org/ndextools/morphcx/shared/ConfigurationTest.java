@@ -29,7 +29,7 @@ public class ConfigurationTest {
         String[] args = {"tocsv", "-i", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getInputIsFile());
-        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getInputFilespec() );
+        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getInputFilename() );
     }
 
     @Ignore
@@ -37,7 +37,7 @@ public class ConfigurationTest {
         String[] args = {"tocsv", "--input", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getInputIsFile());
-        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getInputFilespec() );
+        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getInputFilename() );
     }
 
     @Ignore
@@ -45,7 +45,7 @@ public class ConfigurationTest {
         String[] args = {"tocsv", "-o", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getOutputIsFile());
-        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilespec() );
+        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilename() );
     }
 
     @Ignore
@@ -53,7 +53,7 @@ public class ConfigurationTest {
         String[] args = {"tocsv", "--output", RAW_CX_NETWORK_LBC};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getOutputIsFile());
-        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilespec() );
+        Assert.assertEquals( RAW_CX_NETWORK_LBC, cfg.getOutputFilename() );
     }
 
     @Ignore

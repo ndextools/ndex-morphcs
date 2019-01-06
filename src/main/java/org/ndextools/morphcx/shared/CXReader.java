@@ -27,7 +27,7 @@ public class CXReader {
 
         if (cfg.getInputIsFile()) {
 
-            try (InputStream input = new FileInputStream( cfg.getInputFilespec() );
+            try (InputStream input = new FileInputStream( cfg.getInputFilename() );
                  BufferedInputStream bufferedInput = new BufferedInputStream(input))
             {
                 cx = NdexRestClientUtilities.getCXNetworkFromStream(bufferedInput);

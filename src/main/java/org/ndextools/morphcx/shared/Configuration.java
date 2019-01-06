@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.cli.*;
+import org.apache.commons.csv.CSVFormat;
 
 /**
  * The Configuration class validates command-line parameters used when starting this application, and
@@ -26,8 +27,9 @@ public final class Configuration {
     private boolean isOldMacNewline = false;
     private boolean isSystemNewline = false;
 
-    private String inputFilespec;
-    private String outputFilespec;
+    private String inputFilename;
+    private String outputFilename
+            ;
     private char columnSeparator;
     private String newline;
 
@@ -35,9 +37,9 @@ public final class Configuration {
         TSV, CSV, NOT_SPECIFIED
     }
 
-    enum CSVFormat {
-        DEFAULT, TDF, NOT_SPECIFIED
-    }
+//    enum CSVFormat {
+//        DEFAULT, TDF, NOT_SPECIFIED
+//    }
 
     enum ColumnSeparator {
         COMMA(','), TAB('\t');
@@ -105,13 +107,13 @@ public final class Configuration {
                         .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV >  Default: 'TSV'.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_FORMAT)
-                        .longOpt(OptionConstants.LONG_OPT_FORMAT)
-                        .hasArg()
-                        .desc("Output format as defined by the Apache Commons CSV library. Other options: RFC4180 and EXCEL. < DEFAULT | TDF | RFC4180 | EXCEL >  Default: 'DEFAULT'.")
-                        .build()
-        );
+//        getHelpOptions().addOption(
+//                Option.builder(OptionConstants.OPT_FORMAT)
+//                        .longOpt(OptionConstants.LONG_OPT_FORMAT)
+//                        .hasArg()
+//                        .desc("Output format as defined by the Apache Commons CSV library. < DEFAULT | TDF >  Default: 'DEFAULT'.")
+//                        .build()
+//        );
         getHelpOptions().addOption(
                  Option.builder(OptionConstants.OPT_HELP)
                         .longOpt(OptionConstants.LONG_OPT_HELP)
@@ -188,35 +190,35 @@ public final class Configuration {
             setColumnSeparator(OptionConstants.TAB);
         }
 
-        if (parsed.hasOption(OptionConstants.OPT_FORMAT)) {
-            String format = parsed.getOptionValue(OptionConstants.OPT_FORMAT).toUpperCase();
-            switch (format) {
-                case OptionConstants.FORMAT_DEFAULT:
-                    setCSVFormat(CSVFormat.DEFAULT);
-                    break;
-                case OptionConstants.FORMAT_TDF:
-                    setCSVFormat(CSVFormat.TDF);
-                    break;
-                default:
-                    setCSVFormat(CSVFormat.NOT_SPECIFIED);
-                    break;
-            }
-        } else {
-            setCSVFormat(CSVFormat.NOT_SPECIFIED);
-        }
+//        if (parsed.hasOption(OptionConstants.OPT_FORMAT)) {
+//            String format = parsed.getOptionValue(OptionConstants.OPT_FORMAT).toUpperCase();
+//            switch (format) {
+//                case OptionConstants.FORMAT_DEFAULT:
+//                    setCSVFormat(CSVFormat.DEFAULT);
+//                    break;
+//                case OptionConstants.FORMAT_TDF:
+//                    setCSVFormat(CSVFormat.TDF);
+//                    break;
+//                default:
+//                    setCSVFormat(CSVFormat.NOT_SPECIFIED);
+//                    break;
+//            }
+//        } else {
+//            setCSVFormat(CSVFormat.NOT_SPECIFIED);
+//        }
 
         if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
             setInputIsFile(true);
-            setInputFilespec(parsed.getOptionValue(OptionConstants.OPT_INPUT));
+            setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
         } else {
-            setInputFilespec("");
+            setInputFilename("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
             setOutputIsFile(true);
-            setOutputFilespec(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
+            setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
         } else {
-            setOutputFilespec("");
+            setOutputFilename("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
@@ -262,11 +264,11 @@ public final class Configuration {
             setColumnSeparator(OptionConstants.TAB);
         }
 
-        // csvFormat defaults to "-f tdf" when -f or --format isn't specified in command-line
-        if (csvFormat == CSVFormat.NOT_SPECIFIED) {
-            setCSVFormat(CSVFormat.TDF);
-            setColumnSeparator(OptionConstants.TAB);
-        }
+//        // csvFormat defaults to "-f tdf" when -f or --format isn't specified in command-line
+//        if (csvFormat == CSVFormat.NOT_SPECIFIED) {
+//            setCSVFormat(CSVFormat.TDF);
+//            setColumnSeparator(OptionConstants.TAB);
+//        }
 
         // forces stdin and stdout when -S option is specified on the command-line
         if (isServer()) {
@@ -278,7 +280,7 @@ public final class Configuration {
     private final void validate()throws IOException, SecurityException {
 
         if (getInputIsFile()) {
-            fileExists(getInputFilespec());
+            fileExists(getInputFilename());
         }
     }
 
@@ -356,13 +358,13 @@ public final class Configuration {
         Configuration.outputIsFile = value;
     }
 
-    public static CSVFormat getCSVFormat() {
-        return Configuration.csvFormat;
-    }
-
-    static void setCSVFormat(CSVFormat csvFormat) {
-        Configuration.csvFormat = csvFormat;
-    }
+//    public static CSVFormat getCSVFormat() {
+//        return Configuration.csvFormat;
+//    }
+//
+//    static void setCSVFormat(CSVFormat csvFormat) {
+//        Configuration.csvFormat = csvFormat;
+//    }
 
     public boolean isWindowsNewline() {
         return isWindowsNewline;
@@ -412,20 +414,20 @@ public final class Configuration {
         Configuration.isServer = value;
     }
 
-    public String getInputFilespec() {
-        return inputFilespec;
+    public String getInputFilename() {
+        return inputFilename;
     }
 
-    void setInputFilespec(String inputFilespec) {
-        this.inputFilespec = inputFilespec;
+    void setInputFilename(String inputFilename) {
+        this.inputFilename = inputFilename;
     }
 
-    public String getOutputFilespec() {
-        return outputFilespec;
+    public String getOutputFilename() {
+        return outputFilename;
     }
 
-    void setOutputFilespec(String outputFilespec) {
-        this.outputFilespec = outputFilespec;
+    void setOutputFilename(String outputFilename) {
+        this.outputFilename= outputFilename;
     }
 
     public char getColumnSeparator() {
@@ -448,8 +450,8 @@ public final class Configuration {
         private static final String OPT_CONVERT =  "c";
         private static final String LONG_OPT_CONVERT =  "convert";
 
-        private static final String OPT_FORMAT = "f";
-        private static final String LONG_OPT_FORMAT = "format";
+//        private static final String OPT_FORMAT = "f";
+//        private static final String LONG_OPT_FORMAT = "format";
 
         private static final String OPT_HELP =  "h";
         private static final String LONG_OPT_HELP =  "help";
@@ -466,18 +468,18 @@ public final class Configuration {
         private static final String OPT_SERVER = "S";
 
         private static final String CONVERT_CSV = "CSV";
-        private static final String CSV_EXT = ".csv";
+//        private static final String CSV_EXT = ".csv";
 
         private static final String CONVERT_TSV = "TSV";
-        private static final String TSV_EXT = ".tsv";
+//        private static final String TSV_EXT = ".tsv";
 
         public static final char TAB = '\t';
         public static final char COMMA = ',';
 
-        private static final String FORMAT_DEFAULT = "DEFAULT";
-        private static final String FORMAT_RFC4180 = "RFC4180";
-        private static final String FORMAT_EXCEL = "EXCEL";
-        private static final String FORMAT_TDF = "TDF";
+//        private static final String FORMAT_DEFAULT = "DEFAULT";
+//        private static final String FORMAT_RFC4180 = "RFC4180";
+//        private static final String FORMAT_EXCEL = "EXCEL";
+//        private static final String FORMAT_TDF = "TDF";
 
         public static final String WINDOWS = "WINDOWS";
         public static final String LINUX = "LINUX";
@@ -498,8 +500,8 @@ public final class Configuration {
                 // "operation=%s, " +
                 "inputIsFile=%b, " +
                 "outputIsFile=%b, " +
-                // "cvsFormat=%s, " +
-                "inputFilespec=%s, " +
+//                 "cvsFormat=%s, " +
+                "inputFilename=%s, " +
                 "outputFilespec=%s, ",
                 //"columnSeparator=%s",
                 //"newline=%s",
@@ -507,9 +509,9 @@ public final class Configuration {
                 // operation
                 getInputIsFile(),
                 getOutputIsFile(),
-                // csvFormat
-                getInputFilespec(),
-                getOutputFilespec()
+//                 csvFormat
+                getInputFilename(),
+                getOutputFilename()
                 );
     }
 }
