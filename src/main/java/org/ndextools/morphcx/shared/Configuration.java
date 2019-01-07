@@ -60,18 +60,9 @@ public final class Configuration {
         Utilities.nullReferenceCheck(this.args, Configuration.class.getSimpleName());
 
         CommandLine parsedParams = defineParams();
-
-        System.err.println("Before resolve(), inputIsFile=" + Configuration.getInputIsFile());
-        System.err.println("getInputFilename()=" + Configuration.getInputFilename());
-
         resolve(parsedParams);
 
-        System.err.println("After resolve(), inputIsFile=" + Configuration.getInputIsFile());
-        System.err.println("getInputFilename()=" + Configuration.getInputFilename());
-
-        System.err.println("!isHelp()=" + isHelp() + " | " + Configuration.isHelp());
-
-        if (!isHelp()) {
+        if (!Configuration.isHelp()) {
             preValidationAdjustments();
             validate();
         }
@@ -90,7 +81,6 @@ public final class Configuration {
         getHelpOptions().addOption(
                 Option.builder(OptionConstants.OPT_CONVERT)
                         .longOpt(OptionConstants.LONG_OPT_CONVERT)
-
                         .hasArg()
                         .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV >  Default: 'TSV'.")
                         .build()
@@ -158,10 +148,12 @@ public final class Configuration {
                     case OptionConstants.CONVERT_CSV:
                         Configuration.setOperation(Operation.CSV);
                         Configuration.setDelimiter(OptionConstants.COMMA);
+                        System.err.println("Converting to CSV");
                         break;
                     case OptionConstants.CONVERT_TSV:
                         Configuration.setOperation(Operation.TSV);
                         Configuration.setDelimiter(OptionConstants.TAB);
+                        System.err.println("Converting to TSV");
                     default:
                         Configuration.setOperation(Operation.NOT_SPECIFIED);
                         break;
@@ -198,7 +190,8 @@ public final class Configuration {
                     break;
                     case OptionConstants.SYSTEM:
                         Configuration.newline = Newline.SYSTEM;
-                        Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+//                        Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+                        Configuration.newlineAsString = System.getProperty("line.separator");
                     default:
                         Configuration.newline = Newline.NOT_SPECIFIED;
                         setNewlineAsString("");
