@@ -39,7 +39,7 @@ public class TableToCSVAsStdoutTest {
 
 
     @Test
-    public void _ShouldOutputColumnHeadersUsingCommaDelimiter() {
+    public void _ShouldOutputColumnHeadersAndColumnDataUsingCommaDelimiter() throws Exception {
 
         List<String> row1Headers = new ArrayList<>();
         row1Headers.add("Header-A");
@@ -59,16 +59,18 @@ public class TableToCSVAsStdoutTest {
                     .withDelimiter(COMMA));
             printer.printRecord(row1Headers);
             printer.printRecord(row2Data);
-        } catch (IOException e) {
-            Assert.assertEquals("Header-A" + COMMA +
-                    "Header-B" + COMMA +
-                    "Header-C" + COMMA +
-                    "Header-D\n", outContent.toString());
+        } catch (Exception e) {
+            throw new Exception(e);
         }
+
+        String output = outContent.toString();
+        Assert.assertTrue(output.contains("Header-A,Header-B,Header-C,Header-D"));
+        Assert.assertTrue(output.contains("\n"));
+        Assert.assertTrue(output.contains("data_2_A,data_2_B,data_2_C,data_2_D"));
     }
 
         @Test
-        public void _ShouldOutputColumnHeadersUsingTabDelimiter() {
+        public void _ShouldOutputColumnHeadersAndColumnDataUsingTabDelimiter() throws Exception {
 
             List<String> row1Headers = new ArrayList<>();
             row1Headers.add("Header-A");
@@ -88,22 +90,24 @@ public class TableToCSVAsStdoutTest {
                         .withDelimiter(TAB));
                 printer.printRecord(row1Headers);
                 printer.printRecord(row2Data);
-            } catch (IOException e) {
-                Assert.assertEquals("Header-A" + TAB +
-                        "Header-B" + TAB +
-                        "Header-C" + TAB +
-                        "Header-D\n", outContent.toString() );
+            } catch (Exception e) {
+                throw new Exception(e);
             }
-    }
+
+            String output = outContent.toString();
+            Assert.assertTrue(output.contains("Header-A\tHeader-B\tHeader-C\tHeader-D"));
+            Assert.assertTrue(output.contains("\n"));
+            Assert.assertTrue(output.contains("data_2_A\tdata_2_B\tdata_2_C\tdata_2_D"));
+        }
 
     @Test
-    public void _ShouldOutputColumnHeadersAndDataRowsUsingCommaDelimiter() {
+    public void _ShouldOutputColumnHeadersAndDataRowsUsingWindowsNewline() throws Exception {
 
         List<String> row1Headers = new ArrayList<>();
-        row1Headers.add("Column-A");
-        row1Headers.add("Column-B");
-        row1Headers.add("Column-C");
-        row1Headers.add("Column-D");
+        row1Headers.add("Header-A");
+        row1Headers.add("Header-B");
+        row1Headers.add("Header-C");
+        row1Headers.add("Header-D");
 
         List<String> row2Data = new ArrayList<>();
         row2Data.add("data_A");
@@ -113,53 +117,18 @@ public class TableToCSVAsStdoutTest {
 
         try {
             CSVPrinter printer = new CSVPrinter(ps, CSVFormat.DEFAULT
-                    .withRecordSeparator("\n")
+                    .withRecordSeparator("\r\n")
                     .withDelimiter(COMMA));
             printer.printRecord(row1Headers);
             printer.printRecord(row2Data);
-        } catch (IOException e) {
-            Assert.assertEquals("Column-A" + COMMA +
-                    "Column-B" + COMMA +
-                    "Column-C" + COMMA +
-                    "Column-D\n" + COMMA +
-                    "data_A" + COMMA +
-                    "data_B" + COMMA +
-                    "data_C" + COMMA +
-                    "data-D\n", outContent.toString());
+        } catch (Exception e) {
+            throw new Exception(e);
         }
-    }
 
-    @Test
-    public void _ShouldOutputColumnHeadersAndDataRowsUsingTabDelimiter() {
-
-        List<String> row1Headers = new ArrayList<>();
-        row1Headers.add("Column-A");
-        row1Headers.add("Column-B");
-        row1Headers.add("Column-C");
-        row1Headers.add("Column-D");
-
-        List<String> row2Data = new ArrayList<>();
-        row2Data.add("data_A");
-        row2Data.add("data_B");
-        row2Data.add("data_C");
-        row2Data.add("data_D");
-
-        try {
-            CSVPrinter printer = new CSVPrinter(ps, CSVFormat.TDF
-                    .withRecordSeparator("\n")
-                    .withDelimiter(TAB));
-            printer.printRecord(row1Headers);
-            printer.printRecord(row2Data);
-        } catch (IOException e) {
-            Assert.assertEquals("Column-A" + TAB +
-                    "Column-B" + TAB +
-                    "Column-C" + TAB +
-                    "Column-D\n" + TAB +
-                    "data_A" + TAB +
-                    "data_B" + TAB +
-                    "data_C" + TAB +
-                    "data-D\n", outContent.toString());
-        }
+        String output = outContent.toString();
+        Assert.assertTrue(output.contains("Header-A,Header-B,Header-C,Header-D"));
+        Assert.assertTrue(output.contains("\r\n"));
+        Assert.assertTrue(output.contains("data_A,data_B,data_C,data_D"));
     }
 
 }

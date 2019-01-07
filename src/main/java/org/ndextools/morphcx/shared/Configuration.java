@@ -44,8 +44,8 @@ public final class Configuration {
         Newline(String nl) {
             this.nl = nl;
         }
-    }
 
+    }
     /**
      * Class constructor
      *
@@ -60,11 +60,20 @@ public final class Configuration {
         Utilities.nullReferenceCheck(this.args, Configuration.class.getSimpleName());
 
         CommandLine parsedParams = defineParams();
+
+        System.err.println("Before resolve(), inputIsFile=" + Configuration.getInputIsFile());
+        System.err.println("getInputFilename()=" + Configuration.getInputFilename());
+
         resolve(parsedParams);
 
+        System.err.println("After resolve(), inputIsFile=" + Configuration.getInputIsFile());
+        System.err.println("getInputFilename()=" + Configuration.getInputFilename());
+
+        System.err.println("!isHelp()=" + isHelp() + " | " + Configuration.isHelp());
+
         if (!isHelp()) {
+            preValidationAdjustments();
             validate();
-            postValidationAdjustments();
         }
     }
 
@@ -133,111 +142,110 @@ public final class Configuration {
         return parsed;
     }
 
-    /**
-     * This method resolves all command-line options associated with their respective CLI parameters.
-     */
-    private final void resolve(CommandLine parsed) {
+        /**
+         * This method resolves all command-line options associated with their respective CLI parameters.
+         */
+        private final void resolve(CommandLine parsed) {
 
-        // Apache Commons CLI - Step #3 of 3: Interrogate and resolve parameter settings
-        if (parsed.hasOption(OptionConstants.OPT_HELP)) {
-            setIsHelp(true);
-        }
+            // Apache Commons CLI - Step #3 of 3: Interrogate and resolve parameter settings
+            if (parsed.hasOption(OptionConstants.OPT_HELP)) {
+                Configuration.setIsHelp(true);
+            }
 
-        if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
-            String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
-            switch (convert) {
-                case OptionConstants.CONVERT_CSV:
-                    setOperation(Operation.CSV);
-                    setDelimiter(OptionConstants.COMMA);
+            if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
+                String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
+                switch (convert) {
+                    case OptionConstants.CONVERT_CSV:
+                        Configuration.setOperation(Operation.CSV);
+                        Configuration.setDelimiter(OptionConstants.COMMA);
+                        break;
+                    case OptionConstants.CONVERT_TSV:
+                        Configuration.setOperation(Operation.TSV);
+                        Configuration.setDelimiter(OptionConstants.TAB);
+                    default:
+                        Configuration.setOperation(Operation.NOT_SPECIFIED);
+                        break;
+                }
+            } else {
+                Configuration.setOperation(Operation.NOT_SPECIFIED);
+            }
+
+            if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
+                Configuration.setInputIsFile(true);
+                Configuration.setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
+            } else {
+                Configuration.setInputFilename("");
+            }
+
+            if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
+                String newline = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
+                switch (newline) {
+                    case OptionConstants.WINDOWS:
+                        Configuration.newline = Newline.WINDOWS;
+                        Configuration.newlineAsString = Newline.WINDOWS.getNewlineValueOf();
                     break;
-                case OptionConstants.CONVERT_TSV:
-                    setOperation(Operation.TSV);
-                    setDelimiter(OptionConstants.TAB);
-                default:
-                    setOperation(Operation.NOT_SPECIFIED);
+                    case OptionConstants.LINUX:
+                        Configuration.newline = Newline.LINUX;
+                        Configuration.newlineAsString = Newline.LINUX.getNewlineValueOf();
+                    break;
+                    case OptionConstants.OSX:
+                        Configuration.newline = Newline.OSX;
+                        Configuration.newlineAsString = Newline.OSX.getNewlineValueOf();
+                    break;
+                    case OptionConstants.OLDMAC:
+                        Configuration.newline = Newline.OLDMAC;
+                        Configuration.newlineAsString = Newline.OLDMAC.getNewlineValueOf();
+                    break;
+                    case OptionConstants.SYSTEM:
+                        Configuration.newline = Newline.SYSTEM;
+                        Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+                    default:
+                        Configuration.newline = Newline.NOT_SPECIFIED;
+                        setNewlineAsString("");
                     break;
             }
         } else {
-            setOperation(Operation.NOT_SPECIFIED);
-        }
-
-        if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
-            setInputIsFile(true);
-            setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
-        } else {
-            setInputFilename("");
-        }
-
-        if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
-            String newline = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
-            switch (newline) {
-                case OptionConstants.WINDOWS:
-                    Configuration.newline = Newline.WINDOWS;
-                    Configuration.newlineAsString = Newline.WINDOWS.getNewlineValueOf();
-                    break;
-                case OptionConstants.LINUX:
-                    Configuration.newline = Newline.LINUX;
-                    Configuration.newlineAsString = Newline.LINUX.getNewlineValueOf();
-                    break;
-                case OptionConstants.OSX:
-                    Configuration.newline = Newline.OSX;
-                    Configuration.newlineAsString = Newline.OSX.getNewlineValueOf();
-                    break;
-                case OptionConstants.OLDMAC:
-                    Configuration.newline = Newline.OLDMAC;
-                    Configuration.newlineAsString = Newline.OLDMAC.getNewlineValueOf();
-                    break;
-                case OptionConstants.SYSTEM:
-                    Configuration.newline = Newline.SYSTEM;
-                    Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
-                default:
-                    Configuration.newline = Newline.NOT_SPECIFIED;
-                    setNewlineAsString("");
-                    break;
+                Configuration.newline = Newline.NOT_SPECIFIED;
+                Configuration.setNewlineAsString("");
             }
-        } else {
-            Configuration.newline = Newline.NOT_SPECIFIED;
-            setNewlineAsString("");
-        }
 
         if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
-            setOutputIsFile(true);
-            setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
+            Configuration.setOutputIsFile(true);
+            Configuration.setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
         } else {
-            setOutputFilename("");
+            Configuration.setOutputFilename("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_SERVER)) {
-            setIsServer(true);
+            Configuration.setIsServer(true);
         }
-
     }
 
-    private final void postValidationAdjustments() {
+    private final void preValidationAdjustments() {
 
         // operation defaults to "-c tsv" when -c or --convert isn't specified in command-line
-        if (operation == Operation.NOT_SPECIFIED) {
-            setOperation(Operation.TSV);
-            setDelimiter(OptionConstants.TAB);
+        if (Configuration.operation == Operation.NOT_SPECIFIED) {
+            Configuration.setOperation(Operation.TSV);
+            Configuration.setDelimiter(OptionConstants.TAB);
         }
 
         // newline defaults to "-n system" when -n or --newline isn't specified in command-line
-        if (newline == Newline.NOT_SPECIFIED) {
+        if (Configuration.newline == Newline.NOT_SPECIFIED) {
             Configuration.newline = Newline.SYSTEM;
             Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
         }
 
         // forces stdin and stdout when -S option is specified on the command-line
-        if (isServer()) {
-            setInputIsFile(false);
-            setOutputIsFile(false);
+        if (Configuration.isServer()) {
+            Configuration.setInputIsFile(false);
+            Configuration.setOutputIsFile(false);
         }
     }
 
     private final void validate()throws IOException, SecurityException {
 
-        if (getInputIsFile()) {
-            fileExists(getInputFilename());
+        if (Configuration.getInputIsFile()) {
+            fileExists(Configuration.getInputFilename());
         }
     }
 
@@ -273,22 +281,22 @@ public final class Configuration {
         formatter.printHelp(132, prefix, header, getHelpOptions(), footer, true);
     }
 
-    public String[] getArgs() { return this.args; }
+    public String[] getArgs() { return Configuration.args; }
 
     public static Options getHelpOptions() {
-        return helpOptions;
+        return Configuration.helpOptions;
     }
 
-    void setHelpOptions(Options helpOptions) {
-        this.helpOptions = helpOptions;
+    static void setHelpOptions(Options helpOptions) {
+        Configuration.helpOptions = helpOptions;
     }
 
-    public boolean isHelp() {
-        return this.isHelp;
+    public static boolean isHelp() {
+        return Configuration.isHelp;
     }
 
-    void setIsHelp(boolean value) {
-        this.isHelp = value;
+    static void setIsHelp(boolean value) {
+        Configuration.isHelp = value;
     }
 
     public static Operation getOperation() {

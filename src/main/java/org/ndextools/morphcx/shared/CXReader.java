@@ -14,6 +14,7 @@ public class CXReader {
 
     public CXReader(Configuration cfg) {
         this.cfg = cfg;
+        System.err.println("CXReader Constructor");
     }
 
     /**
@@ -24,6 +25,8 @@ public class CXReader {
      */
     public NiceCXNetwork produceNiceCX() throws IOException {
         NiceCXNetwork cx;
+
+        System.err.println("getInputIsFile()=" + cfg.getInputIsFile() + " | " + Configuration.getInputIsFile());
 
         if (cfg.getInputIsFile()) {
 

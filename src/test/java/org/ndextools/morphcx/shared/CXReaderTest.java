@@ -2,7 +2,6 @@ package org.ndextools.morphcx.shared;
 
 import java.io.IOException;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,7 +15,7 @@ public class CXReaderTest {
     private String LUMINAL_BREAST_CANCER = "src/test/resources/LUMINAL_BREAST_CANCER.json";
     private String EMPTY_LIST = "src/test/resources/EMPTY_LIST.json";
 
-    @Ignore
+    @Test
     public void _Should_Load_NiceCxNetwork_LBC_FILTERED_ERK_AKT() throws Exception {
         String[] args = {"-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = new Configuration(args);
@@ -30,7 +29,7 @@ public class CXReaderTest {
         Assert.assertEquals(9, niceCX.getMetadata().size());
     }
 
-    @Ignore
+    @Test
     public void _Should_Load_NiceCxNetwork_LBC() throws Exception {
         String[] args = {"-i", LUMINAL_BREAST_CANCER};
         Configuration cfg = new Configuration(args);
@@ -47,7 +46,7 @@ public class CXReaderTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Ignore
+    @Test
     public void _Should_Throw_IOException() throws Exception {
         String[] args = {"-i", EMPTY_LIST};
         Configuration cfg = new Configuration(args);
