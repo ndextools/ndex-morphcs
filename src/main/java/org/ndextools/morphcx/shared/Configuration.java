@@ -148,12 +148,10 @@ public final class Configuration {
                     case OptionConstants.CONVERT_CSV:
                         Configuration.setOperation(Operation.CSV);
                         Configuration.setDelimiter(OptionConstants.COMMA);
-                        System.err.println("Converting to CSV");
                         break;
                     case OptionConstants.CONVERT_TSV:
                         Configuration.setOperation(Operation.TSV);
                         Configuration.setDelimiter(OptionConstants.TAB);
-                        System.err.println("Converting to TSV");
                     default:
                         Configuration.setOperation(Operation.NOT_SPECIFIED);
                         break;
