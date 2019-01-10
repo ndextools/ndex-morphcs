@@ -21,6 +21,27 @@ public class ConfigurationTest {
     }
 
     @Test
+    public void _Should_Show_Convert_TSV_Is_Set() throws Exception {
+        String[] args = {"-c", "tsv"};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertEquals(Configuration.Operation.TSV.toString(), cfg.getOperation().toString());
+    }
+
+    @Test
+    public void _Should_Show_Convert_CSV_Is_Set() throws Exception {
+        String[] args = {"-c", "csv"};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertEquals(Configuration.Operation.CSV.toString(), cfg.getOperation().toString());
+    }
+
+    @Test
+    public void _Should_Show_Convert_Default_Is_TSV() throws Exception {
+        String[] args = {};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertEquals(Configuration.Operation.TSV.toString(), cfg.getOperation().toString());
+    }
+
+    @Test
     public void _HelpOptionGiven() throws Exception {
         String[] args = {"-h"};
         Configuration cfg = performConfiguration(args);
@@ -59,7 +80,7 @@ public class ConfigurationTest {
         Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getOutputFilename() );
     }
 
-    @Ignore
+    @Test
     public void _Default_Newline_Should_Be_System_Property_Line_Separator() throws Exception {
         String[] args = {"-n", "system", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
@@ -93,6 +114,21 @@ public class ConfigurationTest {
         String[] args = {"-n", "oldmac", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
         Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R, cfg.getNewlineAsString());
+    }
+
+    @Test
+    public void _Should_Show_Server_Option_Is_Set() throws Exception {
+        String[] args = {"-S"};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertTrue(cfg.isServer());
+    }
+
+    @Test
+    public void _Should_Show_Server_Option_Results_In_System_IO() throws Exception {
+        String[] args = {"-S"};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertFalse(cfg.getInputIsFile());
+        Assert.assertFalse(cfg.getOutputIsFile());
     }
 
     @Rule
