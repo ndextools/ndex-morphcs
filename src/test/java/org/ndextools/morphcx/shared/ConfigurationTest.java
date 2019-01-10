@@ -24,7 +24,7 @@ public class ConfigurationTest {
     public void _HelpOptionGiven() throws Exception {
         String[] args = {"-h"};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(Configuration.isHelp());
+        Assert.assertTrue(cfg.isHelp());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class ConfigurationTest {
         String[] args = {"-c", "tsv", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getInputIsFile());
-        Assert.assertEquals(LBC_FILTERED_ERK_AKT, Configuration.getInputFilename() );
+        Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getInputFilename() );
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ConfigurationTest {
         String[] args = {"--input", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getInputIsFile());
-        Assert.assertEquals(LBC_FILTERED_ERK_AKT, Configuration.getInputFilename() );
+        Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getInputFilename() );
     }
 
     @Test
@@ -48,7 +48,7 @@ public class ConfigurationTest {
         String[] args = {"-o", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getOutputIsFile());
-        Assert.assertEquals(LBC_FILTERED_ERK_AKT, Configuration.getOutputFilename() );
+        Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getOutputFilename() );
     }
 
     @Test
@@ -56,35 +56,35 @@ public class ConfigurationTest {
         String[] args = {"--output", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
         Assert.assertTrue(cfg.getOutputIsFile());
-        Assert.assertEquals(LBC_FILTERED_ERK_AKT, Configuration.getOutputFilename() );
+        Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getOutputFilename() );
     }
 
     @Ignore
     public void _Default_Newline_Should_Be_System_Property_Line_Separator() throws Exception {
         String[] args = {"-n", "system", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(System.getProperty("line.separator"), Configuration.getNewlineAsString());
+        Assert.assertEquals(System.getProperty("line.separator"), cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_Windows_Newline() throws Exception {
         String[] args = {"-n", "windows", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R_ESCAPE_N, Configuration.getNewlineAsString());
+        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R_ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_Linux_Newline() throws Exception {
         String[] args = {"-n", "linux", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, Configuration.getNewlineAsString());
+        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_OSX_Newline() throws Exception {
         String[] args = {"-n", "osx", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, Configuration.getNewlineAsString());
+        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, cfg.getNewlineAsString());
     }
 
 
@@ -92,7 +92,7 @@ public class ConfigurationTest {
     public void _Should_Be_Oldmac_Newline() throws Exception {
         String[] args = {"-n", "oldmac", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R, Configuration.getNewlineAsString());
+        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R, cfg.getNewlineAsString());
     }
 
     @Rule

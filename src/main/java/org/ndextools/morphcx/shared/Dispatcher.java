@@ -21,7 +21,7 @@ public class Dispatcher {
     public void dispatch() throws Exception {
 
         // Only --convert tsv & --convert csv are valid at this time!
-        Configuration.Operation operation = Configuration.getOperation();
+        Configuration.Operation operation = cfg.getOperation();
         switch (operation) {
             case CSV:
             case TSV:

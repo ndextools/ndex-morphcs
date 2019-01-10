@@ -41,8 +41,8 @@ public class MorphCX {
         if (cfg.isHelp()) {
             cfg.printHelpText();
         } else {
-            Dispatcher dpatch = new Dispatcher(cfg);
-            dpatch.dispatch();
+            Dispatcher dispatcher = new Dispatcher(cfg);
+            dispatcher.dispatch();
         }
         return;
     }

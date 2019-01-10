@@ -11,18 +11,18 @@ import org.apache.commons.cli.*;
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    private static String[] args;
-    private static Options helpOptions;
-    private static boolean isHelp;
-    private static Operation operation;
-    private static boolean inputIsFile;
-    private static boolean outputIsFile;
-    private static Newline newline;
-    private static boolean isServer;
-    private static String inputFilename;
-    private static String outputFilename;
-    private static char delimiter;
-    private static String newlineAsString;
+    private final String[] args;
+    private Options helpOptions;
+    private boolean isHelp;
+    private Operation operation;
+    private boolean inputIsFile;
+    private boolean outputIsFile;
+    private Newline newline;
+    private boolean isServer;
+    private String inputFilename;
+    private String outputFilename;
+    private char delimiter;
+    private String newlineAsString;
 
     public enum Operation {
         TSV, CSV, NOT_SPECIFIED
@@ -62,7 +62,7 @@ public final class Configuration {
         CommandLine parsedParams = defineParams();
         resolve(parsedParams);
 
-        if (!Configuration.isHelp()) {
+        if (!isHelp()) {
             preValidationAdjustments();
             validate();
         }
@@ -139,104 +139,103 @@ public final class Configuration {
 
             // Apache Commons CLI - Step #3 of 3: Interrogate and resolve parameter settings
             if (parsed.hasOption(OptionConstants.OPT_HELP)) {
-                Configuration.setIsHelp(true);
+                setIsHelp(true);
             }
 
             if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
                 String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
                 switch (convert) {
                     case OptionConstants.CONVERT_CSV:
-                        Configuration.setOperation(Operation.CSV);
-                        Configuration.setDelimiter(OptionConstants.COMMA);
+                        setOperation(Operation.CSV);
+                        setDelimiter(OptionConstants.COMMA);
                         break;
                     case OptionConstants.CONVERT_TSV:
-                        Configuration.setOperation(Operation.TSV);
-                        Configuration.setDelimiter(OptionConstants.TAB);
+                        setOperation(Operation.TSV);
+                        setDelimiter(OptionConstants.TAB);
                     default:
-                        Configuration.setOperation(Operation.NOT_SPECIFIED);
+                        setOperation(Operation.NOT_SPECIFIED);
                         break;
                 }
             } else {
-                Configuration.setOperation(Operation.NOT_SPECIFIED);
+                setOperation(Operation.NOT_SPECIFIED);
             }
 
             if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
-                Configuration.setInputIsFile(true);
-                Configuration.setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
+                setInputIsFile(true);
+                setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
             } else {
-                Configuration.setInputFilename("");
+                setInputFilename("");
             }
 
             if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
-                String newline = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
-                switch (newline) {
+                String nl = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
+                switch (nl) {
                     case OptionConstants.WINDOWS:
-                        Configuration.newline = Newline.WINDOWS;
-                        Configuration.newlineAsString = Newline.WINDOWS.getNewlineValueOf();
+                        newline = Newline.WINDOWS;
+                        newlineAsString = Newline.WINDOWS.getNewlineValueOf();
                     break;
                     case OptionConstants.LINUX:
-                        Configuration.newline = Newline.LINUX;
-                        Configuration.newlineAsString = Newline.LINUX.getNewlineValueOf();
+                        newline = Newline.LINUX;
+                        newlineAsString = Newline.LINUX.getNewlineValueOf();
                     break;
                     case OptionConstants.OSX:
-                        Configuration.newline = Newline.OSX;
-                        Configuration.newlineAsString = Newline.OSX.getNewlineValueOf();
+                        newline = Newline.OSX;
+                        newlineAsString = Newline.OSX.getNewlineValueOf();
                     break;
                     case OptionConstants.OLDMAC:
-                        Configuration.newline = Newline.OLDMAC;
-                        Configuration.newlineAsString = Newline.OLDMAC.getNewlineValueOf();
+                        newline = Newline.OLDMAC;
+                        newlineAsString = Newline.OLDMAC.getNewlineValueOf();
                     break;
                     case OptionConstants.SYSTEM:
-                        Configuration.newline = Newline.SYSTEM;
-//                        Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
-                        Configuration.newlineAsString = System.getProperty("line.separator");
+                        newline = Newline.SYSTEM;
+                        newlineAsString = System.getProperty("line.separator");
                     default:
-                        Configuration.newline = Newline.NOT_SPECIFIED;
+                        newline = Newline.NOT_SPECIFIED;
                         setNewlineAsString("");
                     break;
             }
         } else {
-                Configuration.newline = Newline.NOT_SPECIFIED;
-                Configuration.setNewlineAsString("");
+                newline = Newline.NOT_SPECIFIED;
+                setNewlineAsString("");
             }
 
         if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
-            Configuration.setOutputIsFile(true);
-            Configuration.setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
+            setOutputIsFile(true);
+            setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
         } else {
-            Configuration.setOutputFilename("");
+            setOutputFilename("");
         }
 
         if (parsed.hasOption(OptionConstants.OPT_SERVER)) {
-            Configuration.setIsServer(true);
+            setIsServer(true);
         }
     }
 
     private final void preValidationAdjustments() {
 
         // operation defaults to "-c tsv" when -c or --convert isn't specified in command-line
-        if (Configuration.operation == Operation.NOT_SPECIFIED) {
-            Configuration.setOperation(Operation.TSV);
-            Configuration.setDelimiter(OptionConstants.TAB);
+        if (operation == Operation.NOT_SPECIFIED) {
+            setOperation(Operation.TSV);
+            setDelimiter(OptionConstants.TAB);
         }
 
         // newline defaults to "-n system" when -n or --newline isn't specified in command-line
-        if (Configuration.newline == Newline.NOT_SPECIFIED) {
-            Configuration.newline = Newline.SYSTEM;
-            Configuration.newlineAsString = Newline.SYSTEM.getNewlineValueOf();
+        if (newline == Newline.NOT_SPECIFIED) {
+            newline = Newline.SYSTEM;
+            newlineAsString = Newline.SYSTEM.getNewlineValueOf();
         }
 
         // forces stdin and stdout when -S option is specified on the command-line
-        if (Configuration.isServer()) {
-            Configuration.setInputIsFile(false);
-            Configuration.setOutputIsFile(false);
+        if (isServer()) {
+            setInputIsFile(false);
+            setOutputIsFile(false);
         }
     }
 
     private final void validate()throws IOException, SecurityException {
 
-        if (Configuration.getInputIsFile()) {
-            fileExists(Configuration.getInputFilename());
+        if (getInputIsFile()) {
+            fileExists(getInputFilename());
         }
     }
 
@@ -264,7 +263,7 @@ public final class Configuration {
         return true;
     }
 
-    public static void printHelpText() {
+    public void printHelpText() {
         String prefix = "java -jar morphcx.jar";
         String header = "where parameter options are:";
         String footer = "";
@@ -272,86 +271,86 @@ public final class Configuration {
         formatter.printHelp(132, prefix, header, getHelpOptions(), footer, true);
     }
 
-    public String[] getArgs() { return Configuration.args; }
+    public String[] getArgs() { return this.args; }
 
-    public static Options getHelpOptions() {
-        return Configuration.helpOptions;
+    public Options getHelpOptions() {
+        return this.helpOptions;
     }
 
-    static void setHelpOptions(Options helpOptions) {
-        Configuration.helpOptions = helpOptions;
+    void setHelpOptions(Options helpOptions) {
+        this.helpOptions = helpOptions;
     }
 
-    public static boolean isHelp() {
-        return Configuration.isHelp;
+    public boolean isHelp() {
+        return isHelp;
     }
 
-    static void setIsHelp(boolean value) {
-        Configuration.isHelp = value;
+    void setIsHelp(boolean value) {
+        isHelp = value;
     }
 
-    public static Operation getOperation() {
-        return Configuration.operation;
+    public Operation getOperation() {
+        return this.operation;
     }
 
-    static void setOperation(Operation operation) {
-        Configuration.operation = operation;
+    void setOperation(Operation operation) {
+        this.operation = operation;
     }
 
-    public static boolean getInputIsFile() {
-        return Configuration.inputIsFile;
+    public boolean getInputIsFile() {
+        return this.inputIsFile;
     }
 
-    static void setInputIsFile(boolean value) {
-        Configuration.inputIsFile = value;
+    void setInputIsFile(boolean value) {
+        this.inputIsFile = value;
     }
 
-    public static boolean getOutputIsFile() {
-        return Configuration.outputIsFile;
+    public boolean getOutputIsFile() {
+        return this.outputIsFile;
     }
 
-    static void setOutputIsFile(boolean value) {
-        Configuration.outputIsFile = value;
+    void setOutputIsFile(boolean value) {
+        this.outputIsFile = value;
     }
 
-    public static boolean isServer() {
-        return Configuration.isServer;
+    public boolean isServer() {
+        return this.isServer;
     }
 
-    static void setIsServer(boolean value) {
-        Configuration.isServer = value;
+    void setIsServer(boolean value) {
+        this.isServer = value;
     }
 
-    public static String getInputFilename() {
-        return Configuration.inputFilename;
+    public String getInputFilename() {
+        return this.inputFilename;
     }
 
-    static void setInputFilename(String filename) {
-        Configuration.inputFilename = filename;
+    void setInputFilename(String filename) {
+        this.inputFilename = filename;
     }
 
-    public static String getOutputFilename() {
-        return Configuration.outputFilename;
+    public String getOutputFilename() {
+        return this.outputFilename;
     }
 
-    static void setOutputFilename(String filename) {
-        Configuration.outputFilename = filename;
+    void setOutputFilename(String filename) {
+        this.outputFilename = filename;
     }
 
-    public static char getDelimiter() {
-        return Configuration.delimiter;
+    public char getDelimiter() {
+        return this.delimiter;
     }
 
-    static void setDelimiter(char delimiter) {
-        Configuration.delimiter = delimiter;
+    void setDelimiter(char delimiter) {
+        this.delimiter = delimiter;
     }
 
-    public static String getNewlineAsString() {
-        return Configuration.newlineAsString;
+    public String getNewlineAsString() {
+        return this.newlineAsString;
     }
 
-    static void setNewlineAsString(String newline) {
-        Configuration.newlineAsString = newline;
+    void setNewlineAsString(String newline) {
+        this.newlineAsString = newline;
     }
 
     public static class OptionConstants {
@@ -405,7 +404,7 @@ public final class Configuration {
                 "outputFilespec=%s, ",
 //                delimiter
                 "newlineAsString=%s",
-//                getargs
+//                getArgs(),
                 getHelpOptions(),
                 // operation
                 getInputIsFile(),
