@@ -6,13 +6,14 @@ import java.io.IOException;
 
 import org.apache.commons.cli.*;
 
+import javax.rmi.CORBA.Util;
+
 /**
  * The Configuration class validates command-line parameters used when starting this application, and
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
     private final String[] args;
-    private Options helpOptions;
     private boolean isHelp;
     private Operation operation;
     private boolean inputIsFile;
@@ -46,6 +47,9 @@ public final class Configuration {
         }
 
     }
+
+    private Options csvParameterOptions;
+
     /**
      * Class constructor
      *
@@ -76,45 +80,45 @@ public final class Configuration {
     private CommandLine defineParams() throws ParseException {
 
         // Apache Commons CLI - Step #1 of 3: Define all command-line parameters
-        setHelpOptions( new Options());
+        setCSVParameterOptions( new Options());
 
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_CONVERT)
-                        .longOpt(OptionConstants.LONG_OPT_CONVERT)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_CONVERT)
+                        .longOpt(ConfigurationConstants.LONG_OPT_CONVERT)
                         .hasArg()
                         .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV >  Default: 'TSV'.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_HELP)
-                        .longOpt(OptionConstants.LONG_OPT_HELP)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_HELP)
+                        .longOpt(ConfigurationConstants.LONG_OPT_HELP)
                         .desc("Displays this help information.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_INPUT)
-                        .longOpt(OptionConstants.LONG_OPT_INPUT)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_INPUT)
+                        .longOpt(ConfigurationConstants.LONG_OPT_INPUT)
                         .hasArg()
                         .desc("Full input path and file specification. Default: input comes from STDIN rather than a file.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_NEWLINE)
-                        .longOpt(OptionConstants.LONG_OPT_NEWLINE)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_NEWLINE)
+                        .longOpt(ConfigurationConstants.LONG_OPT_NEWLINE)
                         .hasArg()
                         .desc("Platform-dependent newline characters. < WINDOWS | LINUX | OSX | OLDMAC | SYSTEM > Default: SYSTEM.")
                         .build()
         );
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_OUTPUT)
-                        .longOpt(OptionConstants.LONG_OPT_OUTPUT)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_OUTPUT)
+                        .longOpt(ConfigurationConstants.LONG_OPT_OUTPUT)
                         .hasArg()
                         .desc("Full output path and file specification. Default: output sent to STDOUT rather than a file.")
                         .build()
         );
 
-        getHelpOptions().addOption(
-                Option.builder(OptionConstants.OPT_SERVER)
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_SERVER)
                         .desc("Program to run as server process. IO is forced to STDIN and STDOUT.")
                         .build()
         );
@@ -123,7 +127,7 @@ public final class Configuration {
         CommandLine parsed;
         CommandLineParser parser = new DefaultParser();
         try {
-            parsed = parser.parse(getHelpOptions(), getArgs());
+            parsed = parser.parse(getCSVParameterOptions(), getArgs());
         } catch (ParseException e) {
             String errMsg = this.getClass().getSimpleName() + ": " + e.getMessage();
             throw new ParseException(errMsg);
@@ -138,20 +142,20 @@ public final class Configuration {
         private final void resolve(CommandLine parsed) {
 
             // Apache Commons CLI - Step #3 of 3: Interrogate and resolve parameter settings
-            if (parsed.hasOption(OptionConstants.OPT_HELP)) {
+            if (parsed.hasOption(ConfigurationConstants.OPT_HELP)) {
                 setIsHelp(true);
             }
 
-            if (parsed.hasOption(OptionConstants.OPT_CONVERT)) {
-                String convert = parsed.getOptionValue(OptionConstants.OPT_CONVERT).toUpperCase();
+            if (parsed.hasOption(ConfigurationConstants.OPT_CONVERT)) {
+                String convert = parsed.getOptionValue(ConfigurationConstants.OPT_CONVERT).toUpperCase();
                 switch (convert) {
-                    case OptionConstants.CONVERT_CSV:
+                    case ConfigurationConstants.CONVERT_CSV:
                         setOperation(Operation.CSV);
-                        setDelimiter(OptionConstants.COMMA);
+                        setDelimiter(ConfigurationConstants.COMMA);
                         break;
-                    case OptionConstants.CONVERT_TSV:
+                    case ConfigurationConstants.CONVERT_TSV:
                         setOperation(Operation.TSV);
-                        setDelimiter(OptionConstants.TAB);
+                        setDelimiter(ConfigurationConstants.TAB);
                     default:
                         setOperation(Operation.NOT_SPECIFIED);
                         break;
@@ -160,33 +164,33 @@ public final class Configuration {
                 setOperation(Operation.NOT_SPECIFIED);
             }
 
-            if (parsed.hasOption(OptionConstants.OPT_INPUT)) {
+            if (parsed.hasOption(ConfigurationConstants.OPT_INPUT)) {
                 setInputIsFile(true);
-                setInputFilename(parsed.getOptionValue(OptionConstants.OPT_INPUT));
+                setInputFilename(parsed.getOptionValue(ConfigurationConstants.OPT_INPUT));
             } else {
                 setInputFilename("");
             }
 
-            if (parsed.hasOption(OptionConstants.OPT_NEWLINE)) {
-                String nl = parsed.getOptionValue(OptionConstants.OPT_NEWLINE).toUpperCase();
+            if (parsed.hasOption(ConfigurationConstants.OPT_NEWLINE)) {
+                String nl = parsed.getOptionValue(ConfigurationConstants.OPT_NEWLINE).toUpperCase();
                 switch (nl) {
-                    case OptionConstants.WINDOWS:
+                    case ConfigurationConstants.WINDOWS:
                         newline = Newline.WINDOWS;
                         newlineAsString = Newline.WINDOWS.getNewlineValueOf();
                     break;
-                    case OptionConstants.LINUX:
+                    case ConfigurationConstants.LINUX:
                         newline = Newline.LINUX;
                         newlineAsString = Newline.LINUX.getNewlineValueOf();
                     break;
-                    case OptionConstants.OSX:
+                    case ConfigurationConstants.OSX:
                         newline = Newline.OSX;
                         newlineAsString = Newline.OSX.getNewlineValueOf();
                     break;
-                    case OptionConstants.OLDMAC:
+                    case ConfigurationConstants.OLDMAC:
                         newline = Newline.OLDMAC;
                         newlineAsString = Newline.OLDMAC.getNewlineValueOf();
                     break;
-                    case OptionConstants.SYSTEM:
+                    case ConfigurationConstants.SYSTEM:
                         newline = Newline.SYSTEM;
                         newlineAsString = System.getProperty("line.separator");
                     default:
@@ -199,14 +203,14 @@ public final class Configuration {
                 setNewlineAsString("");
             }
 
-        if (parsed.hasOption(OptionConstants.OPT_OUTPUT)) {
+        if (parsed.hasOption(ConfigurationConstants.OPT_OUTPUT)) {
             setOutputIsFile(true);
-            setOutputFilename(parsed.getOptionValue(OptionConstants.OPT_OUTPUT));
+            setOutputFilename(parsed.getOptionValue(ConfigurationConstants.OPT_OUTPUT));
         } else {
             setOutputFilename("");
         }
 
-        if (parsed.hasOption(OptionConstants.OPT_SERVER)) {
+        if (parsed.hasOption(ConfigurationConstants.OPT_SERVER)) {
             setIsServer(true);
         }
     }
@@ -216,7 +220,7 @@ public final class Configuration {
         // operation defaults to "-c tsv" when -c or --convert isn't specified in command-line
         if (operation == Operation.NOT_SPECIFIED) {
             setOperation(Operation.TSV);
-            setDelimiter(OptionConstants.TAB);
+            setDelimiter(ConfigurationConstants.TAB);
         }
 
         // newline defaults to "-n system" when -n or --newline isn't specified in command-line
@@ -234,7 +238,7 @@ public final class Configuration {
 
     private final void validate()throws IOException, SecurityException {
 
-        if (getInputIsFile()) {
+        if (inputIsFile()) {
             fileExists(getInputFilename());
         }
     }
@@ -242,21 +246,21 @@ public final class Configuration {
     /**
      *  This method checks if a file (not a directory) exists and can be read/written to.
      *
-     * @param fileSpec the directory path, name and extension of the file to be accessed.
+     * @param filename the directory path, name and extension of the file to be accessed.
      * @return a validated file specification, i.e. a file that can be opened.
      * @throws FileNotFoundException occurs when the input file is not found.
      * @throws SecurityException occurs when read-access to the input file is denied.
      */
-    final boolean fileExists(String fileSpec)
+    final boolean fileExists(String filename)
             throws FileNotFoundException, SecurityException {
 
-        File file = new File(fileSpec);
+        File file = new File(filename);
         if( !file.isFile() ){
-            String errMsg = this.getClass().getSimpleName() + ": " + fileSpec + " - file not found";
+            String errMsg = this.getClass().getSimpleName() + ": " + filename + " - file not found";
             throw new FileNotFoundException(errMsg);
         }
         if( !file.canRead() ){
-            String errMsg = this.getClass().getSimpleName() + ": " + fileSpec + " - access denied";
+            String errMsg = this.getClass().getSimpleName() + ": " + filename + " - access denied";
             throw new SecurityException(errMsg);
         }
 
@@ -268,17 +272,17 @@ public final class Configuration {
         String header = "where parameter options are:";
         String footer = "";
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp(132, prefix, header, getHelpOptions(), footer, true);
+        formatter.printHelp(132, prefix, header, getCSVParameterOptions(), footer, true);
     }
 
     public String[] getArgs() { return this.args; }
 
-    public Options getHelpOptions() {
-        return this.helpOptions;
+    public Options getCSVParameterOptions() {
+        return this.csvParameterOptions;
     }
 
-    void setHelpOptions(Options helpOptions) {
-        this.helpOptions = helpOptions;
+    void setCSVParameterOptions(Options helpOptions) {
+        this.csvParameterOptions = helpOptions;
     }
 
     public boolean isHelp() {
@@ -297,7 +301,7 @@ public final class Configuration {
         this.operation = operation;
     }
 
-    public boolean getInputIsFile() {
+    public boolean inputIsFile() {
         return this.inputIsFile;
     }
 
@@ -305,7 +309,7 @@ public final class Configuration {
         this.inputIsFile = value;
     }
 
-    public boolean getOutputIsFile() {
+    public boolean outputIsFile() {
         return this.outputIsFile;
     }
 
@@ -353,7 +357,7 @@ public final class Configuration {
         this.newlineAsString = newline;
     }
 
-    public static class OptionConstants {
+    public static class ConfigurationConstants {
         private static final String OPT_CONVERT =  "c";
         private static final String LONG_OPT_CONVERT =  "convert";
 
@@ -393,26 +397,28 @@ public final class Configuration {
 
         // TODO: 1/3/19 FINISH 
         return String.format(
-//                args
-                "helpOptions=%b, " +
-                        // "operation=%s, " +
+                "args=%s\n" + 
+                "isHelp=%s, " +
+                "operation=%s, " +
                 "inputIsFile=%b, " +
                 "outputIsFile=%b, " +
-//                newline
+                "newline=%s, " +
                 "isServer=%b, " +
                 "inputFilename=%s, " +
-                "outputFilespec=%s, ",
-//                delimiter
+                "outputFilespec=%s, " +
+                "delimiter=%s, " +
                 "newlineAsString=%s",
-//                getArgs(),
-                getHelpOptions(),
-                // operation
-                getInputIsFile(),
-                getOutputIsFile(),
-//               getNewline
+                getArgs().toString(),
+                isHelp(),
+                getOperation().toString(),
+                inputIsFile(),
+                outputIsFile(),
+                Utilities.newlineToDescriptionText(newline),
                 isServer(),
                 getInputFilename(),
-                getOutputFilename()
+                getOutputFilename(),
+                Utilities.delimiterToDescriptionText(getDelimiter()),
+                getNewlineAsString()
         );
     }
 }

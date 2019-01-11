@@ -22,11 +22,11 @@ public class Utilities {
 
         String stringDelimiter;
         switch (ch) {
-            case Configuration.OptionConstants.TAB:
-                stringDelimiter = String.valueOf(Configuration.OptionConstants.TAB);
+            case Configuration.ConfigurationConstants.TAB:
+                stringDelimiter = String.valueOf(Configuration.ConfigurationConstants.TAB);
                 break;
-            case Configuration.OptionConstants.COMMA:
-                stringDelimiter = String.valueOf(Configuration.OptionConstants.COMMA);
+            case Configuration.ConfigurationConstants.COMMA:
+                stringDelimiter = String.valueOf(Configuration.ConfigurationConstants.COMMA);
                 break;
             default:
                 int intDelimiter = ch;
@@ -36,17 +36,31 @@ public class Utilities {
         return stringDelimiter;
     }
 
+    public static String delimiterToDescriptionText(char ch) {
+        
+        String text = "";
+        switch (ch) {
+            case Configuration.ConfigurationConstants.TAB:
+                text = String.valueOf(Configuration.ConfigurationConstants.TAB);
+                break;
+            case Configuration.ConfigurationConstants.COMMA:
+                text = String.valueOf(Configuration.ConfigurationConstants.COMMA);
+                break;
+        }
+        return text;
+    }
+    
     public static String newlineToStringConvert(String str) {
         String stringNewline;
         switch (str) {
-            case Configuration.OptionConstants.ESCAPE_R_ESCAPE_N:
-                stringNewline = Configuration.OptionConstants.ESCAPE_R_ESCAPE_N;
+            case Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N:
+                stringNewline = Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N;
                 break;
-            case Configuration.OptionConstants.ESCAPE_N:
-                stringNewline = Configuration.OptionConstants.ESCAPE_N;
+            case Configuration.ConfigurationConstants.ESCAPE_N:
+                stringNewline = Configuration.ConfigurationConstants.ESCAPE_N;
                 break;
-            case Configuration.OptionConstants.ESCAPE_R:
-                stringNewline = Configuration.OptionConstants.ESCAPE_R;
+            case Configuration.ConfigurationConstants.ESCAPE_R:
+                stringNewline = Configuration.ConfigurationConstants.ESCAPE_R;
                 break;
             default:
                 stringNewline = str;
@@ -55,4 +69,12 @@ public class Utilities {
         return stringNewline;
     }
 
+    // TODO: 1/10/19 finish 
+    public static String newlineToDescriptionText(Configuration.Newline nl) {
+        String text = "";
+//        switch (nl) {
+//            case
+//        }
+        return "?"; 
+    }
 }

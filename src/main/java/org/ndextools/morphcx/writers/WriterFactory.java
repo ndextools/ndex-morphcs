@@ -49,7 +49,7 @@ public final class WriterFactory {
             }
 
             // Determine whether the output is to a file or stdout.
-            if (cfg.getOutputIsFile()) {
+            if (cfg.outputIsFile()) {
                 printStream = new PrintStream(cfg.getOutputFilename());
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
                 return new TableToCSV(printer, cfg.getDelimiter(), cfg.getNewlineAsString());

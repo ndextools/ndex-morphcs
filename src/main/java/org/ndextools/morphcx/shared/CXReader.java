@@ -26,7 +26,7 @@ public class CXReader {
     public NiceCXNetwork produceNiceCX() throws IOException {
         NiceCXNetwork cx;
 
-        if (cfg.getInputIsFile()) {
+        if (cfg.inputIsFile()) {
 
             try (InputStream input = new FileInputStream( cfg.getInputFilename() );
                  BufferedInputStream bufferedInput = new BufferedInputStream(input))

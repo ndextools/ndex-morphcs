@@ -1,7 +1,5 @@
 package org.ndextools.morphcx.shared;
 
-import org.junit.FixMethodOrder;
-import org.junit.runners.MethodSorters;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
@@ -10,7 +8,6 @@ import java.io.FileNotFoundException;
 /**
  * Unit tests for Configuration class.
  */
-@FixMethodOrder (MethodSorters.NAME_ASCENDING)
 public class ConfigurationTest {
     private final String LBC_FILTERED_ERK_AKT = "src/test/resources/LBC_FILTERED_ERK_AKT.json";
 
@@ -52,7 +49,7 @@ public class ConfigurationTest {
     public void _Should_Show_Input_Is_A_File_1() throws Exception {
         String[] args = {"-c", "tsv", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getInputIsFile());
+        Assert.assertTrue(cfg.inputIsFile());
         Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getInputFilename() );
     }
 
@@ -60,7 +57,7 @@ public class ConfigurationTest {
     public void _Should_Show_Input_Is_A_File_2() throws Exception {
         String[] args = {"--input", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getInputIsFile());
+        Assert.assertTrue(cfg.inputIsFile());
         Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getInputFilename() );
     }
 
@@ -68,7 +65,7 @@ public class ConfigurationTest {
     public void _Should_Show_Output_Is_A_File_1() throws Exception {
         String[] args = {"-o", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getOutputIsFile());
+        Assert.assertTrue(cfg.outputIsFile());
         Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getOutputFilename() );
     }
 
@@ -76,7 +73,7 @@ public class ConfigurationTest {
     public void _Should_Show_Output_Is_A_File_2() throws Exception {
         String[] args = {"--output", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertTrue(cfg.getOutputIsFile());
+        Assert.assertTrue(cfg.outputIsFile());
         Assert.assertEquals(LBC_FILTERED_ERK_AKT, cfg.getOutputFilename() );
     }
 
@@ -91,21 +88,21 @@ public class ConfigurationTest {
     public void _Should_Be_Windows_Newline() throws Exception {
         String[] args = {"-n", "windows", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R_ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_Linux_Newline() throws Exception {
         String[] args = {"-n", "linux", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_OSX_Newline() throws Exception {
         String[] args = {"-n", "osx", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_N, cfg.getNewlineAsString());
     }
 
 
@@ -113,7 +110,7 @@ public class ConfigurationTest {
     public void _Should_Be_Oldmac_Newline() throws Exception {
         String[] args = {"-n", "oldmac", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.OptionConstants.ESCAPE_R, cfg.getNewlineAsString());
+        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_R, cfg.getNewlineAsString());
     }
 
     @Test
@@ -127,8 +124,8 @@ public class ConfigurationTest {
     public void _Should_Show_Server_Option_Results_In_System_IO() throws Exception {
         String[] args = {"-S"};
         Configuration cfg = performConfiguration(args);
-        Assert.assertFalse(cfg.getInputIsFile());
-        Assert.assertFalse(cfg.getOutputIsFile());
+        Assert.assertFalse(cfg.inputIsFile());
+        Assert.assertFalse(cfg.outputIsFile());
     }
 
     @Rule
