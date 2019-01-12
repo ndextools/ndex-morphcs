@@ -4,7 +4,6 @@ import java.io.*;
 
 import org.ndexbio.model.cx.NiceCXNetwork;
 import org.ndexbio.rest.client.NdexRestClientUtilities;
-import org.ndextools.morphcx.MorphCX;
 
 /**
  *  Produces a transitional CX network data structure that will be morphed.
@@ -52,5 +51,4 @@ public class CXReader {
 
         return cx;
     }
-
 }

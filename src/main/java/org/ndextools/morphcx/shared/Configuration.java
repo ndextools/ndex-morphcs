@@ -50,12 +50,17 @@ public final class Configuration {
 
     }
 
-
     /**
      * Class constructor
      */
     public Configuration() {}
 
+    /**
+     * This class builds a fully-configuration Configuration object
+     * @param args command-line parameters used to build a fully-formed Configuration object
+     * @return a fully-configured Configuration object
+     * @throws Exception indicates errors occurred and a fully-formed Configuration object was not built
+     */
     public Configuration configure(String[] args) throws Exception {
 
         Utilities.nullReferenceCheck(args, Configuration.class.getSimpleName());

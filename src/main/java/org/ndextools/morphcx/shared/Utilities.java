@@ -1,7 +1,7 @@
 package org.ndextools.morphcx.shared;
 
 /**
- * The Utilities class holds methods commonly used across classes.
+ * The Utilities class holds methods commonly used across this application's classes.
  */
 public class Utilities {
     private Configuration cfg;
@@ -17,9 +17,10 @@ public class Utilities {
 
     /**
      * Method to check the safety of null references being passed to application methods.
+     *
      * @param reference the reference variable being checked for null condition.
      * @param classname calling method is expected to populate this field with it's simple class name.
-     * @throws NullPointerException
+     * @throws NullPointerException occurs when the passed object reference is null
      */
     public static void nullReferenceCheck(Object reference, String classname) throws NullPointerException {
         if (reference == null) {
@@ -28,6 +29,12 @@ public class Utilities {
         }
     }
 
+    /**
+     * Translates the CSV delimiter character to a text string
+     *
+     * @param ch delimter character to translate into string text
+     * @return string text representing a comma or tab delimiter character
+     */
     public static String delimiterToStringConvert(char ch) {
 
         String stringDelimiter;
@@ -39,13 +46,18 @@ public class Utilities {
                 stringDelimiter = String.valueOf(Configuration.ConfigurationConstants.COMMA);
                 break;
             default:
-                int intDelimiter = ch;
-                stringDelimiter = String.valueOf(intDelimiter);
+                stringDelimiter = String.valueOf(ch);
                 break;
         }
         return stringDelimiter;
     }
 
+    /**
+     * Translates the CSV delimiter character to a text string description
+     *
+     * @param ch delimter character to translate into st a text description
+     * @return string text description of a comma or tab delimiter character
+     */
     public static String delimiterToDescriptionText(char ch) {
         
         String text = "";
@@ -59,7 +71,13 @@ public class Utilities {
         }
         return text;
     }
-    
+
+    /**
+     * Translates the CSV newline constant to a string text
+     *
+     * @param str newline string to translate into string text
+     * @return the platform-dependent newline a writer will use
+     */
     public static String newlineToStringConvert(String str) {
         String stringNewline;
         switch (str) {

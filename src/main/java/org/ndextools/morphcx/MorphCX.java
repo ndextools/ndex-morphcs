@@ -35,17 +35,23 @@ public class MorphCX {
     }
 
     /**
-     * A private-protected method that is also used as a hook for unit testing
+     * A static method that is also used as a hook for unit testing
      *
      * @param conf reference to a template Configuration object
      * @param args reference to the command-line parameters when this application was invoked
      * @return a reference to a fully-configured Configuration option
-     * @throws Exception used as a backstop to any uncaught exceptions
+     * @throws Exception thrown by Configure class or associated class
      */
     static Configuration configureApp(final Configuration conf, final String[] args) throws Exception {
         return conf.configure(args);
     }
 
+    /**
+     * A static method that is also used as a hook for unit testing
+     *
+     * @param cfg reference to a fully-configured Configuration object
+     * @throws Exception thrown by dispatched or subordinate class.
+     */
     static void dispatchByOperation(final Configuration cfg) throws Exception {
         if (cfg.isHelp()) {
             cfg.printHelpText();
@@ -55,6 +61,11 @@ public class MorphCX {
         }
     }
 
+    /**
+     * Getter method
+     *
+     * @return reference to a fully-configured Configuration object
+     */
     public static Configuration appConfig() {
         return cfg;
     }

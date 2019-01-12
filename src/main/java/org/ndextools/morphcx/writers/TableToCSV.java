@@ -40,6 +40,9 @@ public class TableToCSV implements TableWritable, AutoCloseable {
         printer.printRecord(columns);
     }
 
+    /**
+     * Releases resources associated with AutoClosable interface
+     */
     @Override
     public void close() throws IOException {
         if (printer != null) {
@@ -50,6 +53,11 @@ public class TableToCSV implements TableWritable, AutoCloseable {
         }
     }
 
+    /**
+     * Override of Object.toString()
+     *
+     * @return contents of class variables
+     */
     @Override
     public String toString() {
         String stringDelimiter = Utilities.delimiterToStringConvert(this.delimiter);
@@ -60,5 +68,4 @@ public class TableToCSV implements TableWritable, AutoCloseable {
                     stringDelimiter,
                     stringNewline);
     }
-
 }

@@ -8,7 +8,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 /**
- * Concrete class that formats and outputs a single row of a table using the PrintStream class.  It acts as a
+ * Implementation class that formats and outputs a single row of a table using the PrintStream class.  It acts as a
  * substitute to using the Apache Commons CSV library functions.  Typically used when debugging this application.
  */
 public final class TableToStream implements TableWritable, AutoCloseable {
@@ -56,6 +56,9 @@ public final class TableToStream implements TableWritable, AutoCloseable {
         }
     }
 
+    /**
+     * Releases resources associated with AutoClosable interface
+     */
     @Override
     public void close() {
         if (out != null) {
@@ -66,6 +69,11 @@ public final class TableToStream implements TableWritable, AutoCloseable {
         }
     }
 
+    /**
+     * Override of Object.toString()
+     *
+     * @return contents of class variables
+     */
     @Override
     public String toString() {
         String stringDelimiter = Utilities.delimiterToStringConvert(this.delimiter);
