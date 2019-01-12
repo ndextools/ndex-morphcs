@@ -15,11 +15,12 @@ public class CXReaderTest {
     private String LUMINAL_BREAST_CANCER = "src/test/resources/LUMINAL_BREAST_CANCER.json";
     private String EMPTY_LIST = "src/test/resources/EMPTY_LIST.json";
 
+
     @Test
     public void _Should_Load_NiceCxNetwork_LBC_FILTERED_ERK_AKT() throws Exception {
         String[] args = {"-i", LBC_FILTERED_ERK_AKT};
-        Configuration cfg = new Configuration(args);
-        cfg.configure();
+        Configuration cfg = new Configuration();
+        cfg = cfg.configure(args);
 
         CXReader cxReader = new CXReader(cfg);
         NiceCXNetwork niceCX = cxReader.produceNiceCX();
@@ -32,8 +33,8 @@ public class CXReaderTest {
     @Test
     public void _Should_Load_NiceCxNetwork_LBC() throws Exception {
         String[] args = {"-i", LUMINAL_BREAST_CANCER};
-        Configuration cfg = new Configuration(args);
-        cfg.configure();
+        Configuration cfg = new Configuration();
+        cfg = cfg.configure(args);
 
         CXReader cxReader = new CXReader(cfg);
         NiceCXNetwork niceCX = cxReader.produceNiceCX();
@@ -49,8 +50,8 @@ public class CXReaderTest {
     @Test
     public void _Should_Throw_IOException() throws Exception {
         String[] args = {"-i", EMPTY_LIST};
-        Configuration cfg = new Configuration(args);
-        cfg.configure();
+        Configuration cfg = new Configuration();
+        cfg = cfg.configure(args);
 
         CXReader cxReader = new CXReader(cfg);
 

@@ -6,14 +6,12 @@ import java.io.IOException;
 
 import org.apache.commons.cli.*;
 
-import javax.rmi.CORBA.Util;
-
 /**
  * The Configuration class validates command-line parameters used when starting this application, and
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    private final String[] args;
+    private String[] args;
     private boolean isHelp;
     private Operation operation;
     private boolean inputIsFile;
@@ -25,10 +23,13 @@ public final class Configuration {
     private char delimiter;
     private String newlineAsString;
 
+    private Utilities util;
+    private Options csvParameterOptions;
+
     public enum Operation {
         TSV, CSV, NOT_SPECIFIED
-    }
 
+    }
     enum Newline {
         WINDOWS("\r\n"),
         LINUX("\n"),
@@ -38,6 +39,7 @@ public final class Configuration {
         NOT_SPECIFIED("not_specified");
 
         private String nl;
+
         private String getNewlineValueOf() {
             return this.nl;
         }
@@ -48,20 +50,16 @@ public final class Configuration {
 
     }
 
-    private Options csvParameterOptions;
 
     /**
      * Class constructor
-     *
-     * @param args command-line parameters (if any) when invoking the application.
      */
-    public Configuration(final String[] args) {
+    public Configuration() {}
+
+    public Configuration configure(String[] args) throws Exception {
+
+        Utilities.nullReferenceCheck(args, Configuration.class.getSimpleName());
         this.args = args;
-    }
-
-    public final void configure() throws Exception {
-
-        Utilities.nullReferenceCheck(this.args, Configuration.class.getSimpleName());
 
         CommandLine parsedParams = defineParams();
         resolve(parsedParams);
@@ -70,6 +68,8 @@ public final class Configuration {
             preValidationAdjustments();
             validate();
         }
+        util = new Utilities(this);
+        return this;
     }
 
     /**
