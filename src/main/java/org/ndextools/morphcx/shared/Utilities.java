@@ -4,6 +4,16 @@ package org.ndextools.morphcx.shared;
  * The Utilities class holds methods commonly used across classes.
  */
 public class Utilities {
+    private Configuration cfg;
+
+    /**
+     * Class constructor
+     *
+     * @param cfg a reference to a fully-configured Configuration object
+     */
+    public Utilities(Configuration cfg) {
+        this.cfg = cfg;
+    }
 
     /**
      * Method to check the safety of null references being passed to application methods.

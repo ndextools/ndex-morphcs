@@ -17,15 +17,15 @@ public class MorphCXTest {
 
     @Test
     public void _ShouldHandleAnExceptionThrownByConfiguration() throws Exception {
-        String[] args = {"--foobar"};
+        String[] args = {"--foobar"};   // invalid command-line parameter
         thrown.expect(Exception.class);
-        Configuration cfg = MorphCX.configureApp(args);
+        Configuration cfg = MorphCX.configureApp(new Configuration(), args);
     }
 
     @Test
-    public void _ShouldReturnAConfigurationOpject() throws Exception {
-        String[] args = {"-S"};
-        Configuration cfg = MorphCX.configureApp(args);
+    public void _ShouldReturnAConfigurationObject() throws Exception {
+        String[] args = {"-S"};     // valid command-line parameter
+        Configuration cfg = MorphCX.configureApp(new Configuration(), args);
         Assert.assertTrue(cfg instanceof Configuration);
     }
 
@@ -38,13 +38,12 @@ public class MorphCXTest {
         ps = new PrintStream(outputStream);
         System.setOut(ps);
 
-        Configuration cfg = MorphCX.configureApp(args);
+        Configuration cfg = MorphCX.configureApp(new Configuration(), args);
         MorphCX.dispatchByOperation(cfg);
 
         System.setOut(System.out);
 
         String string = outputStream.toString();
         Assert.assertTrue(string.contains("usage: java -jar morphcx.jar"));
-
     }
 }

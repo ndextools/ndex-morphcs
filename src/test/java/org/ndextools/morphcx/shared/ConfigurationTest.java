@@ -3,8 +3,6 @@ package org.ndextools.morphcx.shared;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import java.io.FileNotFoundException;
-
 /**
  * Unit tests for Configuration class.
  */
@@ -12,9 +10,8 @@ public class ConfigurationTest {
     private final String LBC_FILTERED_ERK_AKT = "src/test/resources/LBC_FILTERED_ERK_AKT.json";
 
     static Configuration performConfiguration(String[] args) throws Exception {
-        Configuration configuration = new Configuration(args);
-        configuration.configure();
-        return configuration;
+        Configuration c = new Configuration();
+        return c.configure(args);
     }
 
     @Test
@@ -131,18 +128,18 @@ public class ConfigurationTest {
     @Rule
     public ExpectedException thrown1 = ExpectedException.none();
     @Test
-    public void _ShouldVerifyThatTheFileExistsAndCanBeRead() throws FileNotFoundException {
+    public void _ShouldVerifyThatTheFileExistsAndCanBeRead() throws Exception {
         String[] args = {"-i", LBC_FILTERED_ERK_AKT};
-        Configuration cfg = new Configuration(args);
-        cfg.fileExists(LBC_FILTERED_ERK_AKT);
+        Configuration cfg = new Configuration();
+        cfg = cfg.configure(args);
     }
 
     @Test
-    public void _ShouldThrowAFileNotFoundException() throws FileNotFoundException {
+    public void _ShouldThrowAFileNotFoundException() throws Exception {
         String[] args = {"-i", "file_does_not_exist"};
-        Configuration cfg = new Configuration(args);
-        thrown1.expect(FileNotFoundException.class);
-        cfg.fileExists("file_does_not_exist");
+        Configuration cfg = new Configuration();
+        thrown1.expect(Exception.class);
+        cfg = cfg.configure(args);
     }
 
 }

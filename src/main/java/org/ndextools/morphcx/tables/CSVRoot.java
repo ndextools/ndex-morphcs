@@ -17,8 +17,8 @@ public class CSVRoot {
      * class to instantiate the appropriate writer.  Finally the NiceNetworkCX object is morphed to
      * the desired output format.
      *
-     * @param cfg
-     * @throws Exception
+     * @param cfg reference to a Configuration class object
+     * @throws Exception base class exception when there is an IO or other processing error
      */
     public void execute(final Configuration cfg) throws Exception {
 
@@ -31,12 +31,12 @@ public class CSVRoot {
         }
     }
 
-    final static NiceCXNetwork LoadInputCxNetwork(Configuration cfg) throws IOException {
+    private static NiceCXNetwork LoadInputCxNetwork(Configuration cfg) throws IOException {
         CXReader cxReader = new CXReader(cfg);
         return cxReader.produceNiceCX();
     }
 
-    final static TableWritable setupOutputDestination(Configuration cfg) throws Exception {
+    private static TableWritable setupOutputDestination(Configuration cfg) throws Exception {
         WriterFactory wf = new WriterFactory(cfg);
         return wf.getWriter();
     }
