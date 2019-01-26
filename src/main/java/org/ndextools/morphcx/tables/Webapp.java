@@ -122,16 +122,40 @@ public class Webapp extends Table implements Table2D {
     private List<Cell> collectNodeAttributes(long cxSourceNodeId, long cxTargetNodeId) {
         List<Cell> nodeAttributeCells = new ArrayList<>();
 
-        for (NodeAttributesElement e: getNiceCX().getNodeAttributes().get(cxSourceNodeId)) {
-            String k = LABEL_NODE_ATTRIBUTE_SOURCE_ + e.getName();
-            String v = e.getValue();
-            nodeAttributeCells.add(new Cell(k, v));
+        for (NodeAttributesElement nae: getNiceCX().getNodeAttributes().get(cxSourceNodeId)) {
+            if (nae.isSingleValue()) {
+                String k = LABEL_NODE_ATTRIBUTE_SOURCE_ + nae.getName();
+                String v = nae.getValue();
+                nodeAttributeCells.add(new Cell(k, v));
+            } else {
+                StringBuilder multipleAttrValues = new StringBuilder();
+                for (String value : nae.getValues()) {
+                    multipleAttrValues.append(value);
+                    multipleAttrValues.append("|");
+                }
+                    multipleAttrValues.setLength((multipleAttrValues.length() - 1 ));
+                    String k = LABEL_NODE_ATTRIBUTE_SOURCE_+ nae.getName();
+                    String v = multipleAttrValues.toString();
+                    nodeAttributeCells.add(new Cell(k, v));
+            }
         }
 
-        for (NodeAttributesElement e: getNiceCX().getNodeAttributes().get(cxTargetNodeId)) {
-            String k = LABEL_NODE_ATTRIBUTE_TARGET_ + e.getName();
-            String v = e.getValue();
-            nodeAttributeCells.add(new Cell(k, v));
+        for (NodeAttributesElement nae: getNiceCX().getNodeAttributes().get(cxTargetNodeId)) {
+            if (nae.isSingleValue()) {
+                String k = LABEL_NODE_ATTRIBUTE_TARGET_ + nae.getName();
+                String v = nae.getValue();
+                nodeAttributeCells.add(new Cell(k, v));
+            } else {
+                StringBuilder multipleAttrValues = new StringBuilder();
+                for (String value : nae.getValues()) {
+                    multipleAttrValues.append(value);
+                    multipleAttrValues.append("|");
+                }
+                multipleAttrValues.setLength((multipleAttrValues.length() - 1 ));
+                String k = LABEL_NODE_ATTRIBUTE_TARGET_ + nae.getName();
+                String v = multipleAttrValues.toString();
+                nodeAttributeCells.add(new Cell(k, v));
+            }
         }
 
         return  nodeAttributeCells;
