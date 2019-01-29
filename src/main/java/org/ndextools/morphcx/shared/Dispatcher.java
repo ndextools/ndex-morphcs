@@ -37,7 +37,7 @@ public class Dispatcher {
      *
      * @throws Exception base class exception when there is an IO or other processing error
      */
-    public void dispatch() throws Exception {
+    public void run() throws Exception {
 
         // Only --convert tsv & --convert csv are valid at this time!
         Configuration.Operation operation = cfg.getOperation();

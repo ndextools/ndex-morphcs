@@ -57,7 +57,7 @@ public class MorphCX {
             cfg.printHelpText();
         } else {
             Dispatcher dispatcher = new Dispatcher();
-            dispatcher.dispatch();
+            dispatcher.run();
         }
     }
 
