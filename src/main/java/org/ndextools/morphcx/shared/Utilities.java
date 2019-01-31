@@ -40,10 +40,10 @@ public class Utilities {
         String stringDelimiter;
         switch (ch) {
             case Configuration.ConfigurationConstants.TAB:
-                stringDelimiter = String.valueOf(Configuration.ConfigurationConstants.TAB);
+                stringDelimiter = "\t";
                 break;
             case Configuration.ConfigurationConstants.COMMA:
-                stringDelimiter = String.valueOf(Configuration.ConfigurationConstants.COMMA);
+                stringDelimiter = ",";
                 break;
             default:
                 stringDelimiter = String.valueOf(ch);
@@ -59,14 +59,14 @@ public class Utilities {
      * @return string text description of a comma or tab delimiter character
      */
     public static String delimiterToDescriptionText(char ch) {
-        
+
         String text = "";
         switch (ch) {
             case Configuration.ConfigurationConstants.TAB:
-                text = String.valueOf(Configuration.ConfigurationConstants.TAB);
+                text = "TAB_CHARACTER";
                 break;
             case Configuration.ConfigurationConstants.COMMA:
-                text = String.valueOf(Configuration.ConfigurationConstants.COMMA);
+                text = "COMMA_CHARACTER";
                 break;
         }
         return text;

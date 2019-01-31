@@ -42,13 +42,9 @@ public class Table {
         unorderedListOfCells.addAll(cells);
     }
 
-    NiceCXNetwork getNiceCX() {
-        return this.niceCX;
-    }
+    NiceCXNetwork getNiceCX() { return this.niceCX; }
 
-    List<Cell> getUnorderedListOfCells() {
-        return unorderedListOfCells;
-    }
+    List<Cell> getUnorderedListOfCells() { return unorderedListOfCells; }
 
     /**
      * This method iterates through the list of unordered table cells, picks each cell, and plops that
@@ -99,13 +95,9 @@ public class Table {
             this.cellData = cellData;
         }
 
-        String getCellColumnHeading() {
-            return this.cellColumnHeading;
-        }
+        String getCellColumnHeading() { return this.cellColumnHeading; }
 
-        String getCellData() {
-            return this.cellData;
-        }
+        String getCellData() { return this.cellData; }
 
         @Override
         public String toString() {

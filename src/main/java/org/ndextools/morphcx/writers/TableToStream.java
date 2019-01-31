@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Implementation class that formats and outputs a single row of a table using the PrintStream class.  It acts as a
- * substitute to using the Apache Commons CSV library functions.  Typically used when debugging this application.
+ * substitute to using the Apache Commons CSV library functions.  Can be used for debugging this application.
  */
 public final class TableToStream implements TableWritable, AutoCloseable {
     private final PrintStream out;
