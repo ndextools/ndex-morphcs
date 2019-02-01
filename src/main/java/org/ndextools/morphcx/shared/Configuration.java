@@ -3,6 +3,7 @@ package org.ndextools.morphcx.shared;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.commons.cli.*;
 
@@ -359,21 +360,22 @@ public final class Configuration {
 
     @Override
     public String toString() {
-
-        // TODO: 1/3/19 FINISH 
         return String.format(
-                "args=%s\n" + 
+                "%s{" +
+                "args=%s, " +
                 "isHelp=%s, " +
                 "operation=%s, " +
                 "inputIsFile=%b, " +
                 "outputIsFile=%b, " +
                 "newline=%s, " +
                 "isServer=%b, " +
-                "inputFilename=%s, " +
-                "outputFilespec=%s, " +
+                "inputFilename=\'%s\', " +
+                "outputFilespec=\'%s\', " +
                 "delimiter=%s, " +
-                "newlineAsString=%s",
-                getArgs().toString(),
+                "newlineAsString=%s" +
+                "}",
+                this.getClass().getSimpleName(),
+                Arrays.toString(getArgs()),
                 isHelp(),
                 getOperation().toString(),
                 inputIsFile(),
@@ -383,7 +385,7 @@ public final class Configuration {
                 getInputFilename(),
                 getOutputFilename(),
                 Utilities.delimiterToDescriptionText(getDelimiter()),
-                getNewlineAsString()
+                Utilities.newlineStringToDescriptionText(getNewlineAsString())
         );
     }
 }
