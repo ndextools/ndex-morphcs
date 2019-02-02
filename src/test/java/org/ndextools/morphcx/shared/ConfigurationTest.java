@@ -142,4 +142,12 @@ public class ConfigurationTest {
         cfg = cfg.configure(args);
     }
 
+//    @Test
+//    public void _ShouldShowToString() throws Exception {
+//        String[] args = {"-i", LBC_FILTERED_ERK_AKT, "-o", LBC_FILTERED_ERK_AKT};
+//        Configuration cfg = new Configuration();
+//        String str = cfg.configure(args).toString();
+//        System.err.println(str);
+//    }
+
 }

@@ -56,14 +56,14 @@ public class TableToCSV implements TableWritable, AutoCloseable {
     /**
      * Override of Object.toString()
      *
-     * @return contents of class variables
+     * @return contents of class instance variables
      */
     @Override
-    public String toString() {
+    public final String toString() {
         String stringDelimiter = Utilities.delimiterToStringConvert(this.delimiter);
-        String stringNewline = Utilities.newlineToStringConvert(newline);
+        String stringNewline = Utilities.newlineToStringConvert(this.newline);
 
-        return String.format("thisWriter=%s, delimiter='%s, newline='%s'",
+        return String.format("%s{delimiter=%s, newline=%s}",
                     this.getClass().getSimpleName(),
                     stringDelimiter,
                     stringNewline);

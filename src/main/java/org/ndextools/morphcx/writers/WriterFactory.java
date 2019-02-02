@@ -7,7 +7,7 @@ import org.ndextools.morphcx.shared.Configuration;
 import org.ndextools.morphcx.shared.Utilities;
 
 /**
- * The WriterFactory class creates an output writer appropriate for the application's need,
+ * The WriterFactory class initializes an output writer appropriate for the application's need,
  */
 public final class WriterFactory {
     private final Configuration cfg;
@@ -18,17 +18,16 @@ public final class WriterFactory {
     }
 
     /**
-     * The getWriter method creates an output writer appropriate to the needs of the application.
+     * The getWriter method initializes an output writer appropriate for the application's need,
      *
      * @return the writer object to be used for outputting the resulting morphed CX network
-     * @throws IllegalStateException
+     * @throws Exception
      */
     public final TableWritable getWriter()throws Exception {
         PrintStream printStream;
         CSVFormat csvFormat;
 
-        try
-        {
+        try {
 
             // Determine the output format based on Apache Commons CVSFormat class constants
             Configuration.Operation operation = cfg.getOperation();
@@ -58,8 +57,8 @@ public final class WriterFactory {
                 CSVPrinter printer = new CSVPrinter(printStream, csvFormat);
                 return new TableToCSV(printer, cfg.getDelimiter(), cfg.getNewlineAsString());
             }
-        } catch (Exception e)
-        {
+
+        } catch (Exception e) {
             String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
             throw new Exception(msg);
         }

@@ -3,6 +3,7 @@ package org.ndextools.morphcx.shared;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.commons.cli.*;
 
@@ -282,85 +283,45 @@ public final class Configuration {
 
     public String[] getArgs() { return this.args; }
 
-    public Options getCSVParameterOptions() {
-        return this.csvParameterOptions;
-    }
+    public Options getCSVParameterOptions() { return this.csvParameterOptions; }
 
-    void setCSVParameterOptions(Options helpOptions) {
-        this.csvParameterOptions = helpOptions;
-    }
+    void setCSVParameterOptions(Options helpOptions) { this.csvParameterOptions = helpOptions; }
 
-    public boolean isHelp() {
-        return isHelp;
-    }
+    public boolean isHelp() { return isHelp; }
 
-    void setIsHelp(boolean value) {
-        isHelp = value;
-    }
+    void setIsHelp(boolean value) { isHelp = value; }
 
-    public Operation getOperation() {
-        return this.operation;
-    }
+    public Operation getOperation() { return this.operation; }
 
-    void setOperation(Operation operation) {
-        this.operation = operation;
-    }
+    void setOperation(Operation operation) { this.operation = operation; }
 
-    public boolean inputIsFile() {
-        return this.inputIsFile;
-    }
+    public boolean inputIsFile() { return this.inputIsFile; }
 
-    void setInputIsFile(boolean value) {
-        this.inputIsFile = value;
-    }
+    void setInputIsFile(boolean value) { this.inputIsFile = value; }
 
-    public boolean outputIsFile() {
-        return this.outputIsFile;
-    }
+    public boolean outputIsFile() { return this.outputIsFile; }
 
-    void setOutputIsFile(boolean value) {
-        this.outputIsFile = value;
-    }
+    void setOutputIsFile(boolean value) {this.outputIsFile = value; }
 
-    public boolean isServer() {
-        return this.isServer;
-    }
+    public boolean isServer() { return this.isServer; }
 
-    void setIsServer(boolean value) {
-        this.isServer = value;
-    }
+    void setIsServer(boolean value) { this.isServer = value; }
 
-    public String getInputFilename() {
-        return this.inputFilename;
-    }
+    public String getInputFilename() { return this.inputFilename; }
 
-    void setInputFilename(String filename) {
-        this.inputFilename = filename;
-    }
+    void setInputFilename(String filename) { this.inputFilename = filename; }
 
-    public String getOutputFilename() {
-        return this.outputFilename;
-    }
+    public String getOutputFilename() { return this.outputFilename; }
 
-    void setOutputFilename(String filename) {
-        this.outputFilename = filename;
-    }
+    void setOutputFilename(String filename) { this.outputFilename = filename; }
 
-    public char getDelimiter() {
-        return this.delimiter;
-    }
+    public char getDelimiter() { return this.delimiter; }
 
-    void setDelimiter(char delimiter) {
-        this.delimiter = delimiter;
-    }
+    void setDelimiter(char delimiter) { this.delimiter = delimiter; }
 
-    public String getNewlineAsString() {
-        return this.newlineAsString;
-    }
+    public String getNewlineAsString() { return this.newlineAsString; }
 
-    void setNewlineAsString(String newline) {
-        this.newlineAsString = newline;
-    }
+    void setNewlineAsString(String newline) { this.newlineAsString = newline; }
 
     public static class ConfigurationConstants {
         private static final String OPT_CONVERT =  "c";
@@ -399,21 +360,22 @@ public final class Configuration {
 
     @Override
     public String toString() {
-
-        // TODO: 1/3/19 FINISH 
         return String.format(
-                "args=%s\n" + 
+                "%s{" +
+                "args=%s, " +
                 "isHelp=%s, " +
                 "operation=%s, " +
                 "inputIsFile=%b, " +
                 "outputIsFile=%b, " +
                 "newline=%s, " +
                 "isServer=%b, " +
-                "inputFilename=%s, " +
-                "outputFilespec=%s, " +
+                "inputFilename=\'%s\', " +
+                "outputFilespec=\'%s\', " +
                 "delimiter=%s, " +
-                "newlineAsString=%s",
-                getArgs().toString(),
+                "newlineAsString=%s" +
+                "}",
+                this.getClass().getSimpleName(),
+                Arrays.toString(getArgs()),
                 isHelp(),
                 getOperation().toString(),
                 inputIsFile(),
@@ -423,7 +385,7 @@ public final class Configuration {
                 getInputFilename(),
                 getOutputFilename(),
                 Utilities.delimiterToDescriptionText(getDelimiter()),
-                getNewlineAsString()
+                Utilities.newlineStringToDescriptionText(getNewlineAsString())
         );
     }
 }
