@@ -1,4 +1,4 @@
-# Parameter Options
+## Parameter Options
 
 The user can pick from several command-line parser standards:
 

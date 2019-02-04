@@ -1,4 +1,4 @@
-# IO-Redirection
+## IO-Redirection
 
 When run in a Terminal or Command shell, the application can make use of standard IO-redirection
 features of most terminal or command shells.  Examples include Unix and OSX Terminal or Window's PowerShell.

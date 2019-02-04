@@ -1,4 +1,4 @@
-# As an NDEx Server Process
+## As an NDEx Server Process
 
 # === WORK IN PROGRESS ===
 
