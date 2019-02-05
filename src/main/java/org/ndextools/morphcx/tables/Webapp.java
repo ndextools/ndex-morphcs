@@ -43,7 +43,7 @@ public class Webapp extends Table implements Table2D {
     }
 
     @Override
-    public void morphThisNiceCX() throws IOException {
+    public void morphThisCX() throws IOException {
 
         // Create and output column headers, saving them so that data can be arranged in that sequence for output.
         columnHeadings = buildColumnHeadings();

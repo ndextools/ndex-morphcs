@@ -1,10 +1,11 @@
 package org.ndextools.morphcx.shared;
 
 import org.ndextools.morphcx.MorphCX;
-import org.ndextools.morphcx.tables.CSVRoot;
+import org.ndextools.morphcx.tables.TablesRoot;
 
 /**
- * The Dispatcher class is a factory that instantiates and passes control to the class doing the morphing.
+ * The Dispatcher class is a factory that instantiates and passes control to the class which controls
+ * the morphing workflow.
  */
 public class Dispatcher {
     private final Configuration cfg;
@@ -39,15 +40,14 @@ public class Dispatcher {
      */
     public void run() throws Exception {
 
-        // Only --convert tsv & --convert csv are valid at this time!
         Configuration.Operation operation = cfg.getOperation();
         switch (operation) {
-            case CSV:
             case TSV:
+            case CSV:
+            case EXCEL:
             default:
-                CSVRoot root = new CSVRoot();
+                TablesRoot root = new TablesRoot();
                 root.execute(cfg);
-                break;
         }
     }
 }

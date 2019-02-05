@@ -60,11 +60,8 @@
             <version>2.4.0</version>
         </dependency>
     </dependencies>
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> e412b2b3a04b115f01448e07d3ccaa898c2e9040
+
     <build>
         <finalName>morphcx_no_dependencies_2.4.0</finalName>
 

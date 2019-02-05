@@ -12,6 +12,7 @@ import org.apache.commons.cli.*;
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
+    public final boolean EXCEL_FEATURE_DISABLED = true;  // TODO: 2/7/19 temporary, remove when Excel feature goes alpha 
     private String[] args;
     private boolean isHelp;
     private Operation operation;
@@ -28,7 +29,7 @@ public final class Configuration {
     private Options csvParameterOptions;
 
     public enum Operation {
-        TSV, CSV, NOT_SPECIFIED
+        TSV, CSV, EXCEL, NOT_SPECIFIED
 
     }
     enum Newline {
@@ -92,7 +93,7 @@ public final class Configuration {
                 Option.builder(ConfigurationConstants.OPT_CONVERT)
                         .longOpt(ConfigurationConstants.LONG_OPT_CONVERT)
                         .hasArg()
-                        .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV >  Default: 'TSV'.")
+                        .desc("Converts an NDEx CX network to a .csv or .tsv format. < CSV | TSV | EXCEL >  Default: 'TSV'.")
                         .build()
         );
         getCSVParameterOptions().addOption(
@@ -162,6 +163,10 @@ public final class Configuration {
                     case ConfigurationConstants.CONVERT_TSV:
                         setOperation(Operation.TSV);
                         setDelimiter(ConfigurationConstants.TAB);
+                        break;
+                    case ConfigurationConstants.CONVERT_EXCEL:
+                        setOperation(Operation.EXCEL);
+                        break;
                     default:
                         setOperation(Operation.NOT_SPECIFIED);
                         break;
@@ -342,8 +347,8 @@ public final class Configuration {
         private static final String OPT_SERVER = "S";
 
         private static final String CONVERT_CSV = "CSV";
-
         private static final String CONVERT_TSV = "TSV";
+        private static final String CONVERT_EXCEL = "EXCEL";
 
         public static final char TAB = '\t';
         public static final char COMMA = ',';

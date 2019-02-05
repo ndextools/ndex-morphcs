@@ -29,6 +29,13 @@ public class ConfigurationTest {
     }
 
     @Test
+    public void _Should_Show_Convert_EXCEL_Is_Set() throws Exception {
+        String[] args = {"-c", "excel"};
+        Configuration cfg = performConfiguration(args);
+        Assert.assertEquals(Configuration.Operation.EXCEL.toString(), cfg.getOperation().toString());
+    }
+
+    @Test
     public void _Should_Show_Convert_Default_Is_TSV() throws Exception {
         String[] args = {};
         Configuration cfg = performConfiguration(args);

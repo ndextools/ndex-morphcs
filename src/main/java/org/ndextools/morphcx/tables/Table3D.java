@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Interface for Table classes
+ * Interface for Tables classes
  */
-public interface Table2D {
+public interface Table3D {
 
     void morphThisCX() throws IOException;
 
