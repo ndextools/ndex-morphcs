@@ -13,13 +13,7 @@
 *.class
 
 # Maven
-!target/morphcx.jar
-target/maven-archiver/
-target/maven-status/
-target/surefire-reports/
-target/sample-networks/EMPTY_LIST.json
-target/sample-networks/LBC_FILTERED_ERK_AKT.csv
-src/test/resources/LBC_FILTERED_ERK_AKT.csv
+target/
 
 # IntelliJ project files
 *.iml
