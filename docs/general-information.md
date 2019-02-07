@@ -19,15 +19,20 @@ input and output filenames and the file-type you want.
 
 
 ### Running the Application
-The executable program containing all dependencies is named `morphcx.jar`, and is found 
-in this repository's `${project}/target` directory.  
+The executable program containing all dependencies is named `morphcx.jar`.  
+A `zip` or `tar` file of this asset is obtained using this repository's 
+[Releases](https://github.com/ndextools/ndex-morphcx/releases) function.  Download the file by clicking
+on the appropriate asset file link.
+
+The executable file should be placed in a directory pointed to by the Java CLASSPATH environment variable
+or in the current directory. If the program is not found, it is likely Java is not installed or is 
+incorrectly configured.  
 
 The program is a Java executable, thus the Java JRE 8 or JDK 8 must be installed on your computer.
 To test if Java is installed, enter the following on the Terminal or Command-line/PowerShell prompt:
 ```text
 java -version
 ```
-If the program is not found, it is likely Java is not installed or is incorrectly configured.
 
 Execute the program in a Terminal or Command/Powershell shell using the following general format.  
 ```text
