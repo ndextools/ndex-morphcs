@@ -6,7 +6,7 @@
 
     <groupId>org.ndextools</groupId>
     <artifactId>morphcx</artifactId>
-    <version>2.4.0-Beta-1c</version>
+    <version>2.4.0-Beta-1d</version>
     <packaging>jar</packaging>
 
     <url>http://www.ndextools.org</url>

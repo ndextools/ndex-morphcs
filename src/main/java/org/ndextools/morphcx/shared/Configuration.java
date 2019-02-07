@@ -12,7 +12,7 @@ import org.apache.commons.cli.*;
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    public final boolean EXCEL_FEATURE_DISABLED = true;  // TODO: 2/7/19 temporary, remove when Excel feature goes alpha 
+    public final boolean EXCEL_FEATURE_DISABLED = false;  // TODO: 2/7/19 temporary, remove when Excel feature goes alpha
     private String[] args;
     private boolean isHelp;
     private Operation operation;
