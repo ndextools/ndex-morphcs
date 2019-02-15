@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- *  The subclass of Table that customizes output according to the NDEx Webapp table schema.
+ *  The subclass of Table that customizes output according to the NDEx WebApp table schema.
  */
-public class Webapp extends Table implements Table2D {
+public class WebApp extends Table implements Table2D {
 
     // column header labels used in this table, presented in column sequence order
     protected final static String LABEL_SOURCE_NODE = "Source Node";
@@ -38,7 +38,7 @@ public class Webapp extends Table implements Table2D {
      * @param niceCX reference to NiceCXNetwork class object
      * @param cxWriter reference to output writer class object
      */
-    public Webapp(Configuration cfg, NiceCXNetwork niceCX, TableWritable cxWriter) {
+    public WebApp(Configuration cfg, NiceCXNetwork niceCX, TableWritable cxWriter) {
         super(cfg, niceCX, cxWriter);
     }
 

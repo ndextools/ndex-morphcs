@@ -45,11 +45,19 @@ public class TableToCSV implements TableWritable, AutoCloseable {
      */
     @Override
     public void close() throws IOException {
-        if (printer != null) {
-            printer.flush();
-        }
-        if (printer != null) {
-            printer.close();
+
+        try
+        {
+            if (printer != null) {
+                printer.flush();
+            }
+
+            if (printer != null) {
+                printer.close();
+            }
+
+        } catch (IOException e) {
+            throw new IOException(e);
         }
     }
 

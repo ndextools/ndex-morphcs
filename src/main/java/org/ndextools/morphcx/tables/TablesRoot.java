@@ -1,19 +1,16 @@
 package org.ndextools.morphcx.tables;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.ndexbio.model.cx.NiceCXNetwork;
 import org.ndextools.morphcx.shared.CXReader;
 import org.ndextools.morphcx.shared.Configuration;
 import org.ndextools.morphcx.shared.Utilities;
-import org.ndextools.morphcx.writers.TableToCSV;
+import org.ndextools.morphcx.writers.TableToPOI;
 import org.ndextools.morphcx.writers.TableWritable;
 import org.ndextools.morphcx.writers.WriterFactory;
 
@@ -23,85 +20,87 @@ import org.ndextools.morphcx.writers.WriterFactory;
 public class TablesRoot {
 
     /**
-     * Converts the JSON-format NDEx CX Network into a NiceCXNetwork object, then uses a factory
-     * class to instantiate the class of writer needed by the operation.  Finally, control is passed
-     * to the class which morphs the NiceCXNetwork object to the desired output format.
+     * Converts the JSON-format NDEx CX Network into a NiceCXNetwork object, Then control
+     * is passed to the class which morphs the NiceCXNetwork object to the desired output format.
      *
      * @param cfg reference to a Configuration class object
      * @throws Exception base class exception when there is an IO or other processing error
      */
     public void execute(final Configuration cfg) throws Exception {
+
         String msg = String.format("%s: expecting MorphCX.appConfig() !=null, actual=%s ",
                 TablesRoot.class.getSimpleName(), cfg);
         Utilities.nullReferenceCheck(cfg, msg);
 
-        NiceCXNetwork niceCX = LoadInputCxNetwork(cfg);
+        // Transform input stream to a NiceCXNetwork object.
+        CXReader cxReader = new CXReader(cfg);
+        NiceCXNetwork niceCX = cxReader.produceNiceCX();
 
-        switch (cfg.getOperation())
-        {
-            case EXCEL:
-                // TODO: BEGIN *************************************************************
-                // TODO: Remove feature disabled conditional when features goes alpha
-                if (cfg.EXCEL_FEATURE_DISABLED) {
-                    System.err.println("The Excel feature is still being developed!");
-                    return;
-                } else {
-
-                    try ( Workbook writer = setupPOIOutputWriter(cfg) ) {
-                        Table3D morph = new CXToExcel(cfg, niceCX, writer);
-                        morph.morphThisCX();
-                    } catch (Exception e) {
-                        throw new Exception(e);
-                    }
-                    break;
-                }
-                // TODO: END **************************************************************
-
+        // Prepare for and run a morphing operation on the NiceCXNetwork object.
+        switch (cfg.getOperation()) {
             case TSV:
             case CSV:
             case NOT_SPECIFIED:
 
                 try ( TableWritable writer = setupCSVOutputWriter(cfg) ) {
-                    Table2D morph = new Webapp( cfg, niceCX, writer);
+                    Table2D morph = new WebApp( cfg, niceCX, writer);
                     morph.morphThisCX();
                 } catch (Exception e) {
                     throw new Exception(e);
                 }
                 break;
 
-        }
-    }
+            case EXCEL:
 
-    private static NiceCXNetwork LoadInputCxNetwork(Configuration cfg) throws IOException {
-        CXReader cxReader = new CXReader(cfg);
-        return cxReader.produceNiceCX();
+                // TODO: BEGIN ****************************************************************
+                // TODO: Remove/comment this code when excel feature is released for testing
+                if ( (cfg.EXCEL_FEATURE_DISABLED) && (!cfg.isDebugMode()) ) {
+                    System.out.println("The Excel feature is being developed!");
+                    return;
+                }
+                // TODO: END ******************************************************************
+
+                if (cfg.outputIsFile()) {
+                    setupForPOIAsFile(cfg, niceCX);
+                } else {
+                    setupForPOIAsStdout(cfg, niceCX);
+                    return;
+                }
+                break;
+
+            default:
+                String errMsg = String.format("%s: \'%s\' is not a valid operation",
+                        TablesRoot.class.getSimpleName(), cfg.getOperation());
+                throw new Exception(errMsg);
+        }
     }
 
     private static TableWritable setupCSVOutputWriter(Configuration cfg) throws Exception {
         WriterFactory wf = new WriterFactory(cfg);
-        return wf.getWriter();
+        return wf.getCSVWriter();
     }
 
+    void setupForPOIAsFile(Configuration cfg, NiceCXNetwork niceCX) throws Exception {
 
-    private Workbook setupPOIOutputWriter(Configuration cfg) throws Exception {
-        Workbook workbook;
-
-        try
-        {
-
-        // Determine whether the output is to a file or stdout.
-            if (cfg.outputIsFile()) {
-                Workbook wb = WorkbookFactory.create(new File(cfg.getOutputFilename()));
-                return wb;
-            } else {
-                Workbook wb = WorkbookFactory.create(new FileInputStream(cfg.getOutputFilename()));
-                return wb;
-            }
-
+        try (OutputStream outputStream = new FileOutputStream(cfg.getOutputFilename());
+             XSSFWorkbook workbook = new XSSFWorkbook() ) {
+            TableToPOI writer = new TableToPOI(outputStream, workbook);
+            Table3D morph = new ExcelApp(cfg, niceCX, writer, workbook, outputStream);
+            morph.morphThisCX();
+        } catch (Exception e) {
+            throw new Exception(e);
         }
-            catch (Exception e) {
-            String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
-            throw new Exception(msg);
+    }
+
+    void setupForPOIAsStdout(Configuration cfg, NiceCXNetwork niceCX) throws Exception {
+
+        try (OutputStream outputStream = new PrintStream(System.out);
+             XSSFWorkbook workbook = new XSSFWorkbook() ) {
+            TableToPOI writer = new TableToPOI(outputStream, workbook);
+            Table3D morph = new ExcelApp(cfg, niceCX, writer, workbook, outputStream);
+            morph.morphThisCX();
+        } catch (Exception e) {
+            throw new Exception(e);
         }
     }
 

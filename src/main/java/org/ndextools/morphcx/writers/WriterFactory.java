@@ -3,8 +3,6 @@ package org.ndextools.morphcx.writers;
 import java.io.PrintStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.ndextools.morphcx.shared.Configuration;
 import org.ndextools.morphcx.shared.Utilities;
 
@@ -20,12 +18,12 @@ public final class WriterFactory {
     }
 
     /**
-     * The getWriter method initializes an output writer appropriate for the application's need,
+     * The getCSVWriter method initializes an output writer appropriate for the application's need,
      *
      * @return the writer object to be used for outputting the resulting morphed CX network
      * @throws Exception base class exception when there is an IO or other processing error
      */
-    public final TableWritable getWriter() throws Exception {
+    public final TableWritable getCSVWriter() throws Exception {
         PrintStream printStream;
         CSVFormat csvFormat;
 
@@ -67,4 +65,5 @@ public final class WriterFactory {
             throw new Exception(msg);
         }
     }
+
 }

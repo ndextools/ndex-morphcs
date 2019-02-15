@@ -12,7 +12,7 @@ import org.apache.commons.cli.*;
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    public final boolean EXCEL_FEATURE_DISABLED = false;  // TODO: 2/7/19 temporary, remove when Excel feature goes alpha
+    public final boolean EXCEL_FEATURE_DISABLED = true;  // TODO: temporary, remove when Excel feature goes alpha
     private String[] args;
     private boolean isHelp;
     private Operation operation;
@@ -20,6 +20,7 @@ public final class Configuration {
     private boolean outputIsFile;
     private Newline newline;
     private boolean isServer;
+    private boolean isDebugMode;
     private String inputFilename;
     private String outputFilename;
     private char delimiter;
@@ -130,6 +131,13 @@ public final class Configuration {
                         .build()
         );
 
+        getCSVParameterOptions().addOption(
+                Option.builder(ConfigurationConstants.OPT_DEBUG)
+                        .longOpt(ConfigurationConstants.LONG_OPT_DEBUG)
+                        .desc("A flag used for debugging and development purposes. < -X | --DEBUG >")
+                        .build()
+        );
+
         // Apache Commons CLI - Step #2 of 3: Parse all command-line parameters
         CommandLine parsed;
         CommandLineParser parser = new DefaultParser();
@@ -224,6 +232,10 @@ public final class Configuration {
         if (parsed.hasOption(ConfigurationConstants.OPT_SERVER)) {
             setIsServer(true);
         }
+
+        if (parsed.hasOption(ConfigurationConstants.OPT_DEBUG)) {
+            setIsDebugMode(true);
+        }
     }
 
     private final void preValidationAdjustments() {
@@ -312,6 +324,10 @@ public final class Configuration {
 
     void setIsServer(boolean value) { this.isServer = value; }
 
+    public boolean isDebugMode() { return this.isDebugMode; }
+
+    void setIsDebugMode(boolean value) { this.isDebugMode = value; }
+
     public String getInputFilename() { return this.inputFilename; }
 
     void setInputFilename(String filename) { this.inputFilename = filename; }
@@ -345,6 +361,9 @@ public final class Configuration {
         private static final String LONG_OPT_OUTPUT = "output";
 
         private static final String OPT_SERVER = "S";
+
+        private static final String OPT_DEBUG =  "X";
+        private static final String LONG_OPT_DEBUG =  "DEBUG";
 
         private static final String CONVERT_CSV = "CSV";
         private static final String CONVERT_TSV = "TSV";

@@ -14,5 +14,4 @@ public interface TableWritable extends AutoCloseable {
      * @throws Exception base class exception when there is an IO or other processing error.
      */
     void outputRow(List<String> columns) throws Exception;
-
 }

@@ -1,34 +1,52 @@
 package org.ndextools.morphcx.writers;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
-public class TableToPOI implements TableWritable, AutoCloseable {
-    private final OutputStream workbook;
+public class TableToPOI implements POIWritable, AutoCloseable {
+    private final OutputStream outputStream;
+    private final XSSFWorkbook workbook;
 
-    public TableToPOI(final OutputStream workbook) {
+    public TableToPOI(OutputStream outputStream, final XSSFWorkbook workbook) {
+        this.outputStream = outputStream;
         this.workbook = workbook;
     }
 
     /**
-     * @param columns is a list of ordered columns/cells that are output as a single and complete row.
-     * @throws Exception base class exception when there is an IO or other processing error
+     * Outputs the Excel workbook object to a designated output stream.
+     *
+     * @throws IOException likely caused by an IOException when when writing to the underlying output stream.
      */
     @Override
-    public void outputRow(List<String> columns) throws Exception {
-
+    public void outputAll() throws IOException {
+        try {
+            workbook.write(outputStream);
+        } catch (IOException io) {
+            throw new IOException(io);
+        }
     }
 
     /**
      * Releases resources associated with AutoClosable interface
      */
     @Override
-    public void close() throws Exception {
-        if (workbook != null) {
-            workbook.flush();
-        }
-        if (workbook != null) {
-            workbook.close();
+    public void close() throws IOException {
+        try
+        {
+            if (workbook != null) {
+                workbook.close();
+            }
+
+            if (outputStream != null) {
+                outputStream.flush();
+                outputStream.close();
+            }
+
+        } catch (IOException e) {
+            throw new IOException(e);
         }
     }
+
 }
