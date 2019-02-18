@@ -14,7 +14,7 @@ Tested and stable releases can be obtained through the links provided in the fol
 
 Version | Release Date | Notes
 ------- | ------------ | -----
-[2.4.0-Beta-1b](https://github.com/ndextools/ndex-morphcx/releases/tag/2.4.0-Beta-1b) | 2019-02-01 |  Tested and Stable
+[2.4.0-Beta-1e](https://github.com/ndextools/ndex-morphcx/releases/tag/2.4.0-Beta-1e) | 2019-02-17 |  Tested and Stable
 
 The master branch may
 contain more recent commits due to "hot fixes" to reported 
