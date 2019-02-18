@@ -1,15 +1,14 @@
 package org.ndextools.morphcx.tables;
 
-import java.io.IOException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.ndexbio.model.cx.NiceCXNetwork;
+
 import java.util.List;
 
-/**
- * Interface for Tables classes
- */
-public interface Table3D {
+public interface Table3D extends Table2D {
 
-    void morphThisCX() throws IOException;
+    List<SpreadsheetInfo> initializeSpreadsheets(NiceCXNetwork niceCX, XSSFWorkbook wb);
 
-    List<String> buildColumnHeadings();
+    void processSpreadsheets(NiceCXNetwork niceCX, XSSFWorkbook wb, List<SpreadsheetInfo> spreadsheetInfos);
 
 }

@@ -16,7 +16,7 @@ public class Table {
 
     protected List<String> columnHeadings = new ArrayList<>();
     protected int columnsInTable;
-    protected List<Cell> unorderedListOfCells = new ArrayList<>();
+    protected List<Bin> unorderedListOfBins = new ArrayList<>();
 
     /**
      * Table class constructor
@@ -34,42 +34,42 @@ public class Table {
     }
 
     void addCellToRow(String label, String value) {
-        Table.Cell cell = this.new Cell(label, value);
-        unorderedListOfCells.add(cell);
+        Bin bin = this.new Bin(label, value);
+        unorderedListOfBins.add(bin);
     }
 
-    void addCellsToRow(List<Cell> cells) {
-        unorderedListOfCells.addAll(cells);
+    void addCellsToRow(List<Bin> bins) {
+        unorderedListOfBins.addAll(bins);
     }
 
     NiceCXNetwork getNiceCX() { return this.niceCX; }
 
-    List<Cell> getUnorderedListOfCells() { return unorderedListOfCells; }
+    List<Bin> getUnorderedListOfBins() { return unorderedListOfBins; }
 
     /**
      * This method iterates through the list of unordered table cells, picks each cell, and plops that
      * cell into a list of table cells ordered by column heading sequence/index.  This ordered list will
-     * becomes the unorderedListOfCells that will be output.
+     * becomes the unorderedListOfBins that will be output.
      *
      * @return a list of cells that are ordered by column heading sequence
      */
     List<String> pickAndPlop() {
 
-        // Create a unorderedListOfCells of cell elements, one cell element for each column to output.  This unorderedListOfCells will
+        // Create a unorderedListOfBins of cell elements, one cell element for each column to output.  This unorderedListOfBins will
         // eventually contain cells arranged in a sequence that matches that of the column headings
         List<String> outList = new ArrayList<>();
         for (int i = 0; i < columnHeadings.size(); i++) {
             outList.add("");
         }
 
-        // Iterate through the unordered cells in the output unorderedListOfCells, and place each unordered cell's
+        // Iterate through the unordered cells in the output unorderedListOfBins, and place each unordered cell's
         // value into the column sequence/index associated with its respective column heading.
-        for ( Cell cell : unorderedListOfCells) {
-            int idx = columnHeadings.indexOf(cell.getCellColumnHeading());
+        for ( Bin bin : unorderedListOfBins) {
+            int idx = columnHeadings.indexOf(bin.getCellColumnHeading());
             if (idx < 0) {
                 System.err.println("NOT FOUND IN COLUMN HEADINGS");
             } else {
-                outList.set(idx, cell.getCellData());
+                outList.set(idx, bin.getCellData());
             }
         }
 
@@ -77,10 +77,10 @@ public class Table {
     }
 
     /**
-     * Inner Cell class contains the text of the column heading it is associated with.  The contents
-     * is the text to be displayed within a unorderedListOfCells of cells.
+     * Inner Bin class contains the text of the column heading it is associated with.  The contents
+     * is the text to be displayed within a unorderedListOfBins of cells.
      */
-    class Cell {
+    class Bin {
 
         private final String cellColumnHeading;
         private final String cellData;
@@ -90,7 +90,7 @@ public class Table {
          * @param cellColumnHeading contains text of the column heading a cell is associated with.
          * @param cellData contains the text to be be displayed
          */
-        Cell (String cellColumnHeading, String cellData) {
+        Bin(String cellColumnHeading, String cellData) {
             this.cellColumnHeading = cellColumnHeading;
             this.cellData = cellData;
         }

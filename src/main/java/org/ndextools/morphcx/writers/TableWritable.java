@@ -13,5 +13,6 @@ public interface TableWritable extends AutoCloseable {
      * @param columns is a list of ordered columns/cells that are output as a single and complete row.
      * @throws Exception base class exception when there is an IO or other processing error.
      */
-    void outputRow(List<String> columns) throws Exception;
+    void outputRow(List<String> columns) throws Exception;  // TODO: eventually replace by writeRow()
+
 }

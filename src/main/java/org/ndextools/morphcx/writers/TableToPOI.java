@@ -1,29 +1,66 @@
 package org.ndextools.morphcx.writers;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.ndextools.morphcx.tables.POICell;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
-public class TableToPOI implements POIWritable, AutoCloseable {
+/**
+ * This class formats and writes Excel workbooks to an  output stream by using
+ * the Apache Commons POI dependency.
+ */
+public class TableToPOI implements POIWritable<POICell> {
     private final OutputStream outputStream;
     private final XSSFWorkbook workbook;
 
-    public TableToPOI(OutputStream outputStream, final XSSFWorkbook workbook) {
+
+    /**
+     * Class constructor
+     *
+     * @param outputStream reference to the destination output stream.
+     * @param workbook reference to an Excel workbook data structure managed by POI.
+     */
+    public TableToPOI(OutputStream outputStream, final XSSFWorkbook workbook)
+    {
         this.outputStream = outputStream;
         this.workbook = workbook;
     }
 
     /**
-     * Outputs the Excel workbook object to a designated output stream.
-     *
-     * @throws IOException likely caused by an IOException when when writing to the underlying output stream.
+     * Refer to the corresponding method in the POIWritable interface.
      */
     @Override
-    public void outputAll() throws IOException {
-        try {
+    public void writeRow(List<POICell> columns) throws Exception {
+        try
+        {
+            for ( POICell column : columns )
+            {
+                Row row = column.getRow();
+                row.createCell(column.getColumnIdx()).setCellValue(column.getText());
+            }
+        }
+        catch (Exception e)
+        {
+            String msg = this.getClass().getSimpleName() + ": " + e.getMessage();
+            throw new IOException(msg);
+        }
+    }
+
+    /**
+     * Refer to the corresponding method in the POIWritable interface.
+     */
+    @Override
+    public void writeAll() throws IOException {
+        try
+        {
             workbook.write(outputStream);
-        } catch (IOException io) {
+            workbook.close();
+        }
+        catch (IOException io)
+        {
             throw new IOException(io);
         }
     }
@@ -35,16 +72,18 @@ public class TableToPOI implements POIWritable, AutoCloseable {
     public void close() throws IOException {
         try
         {
-            if (workbook != null) {
+            if (workbook != null)
+            {
                 workbook.close();
             }
-
-            if (outputStream != null) {
+            if (outputStream != null)
+            {
                 outputStream.flush();
                 outputStream.close();
             }
-
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new IOException(e);
         }
     }

@@ -7,7 +7,7 @@ import org.ndextools.morphcx.shared.Configuration;
 import org.ndextools.morphcx.shared.Utilities;
 
 /**
- * Concrete class that formats and writes character separated values to an output stream by using
+ * This class formats and writes character separated values to an output stream by using
  * the Apache Commons CSV dependency.
  */
 public class TableToCSV implements TableWritable, AutoCloseable {
@@ -30,10 +30,7 @@ public class TableToCSV implements TableWritable, AutoCloseable {
     }
 
     /**
-     * Refer to the corresponding method in the TableWritable interface for more details.
-     *
-     * @param columns is a list of ordered columns/cells that are output as a single and complete row.
-     * @throws IOException likely caused by an IOException when when writing to the underlying output stream.
+     * Refer to the corresponding method in the TableWritable interface.
      */
     @Override
     public void outputRow(final List<String> columns) throws IOException {
@@ -62,9 +59,7 @@ public class TableToCSV implements TableWritable, AutoCloseable {
     }
 
     /**
-     * Override of Object.toString()
-     *
-     * @return contents of class instance variables
+     * Object.toString() override.
      */
     @Override
     public final String toString() {

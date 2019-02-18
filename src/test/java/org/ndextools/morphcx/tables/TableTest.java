@@ -16,12 +16,12 @@ public class TableTest {
         Table table = new Table(null, null, null);
         table.addCellToRow(heading1, data1);
         table.addCellToRow(heading2, data2);
-        List<Table.Cell> listOfCells;
-        listOfCells = table.getUnorderedListOfCells();
-        Assert.assertEquals(heading1, listOfCells.get(0).getCellColumnHeading());
-        Assert.assertEquals(data1, listOfCells.get(0).getCellData());
-        Assert.assertEquals(heading2, listOfCells.get(1).getCellColumnHeading());
-        Assert.assertEquals(data2, listOfCells.get(1).getCellData());
+        List<Table.Bin> listOfBins;
+        listOfBins = table.getUnorderedListOfBins();
+        Assert.assertEquals(heading1, listOfBins.get(0).getCellColumnHeading());
+        Assert.assertEquals(data1, listOfBins.get(0).getCellData());
+        Assert.assertEquals(heading2, listOfBins.get(1).getCellColumnHeading());
+        Assert.assertEquals(data2, listOfBins.get(1).getCellData());
     }
 
     @Test
@@ -29,8 +29,8 @@ public class TableTest {
         String heading = "Column-1";
         String data = "Data-1";
         Table table = new Table(null, null, null);
-        Table.Cell cell = table.new Cell(heading, data);
-        Assert.assertEquals(heading, cell.getCellColumnHeading());
-        Assert.assertEquals(data, cell.getCellData());
+        Table.Bin bin = table.new Bin(heading, data);
+        Assert.assertEquals(heading, bin.getCellColumnHeading());
+        Assert.assertEquals(data, bin.getCellData());
     }
 }

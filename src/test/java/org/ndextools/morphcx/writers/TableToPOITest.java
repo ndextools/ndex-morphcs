@@ -8,12 +8,34 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.ndextools.morphcx.tables.POICell;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableToPOITest {
     private PrintStream ps;
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+
+    private final int SHEET_TAB_0 = 0;
+    private final int SHEET_TAB_1 = 1;
+    private final String SHEETNAME_TEST_A = "Test A";
+    private final String SHEETNAME_TEST_B = "Test B";
+    private final int ROW_0 = 0;
+    private final int ROW_1 = 1;
+    private final int COLUMN_IDX_0 = 0;
+    private final int COLUMN_IDX_1 = 1;
+    private final int COLUMN_IDX_2 = 2;
+    private final int COLUMN_IDX_3 = 3;
+    private final String CELL_0_TEXT = "cell zero";
+    private final String CELL_1_TEXT = "cell one";
+    private final String CELL_2_TEXT = "cell two";
+    private final String CELL_3_TEXT = "cell three";
+
+    private List<POICell> cells = new ArrayList<>();
+    private Sheet sheet;
+    private Row row;
 
     @Before
     public void setup() {
@@ -29,44 +51,136 @@ public class TableToPOITest {
     }
 
     @Test
-    public void _ShouldProveExcelWorkbookWithTestSpreadsheetWasCreatedAndImportable() throws Exception {
+    public void _Should_Validate_POI_Output_Can_Be_Unit_Tested() throws Exception
+    // Simply a test of the testing process used by this class.
+    {
+        try ( OutputStream out = new PrintStream(outContent);
+              XSSFWorkbook exportWB = new XSSFWorkbook() )
+        {
+            // Create workbook and populate it with a row with cells.
+            Sheet expSheet = exportWB.createSheet(SHEETNAME_TEST_A);
+            Row expRow = expSheet.createRow(ROW_0);
+            expRow.createCell(COLUMN_IDX_0).setCellValue(CELL_0_TEXT);
+            expRow.createCell(COLUMN_IDX_1).setCellValue(CELL_1_TEXT);
+            expRow.createCell(COLUMN_IDX_2).setCellValue(CELL_2_TEXT);
+            expRow.createCell(COLUMN_IDX_3).setCellValue(CELL_3_TEXT);
 
-        // Create a trivial Excel workbook containing a test sheet and row.
-        final String cell0 = "Cell-0";
-        final String cell1 = "Cell-1";
-        final String cell2 = "Cell-2";
-        final String cell3 = "Cell-3";
-        final String testSheetName = "Test1";
-
-        // Create workbook and populate a row with cells
-        try (OutputStream out = new PrintStream(outContent);
-             XSSFWorkbook exportWB = new XSSFWorkbook() ) {
-            Sheet expSheet = exportWB.createSheet(testSheetName);
-            Row expRow = expSheet.createRow(0);
-            expRow.createCell(0).setCellValue(cell0);
-            expRow.createCell(1).setCellValue(cell1);
-            expRow.createCell(2).setCellValue(cell2);
-            expRow.createCell(3).setCellValue(cell3);
+            // Output to a ByteArrayOutputStream.
             exportWB.write(out);
-        } catch (Exception io) {
-            System.err.println(io);
+        }
+        catch (Exception e) {
             Assert.fail();
         }
 
-        // Import Excel worksheet stream into POI worksheet
+        // Import Excel worksheet stream from a ByteArrayOutputStream into POI worksheet
         ByteArrayInputStream inContent;
         inContent = new ByteArrayInputStream(outContent.toByteArray());
         Workbook impWB = new XSSFWorkbook(inContent);
 
         // Perform tests
-        Sheet impSheet = impWB.getSheetAt(0);
-        Assert.assertEquals( impSheet.getSheetName(), testSheetName );
+        Sheet impSheet = impWB.getSheetAt(SHEET_TAB_0);
+        row = impSheet.getRow(ROW_0);
+        Assert.assertEquals( SHEETNAME_TEST_A, impSheet.getSheetName() );
+        Assert.assertEquals( CELL_0_TEXT, row.getCell(0).getStringCellValue() );
+        Assert.assertEquals( CELL_1_TEXT, row.getCell(1).getStringCellValue() );
+        Assert.assertEquals( CELL_2_TEXT, row.getCell(2).getStringCellValue() );
+        Assert.assertEquals( CELL_3_TEXT, row.getCell(3).getStringCellValue() );
+    }
 
-        Row r0 = impSheet.getRow(0);
-        Assert.assertEquals( r0.getCell(0).getStringCellValue(), cell0 );
-        Assert.assertEquals( r0.getCell(1).getStringCellValue(), cell1 );
-        Assert.assertEquals( r0.getCell(2).getStringCellValue(), cell2 );
-        Assert.assertEquals( r0.getCell(3).getStringCellValue(), cell3 );
+    @Test
+    public void _Should_Output_Workbook_Using_WriteAll_Method() throws Exception
+    {
+        try ( OutputStream out = new PrintStream(outContent);
+              XSSFWorkbook exportWB = new XSSFWorkbook() )
+        {
+            TableToPOI poiWriter = new TableToPOI(out, exportWB);
+
+            // Create workbook and populate it with a row with cells.
+            Sheet expSheet = exportWB.createSheet(SHEETNAME_TEST_A);
+            Row expRow = expSheet.createRow(ROW_1);
+            expRow.createCell(COLUMN_IDX_0).setCellValue(CELL_0_TEXT);
+            expRow.createCell(COLUMN_IDX_1).setCellValue(CELL_1_TEXT);
+            expRow.createCell(COLUMN_IDX_2).setCellValue(CELL_2_TEXT);
+            expRow.createCell(COLUMN_IDX_3).setCellValue(CELL_3_TEXT);
+
+            // Output to a ByteArrayOutputStream.
+            poiWriter.writeAll();
+        }
+        catch (Exception e) {
+            Assert.fail();
+        }
+
+        // Import Excel worksheet stream from a ByteArrayOutputStream into POI worksheet
+        ByteArrayInputStream inContent;
+        inContent = new ByteArrayInputStream(outContent.toByteArray());
+        Workbook impWB = new XSSFWorkbook(inContent);
+
+        // Perform tests
+        Sheet impSheet = impWB.getSheetAt(SHEET_TAB_0);
+        row = impSheet.getRow(ROW_1);
+        Assert.assertEquals( SHEETNAME_TEST_A, impSheet.getSheetName() );
+        Assert.assertEquals( CELL_0_TEXT, row.getCell(0).getStringCellValue() );
+        Assert.assertEquals( CELL_1_TEXT, row.getCell(1).getStringCellValue() );
+        Assert.assertEquals( CELL_2_TEXT, row.getCell(2).getStringCellValue() );
+        Assert.assertEquals( CELL_3_TEXT, row.getCell(3).getStringCellValue() );
+    }
+
+    @Test
+    public void _Should_Write_Cells_Using_WriteRow_Method() throws Exception {
+
+        // Create workbook and populate a row with cells
+        try (OutputStream out = new PrintStream(outContent);
+             XSSFWorkbook exportWB = new XSSFWorkbook() )
+        {
+            TableToPOI poiWriter = new TableToPOI(out, exportWB);
+
+            // create two spreadsheets and populate them with a row of cells.
+            sheet = exportWB.createSheet(SHEETNAME_TEST_A);
+            row = sheet.createRow(ROW_0);
+            cells.add( new POICell(CELL_0_TEXT, COLUMN_IDX_0, row) );
+            cells.add( new POICell(CELL_1_TEXT, COLUMN_IDX_1, row) );
+            cells.add( new POICell(CELL_2_TEXT, COLUMN_IDX_2, row) );
+            cells.add( new POICell(CELL_3_TEXT, COLUMN_IDX_3, row) );
+
+            sheet = exportWB.createSheet(SHEETNAME_TEST_B);
+            row = sheet.createRow(ROW_1);
+            cells.add( new POICell(CELL_0_TEXT, COLUMN_IDX_3, row) );
+            cells.add( new POICell(CELL_1_TEXT, COLUMN_IDX_2, row) );
+            cells.add( new POICell(CELL_2_TEXT, COLUMN_IDX_1, row) );
+            cells.add( new POICell(CELL_3_TEXT, COLUMN_IDX_0, row) );
+
+            // Output to a ByteArrayOutputStream.
+            poiWriter.writeRow(cells);
+            poiWriter.writeAll();
+        }
+        catch (Exception e) {
+            Assert.fail();
+        }
+
+        // Import Excel worksheet stream from a ByteArrayOutputStream into POI worksheet
+        ByteArrayInputStream inContent;
+        inContent = new ByteArrayInputStream(outContent.toByteArray());
+        Workbook impWB = new XSSFWorkbook(inContent);
+
+        // Perform tests
+        Sheet impSheet;
+        Row impRow;
+
+        impSheet = impWB.getSheetAt(SHEET_TAB_0);
+        impRow = impSheet.getRow(ROW_0);
+        Assert.assertEquals( impSheet.getSheetName(), SHEETNAME_TEST_A);
+        Assert.assertEquals(CELL_0_TEXT, impRow.getCell(COLUMN_IDX_0).getStringCellValue());
+        Assert.assertEquals(CELL_1_TEXT, impRow.getCell(COLUMN_IDX_1).getStringCellValue());
+        Assert.assertEquals(CELL_2_TEXT, impRow.getCell(COLUMN_IDX_2).getStringCellValue());
+        Assert.assertEquals(CELL_3_TEXT, impRow.getCell(COLUMN_IDX_3).getStringCellValue());
+
+        impSheet = impWB.getSheetAt(SHEET_TAB_1);
+        impRow = impSheet.getRow(ROW_1);
+        Assert.assertEquals( impSheet.getSheetName(), SHEETNAME_TEST_B);
+        Assert.assertEquals(CELL_3_TEXT, impRow.getCell(COLUMN_IDX_0).getStringCellValue());
+        Assert.assertEquals(CELL_2_TEXT, impRow.getCell(COLUMN_IDX_1).getStringCellValue());
+        Assert.assertEquals(CELL_1_TEXT, impRow.getCell(COLUMN_IDX_2).getStringCellValue());
+        Assert.assertEquals(CELL_0_TEXT, impRow.getCell(COLUMN_IDX_3).getStringCellValue());
     }
 
 }

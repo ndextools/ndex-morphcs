@@ -46,7 +46,7 @@ public class WebApp extends Table implements Table2D {
     public void morphThisCX() throws IOException {
 
         // Create and output column headers, saving them so that data can be arranged in that sequence for output.
-        columnHeadings = buildColumnHeadings();
+        columnHeadings = makeColumnHeadings();
         columnsInTable = columnHeadings.size();
 
         try {
@@ -56,11 +56,11 @@ public class WebApp extends Table implements Table2D {
             throw new IOException(errMsg);
         }
 
-        // Iterate through all CX edges, gathering edge values into a unorderedListOfCells of cells which is output
+        // Iterate through all CX edges, gathering edge values into a unorderedListOfBins of cells which is output
         // at the end of each iteration.
         Map<Long, EdgesElement> edges = getNiceCX().getEdges();
         for (Map.Entry<Long, EdgesElement> entry : edges.entrySet()) {
-            unorderedListOfCells.clear();
+            unorderedListOfBins.clear();
 
             long _cx_edge_id = entry.getValue().getId();
             long _cx_source_node_id = entry.getValue().getSource();
@@ -76,20 +76,20 @@ public class WebApp extends Table implements Table2D {
 
             // gather node values for eventual output
             Map<Long, NodesElement> nodes = getNiceCX().getNodes();
-            List<Cell> nodeData = collectNodeData( nodes, _cx_source_node_id, _cx_target_node_id );
+            List<Bin> nodeData = collectNodeData( nodes, _cx_source_node_id, _cx_target_node_id );
             addCellsToRow(nodeData);
 
             // gather node attribute values for eventual output
-            List<Cell> nodeAttributeData;
+            List<Bin> nodeAttributeData;
             nodeAttributeData = collectNodeAttributes(_cx_source_node_id, _cx_target_node_id);
             addCellsToRow(nodeAttributeData);
 
             // gather edge attribute values for eventual output
-            List<Cell> edgeAttributeData;
+            List<Bin> edgeAttributeData;
             edgeAttributeData = collectEdgeAttributes(_cx_edge_id);
             addCellsToRow(edgeAttributeData);
 
-            // Arrange cells according to column heading order and output the unorderedListOfCells
+            // Arrange cells according to column heading order and output the unorderedListOfBins
             List<String> orderedListOfCells = pickAndPlop();
             try {
                 exportWriter.outputRow(orderedListOfCells);
@@ -100,27 +100,27 @@ public class WebApp extends Table implements Table2D {
         }
     }
 
-    private List<Cell> collectNodeData(Map<Long, NodesElement> nodes, Long sourceNodeId, Long targetNodeId) {
-        List<Cell> nodeDataCells = new ArrayList<>();
+    private List<Bin> collectNodeData(Map<Long, NodesElement> nodes, Long sourceNodeId, Long targetNodeId) {
+        List<Bin> nodeDataBins = new ArrayList<>();
 
         String _Source_Node = nodes.get(sourceNodeId).getNodeName();
-        nodeDataCells.add( new Cell( LABEL_SOURCE_NODE, _Source_Node ));
+        nodeDataBins.add( new Bin( LABEL_SOURCE_NODE, _Source_Node ));
 
         String _Source_Id = nodes.get(sourceNodeId).getNodeRepresents();
-        nodeDataCells.add( new Cell( LABEL_SOURCE_ID, _Source_Id ));
+        nodeDataBins.add( new Bin( LABEL_SOURCE_ID, _Source_Id ));
 
 
         String _Target_Node = nodes.get(targetNodeId).getNodeName();
-        nodeDataCells.add( new Cell( LABEL_TARGET_NODE, _Target_Node ));
+        nodeDataBins.add( new Bin( LABEL_TARGET_NODE, _Target_Node ));
 
         String _Target_Id = nodes.get(targetNodeId).getNodeRepresents();
-        nodeDataCells.add( new Cell( LABEL_TARGET_ID, _Target_Id ));
+        nodeDataBins.add( new Bin( LABEL_TARGET_ID, _Target_Id ));
 
-        return nodeDataCells;
+        return nodeDataBins;
     }
 
-    private List<Cell> collectNodeAttributes(long cxSourceNodeId, long cxTargetNodeId) {
-        List<Cell> nodeAttributeCells = new ArrayList<>();
+    private List<Bin> collectNodeAttributes(long cxSourceNodeId, long cxTargetNodeId) {
+        List<Bin> nodeAttributeBins = new ArrayList<>();
 
         // collect source node attributes only if there are any
         if (getNiceCX().getNodeAttributes().get(cxSourceNodeId) != null) {
@@ -128,7 +128,7 @@ public class WebApp extends Table implements Table2D {
                 if (nae.isSingleValue()) {
                     String k = LABEL_NODE_ATTRIBUTE_SOURCE_ + nae.getName();
                     String v = nae.getValue();
-                    nodeAttributeCells.add(new Cell(k, v));
+                    nodeAttributeBins.add(new Bin(k, v));
                 } else {
                     StringBuilder multipleAttrValues = new StringBuilder();
                     for (String value : nae.getValues()) {
@@ -138,7 +138,7 @@ public class WebApp extends Table implements Table2D {
                     multipleAttrValues.setLength((multipleAttrValues.length() - 1 ));
                     String k = LABEL_NODE_ATTRIBUTE_SOURCE_+ nae.getName();
                     String v = multipleAttrValues.toString();
-                    nodeAttributeCells.add(new Cell(k, v));
+                    nodeAttributeBins.add(new Bin(k, v));
                 }
             }
         }
@@ -149,7 +149,7 @@ public class WebApp extends Table implements Table2D {
                 if (nae.isSingleValue()) {
                     String k = LABEL_NODE_ATTRIBUTE_TARGET_ + nae.getName();
                     String v = nae.getValue();
-                    nodeAttributeCells.add(new Cell(k, v));
+                    nodeAttributeBins.add(new Bin(k, v));
                 } else {
                     StringBuilder multipleAttrValues = new StringBuilder();
                     for (String value : nae.getValues()) {
@@ -159,16 +159,16 @@ public class WebApp extends Table implements Table2D {
                     multipleAttrValues.setLength((multipleAttrValues.length() - 1 ));
                     String k = LABEL_NODE_ATTRIBUTE_TARGET_ + nae.getName();
                     String v = multipleAttrValues.toString();
-                    nodeAttributeCells.add(new Cell(k, v));
+                    nodeAttributeBins.add(new Bin(k, v));
                 }
             }
         }
 
-        return  nodeAttributeCells;
+        return nodeAttributeBins;
     }
 
-    private List<Cell> collectEdgeAttributes(long cxEdgeId) {
-        List<Cell> edgeAttributeCells = new ArrayList<>();
+    private List<Bin> collectEdgeAttributes(long cxEdgeId) {
+        List<Bin> edgeAttributeBins = new ArrayList<>();
 
         // collect edge attributes only if there are any
         if (getNiceCX().getEdgeAttributes().values() != null) {
@@ -178,7 +178,7 @@ public class WebApp extends Table implements Table2D {
                         if (attr.isSingleValue()) {
                             String k = attr.getName();
                             String v = attr.getValue();
-                            edgeAttributeCells.add(new Cell(k, v));
+                            edgeAttributeBins.add(new Bin(k, v));
                         } else {
                             StringBuilder multipleValues = new StringBuilder();
                             for (String value : attr.getValues()) {
@@ -188,52 +188,51 @@ public class WebApp extends Table implements Table2D {
                             multipleValues.setLength((multipleValues.length() - 1 ));
                             String k = attr.getName();
                             String v = multipleValues.toString();
-                            edgeAttributeCells.add(new Cell(k, v));
+                            edgeAttributeBins.add(new Bin(k, v));
                         }
                     }
                 }
             }
         }
 
-        return edgeAttributeCells;
+        return edgeAttributeBins;
     }
 
     /**
      *
      * @return list of ordered column headings according to the sequence in which each was added.
      */
-    public List<String> buildColumnHeadings() {
+    public List<String> makeColumnHeadings() {
 
         int COLUMN_COUNT = 30;
-        List<String> labels = new ArrayList<>( COLUMN_COUNT );
+        List<String> colHeadings = new ArrayList<>( COLUMN_COUNT );
 
-        labels.add(LABEL_SOURCE_NODE);
-        labels.add(LABEL_INTERACTION);
-        labels.add(LABEL_TARGET_NODE);
+        colHeadings.add(LABEL_SOURCE_NODE);
+        colHeadings.add(LABEL_INTERACTION);
+        colHeadings.add(LABEL_TARGET_NODE);
 
         Collection<String> orderedNodeAttributeLabels;
         orderedNodeAttributeLabels = gatherNodeColumnHeadings(niceCX);
-        ((ArrayList<String>) labels).addAll(orderedNodeAttributeLabels);
+        ((ArrayList<String>) colHeadings).addAll(orderedNodeAttributeLabels);
 
         Collection<String> orderedEdgeAttributeLabels;
         orderedEdgeAttributeLabels = gatherEdgeColumnHeadings(niceCX);
-        ((ArrayList<String>) labels).addAll(orderedEdgeAttributeLabels);
+        ((ArrayList<String>) colHeadings).addAll(orderedEdgeAttributeLabels);
 
-        labels.add(LABEL_CX_EDGE_ID);
-        labels.add(LABEL_CX_SOURCE_NODE_ID);
-        labels.add(LABEL_CX_TARGET_NODE_ID);
+        colHeadings.add(LABEL_CX_EDGE_ID);
+        colHeadings.add(LABEL_CX_SOURCE_NODE_ID);
+        colHeadings.add(LABEL_CX_TARGET_NODE_ID);
 
-        return labels;
+        return colHeadings;
     }
 
     Collection<String> gatherNodeColumnHeadings(NiceCXNetwork niceCX) {
         List<String> orderedNodeAttributes = new ArrayList<>();
         Set<String> unorderedNodeAttributes = new TreeSet<>();
-//        Set<String> unorderedNodeAttributes = new LinkedHashSet<>();
 
         for (Collection<NodeAttributesElement> nodeAttrs : niceCX.getNodeAttributes().values() ) {
-            for ( NodeAttributesElement attr : nodeAttrs ) {
-                unorderedNodeAttributes.add(attr.getName());
+            for ( NodeAttributesElement nae : nodeAttrs ) {
+                unorderedNodeAttributes.add(nae.getName());
             }
         }
 
