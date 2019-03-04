@@ -52,51 +52,41 @@ public class ExcelApp implements Table3D {
      * @return List of spreadsheets and associated information belonging to Excel Excel workbook object
      */
     public List<SpreadsheetInfo> initializeSpreadsheets(final NiceCXNetwork niceCX, final XSSFWorkbook wb) {
-        List<SpreadsheetInfo> spreadsheets = new ArrayList();
+        List<SpreadsheetInfo> ssInfoList = new ArrayList();
 
         // Create Network Table spreadsheet
         List<String> columnHeadings = gatherNetworkTableColumnHeadings(niceCX);
-        String sheetName = ExcelAppConstants.SHEET_NETWORK_TABLE;
-        Sheet sheet = wb.createSheet(sheetName);
-        int nextRowIdx = addColumnHeadings(sheet, columnHeadings);
-
-        SpreadsheetInfo spreadsheetInfo = new SpreadsheetInfo(
-                wb,
-                sheetName,
-                sheet,
-                columnHeadings,
-                nextRowIdx);
-        spreadsheets.add(spreadsheetInfo);
+        String sheetName = ExcelApp_Constants.SHEET_NETWORK_TABLE;
+        ssInfoList.add( addSSInfoElement(wb, sheetName, columnHeadings) );
 
         // Create Node Table spreadsheet
         columnHeadings = gatherNodeTableColumnHeadings(niceCX);
-        sheetName = ExcelAppConstants.SHEET_NODE_TABLE;
-        sheet = wb.createSheet(sheetName);
-        nextRowIdx = addColumnHeadings(sheet, columnHeadings);
-
-        spreadsheetInfo = new SpreadsheetInfo(
-                wb,
-                sheetName,
-                sheet,
-                columnHeadings,
-                nextRowIdx);
-        spreadsheets.add(spreadsheetInfo);
+        sheetName = ExcelApp_Constants.SHEET_NODE_TABLE;
+        ssInfoList.add( addSSInfoElement(wb, sheetName, columnHeadings) );
 
         // Create Edge Table spreadsheet
         columnHeadings = gatherEdgeTableColumnHeadings(niceCX);
-        sheetName = ExcelAppConstants.SHEET_EDGE_TABLE;
-        sheet = wb.createSheet(sheetName);
-        nextRowIdx = addColumnHeadings(sheet, columnHeadings);
+        sheetName = ExcelApp_Constants.SHEET_EDGE_TABLE;
+        ssInfoList.add( addSSInfoElement(wb, sheetName, columnHeadings) );
 
-        spreadsheetInfo = new SpreadsheetInfo(
+        return ssInfoList;
+    }
+
+    public static SpreadsheetInfo addSSInfoElement(XSSFWorkbook wb,
+                                 String sheetName,
+                                 List<String> columnHeadings)
+    {
+        Sheet sheet = wb.createSheet(sheetName);
+        int nextRowIdx = addColumnHeadings(sheet, columnHeadings);
+
+        SpreadsheetInfo ssInfo = new SpreadsheetInfo(
                 wb,
                 sheetName,
                 sheet,
                 columnHeadings,
                 nextRowIdx);
-        spreadsheets.add(spreadsheetInfo);
 
-        return spreadsheets;
+        return ssInfo;
     }
 
     /**
@@ -110,45 +100,46 @@ public class ExcelApp implements Table3D {
 
         for (SpreadsheetInfo spreadsheetInfo : spreadsheetInfos) {
             switch (spreadsheetInfo.getSheetName()) {
-                case ExcelAppConstants.SHEET_NETWORK_TABLE:
-                    populateNetworkTableSheet(niceCX, wb, spreadsheetInfo);
+                case ExcelApp_Constants.SHEET_NETWORK_TABLE:
+                    List<NetworkAttributesElement> naElements = new ArrayList<>(niceCX.getNetworkAttributes());
+                    populateNetworkTableSheet(naElements, spreadsheetInfo);
                     break;
-                case ExcelAppConstants.SHEET_NODE_TABLE:
+                case ExcelApp_Constants.SHEET_NODE_TABLE:
                     populateNodeTableSheet(niceCX, wb, spreadsheetInfo);
                     break;
-                case ExcelAppConstants.SHEET_EDGE_TABLE:
+                case ExcelApp_Constants.SHEET_EDGE_TABLE:
                     populateEdgeTableSheet(niceCX, wb, spreadsheetInfo);
                     break;
             }
         }
     }
 
-    static void populateNetworkTableSheet(final NiceCXNetwork niceCX, final XSSFWorkbook wb, final SpreadsheetInfo sheetInfo) {
+    static void populateNetworkTableSheet(List<NetworkAttributesElement> naElements, final SpreadsheetInfo sheetInfo) {
 
-        List<NetworkAttributesElement> networkAttributesElements = niceCX.getNetworkAttributes().stream()
-                .collect(Collectors.toList());
-
-        if (networkAttributesElements.isEmpty()) return;
+        if (naElements.isEmpty()) return;
 
         Sheet sheet = sheetInfo.getSheet();
         Row row = sheet.createRow(sheetInfo.getNextRowIdx());
-        for ( NetworkAttributesElement attr : networkAttributesElements ) {
+        int columnIdx;
 
-            if (attr.isSingleValue()) {
-                int columnIdx = sheetInfo.findColumnIdx(attr.getName());
-                row.createCell(columnIdx).setCellValue(attr.getValue());
+        for ( NetworkAttributesElement naElement : naElements ) {
 
-            } else {
-
-                String attrName = attr.getName();
-                StringBuilder attrValues = new StringBuilder();
-                for ( String value : attr.getValues() ) {
-                    attrValues.append(value);
-                    attrValues.append('|');
+            if (naElement.isSingleValue())
+                {
+                    columnIdx = sheetInfo.findColumnIdx(naElement.getName());
+                    row.createCell(columnIdx).setCellValue(naElement.getValue());
                 }
-                attrValues.setLength(( attrValues.length() - 1) );
-
-            }
+            else
+                {
+                    StringBuilder attrValues = new StringBuilder();
+                    for ( String value : naElement.getValues() ) {
+                        attrValues.append(value);
+                        attrValues.append('|');
+                    }
+                    attrValues.setLength(( attrValues.length() - 1) );
+                    columnIdx = sheetInfo.findColumnIdx(naElement.getName());
+                    row.createCell(columnIdx).setCellValue( attrValues.toString() );
+                }
         }
 
         sheetInfo.incrementNextRowIdx();
@@ -171,20 +162,20 @@ public class ExcelApp implements Table3D {
             String nodeName = niceCX.getNodes().get(nodeKey).getNodeName();
             String nodeRepresents = niceCX.getNodes().get(nodeKey).getNodeRepresents();
 
-//            System.err.println("\n***********************");
-//            String x = String.format("id=%s, name=%s, represents=%s", nodeId, nodeName, nodeRepresents);
-//            System.err.println(x);
-//
-//            //Node Attributes
-//            Collection<NodeAttributesElement> nodeAttributeElements = niceCX.getNodeAttributes().get(nodeKey);
-//            for ( NodeAttributesElement nae : niceCX.getNodeAttributes().get(nodeKey)) {
-//                if (nae.isSingleValue()) {
-//                    System.err.println("* String  " + nae.getName() + "=" + nae.getValue());
-//                } else {
-//                    System.err.println(" List_of_Strings  " + nae.getValues().toString());
-//                }
-//                System.err.println("\n***********************");
-//            }
+            System.err.println("\n***********************");
+            String x = String.format("id=%s, name=%s, represents=%s", nodeId, nodeName, nodeRepresents);
+            System.err.println(x);
+
+            //Node Attributes
+            Collection<NodeAttributesElement> nodeAttributeElements = niceCX.getNodeAttributes().get(nodeKey);
+            for ( NodeAttributesElement nae : niceCX.getNodeAttributes().get(nodeKey)) {
+                if (nae.isSingleValue()) {
+                    System.err.println("* String  " + nae.getName() + "=" + nae.getValue());
+                } else {
+                    System.err.println(" List_of_Strings  " + nae.getValues().toString());
+                }
+                System.err.println("\n***********************");
+            }
 
             sheetInfo.incrementNextRowIdx();
         }
@@ -251,13 +242,13 @@ public class ExcelApp implements Table3D {
     static List<String> gatherNetworkTableColumnHeadings(final NiceCXNetwork niceCX) {
         List<String> orderedColumnHeadings = new ArrayList<>();
 
-        orderedColumnHeadings.add(ExcelAppConstants.NETWORK_NAME);
-        orderedColumnHeadings.add(ExcelAppConstants.NETWORK_DESCRIPTION);
+        orderedColumnHeadings.add(ExcelApp_Constants.NETWORK_NAME);
+        orderedColumnHeadings.add(ExcelApp_Constants.NETWORK_DESCRIPTION);
 
         List<String> filteredColumnHeadings = niceCX.getNetworkAttributes().stream()
                 .map(AbstractAttributesAspectElement::getName)
-                .filter( filter -> !filter.equalsIgnoreCase(ExcelAppConstants.NETWORK_NAME))
-                .filter( filter -> !filter.equalsIgnoreCase(ExcelAppConstants.NETWORK_DESCRIPTION))
+                .filter( filter -> !filter.equalsIgnoreCase(ExcelApp_Constants.NETWORK_NAME))
+                .filter( filter -> !filter.equalsIgnoreCase(ExcelApp_Constants.NETWORK_DESCRIPTION))
                 .sorted(Comparator.comparing(nae -> nae))
                 .collect(Collectors.toList());
 
@@ -271,8 +262,8 @@ public class ExcelApp implements Table3D {
     static List<String> gatherNodeTableColumnHeadings(final NiceCXNetwork niceCX) {
         List<String> orderedNodeColumnHeadings = new ArrayList<>();
 
-        orderedNodeColumnHeadings.add(ExcelAppConstants.NODE_NAME);
-        orderedNodeColumnHeadings.add(ExcelAppConstants.NODE_REPRESENTS);
+        orderedNodeColumnHeadings.add(ExcelApp_Constants.NODE_NAME);
+        orderedNodeColumnHeadings.add(ExcelApp_Constants.NODE_REPRESENTS);
 
         Set<String> sortedNodeAttributeNames = new TreeSet<>();
         for (Collection<NodeAttributesElement> nodeAttrs : niceCX.getNodeAttributes().values() ) {
@@ -283,7 +274,7 @@ public class ExcelApp implements Table3D {
 
         orderedNodeColumnHeadings.addAll(sortedNodeAttributeNames);
 
-        orderedNodeColumnHeadings.add(ExcelAppConstants.NODE_CX_NODE_ID);
+        orderedNodeColumnHeadings.add(ExcelApp_Constants.NODE_CX_NODE_ID);
 
         return orderedNodeColumnHeadings;
     }
@@ -291,9 +282,9 @@ public class ExcelApp implements Table3D {
     static List<String> gatherEdgeTableColumnHeadings(final NiceCXNetwork niceCX) {
         List<String> orderedEdgeColumnHeadings = new ArrayList<>();
 
-        orderedEdgeColumnHeadings.add(ExcelAppConstants.NODE_NAME);
-        orderedEdgeColumnHeadings.add(ExcelAppConstants.EDGE_INTERACTION);
-        orderedEdgeColumnHeadings.add(ExcelAppConstants.EDGE_TARGET);
+        orderedEdgeColumnHeadings.add(ExcelApp_Constants.NODE_NAME);
+        orderedEdgeColumnHeadings.add(ExcelApp_Constants.EDGE_INTERACTION);
+        orderedEdgeColumnHeadings.add(ExcelApp_Constants.EDGE_TARGET);
 
         Set<String> sortedEdgeAttributeNames = new TreeSet<>();
         for (Collection<EdgeAttributesElement> nodeAttrs : niceCX.getEdgeAttributes().values() ) {
@@ -304,7 +295,7 @@ public class ExcelApp implements Table3D {
 
         orderedEdgeColumnHeadings.addAll(sortedEdgeAttributeNames);
 
-        orderedEdgeColumnHeadings.add(ExcelAppConstants.EDGE_CX_EDGE_ID);
+        orderedEdgeColumnHeadings.add(ExcelApp_Constants.EDGE_CX_EDGE_ID);
 
         return orderedEdgeColumnHeadings;
    }
@@ -347,7 +338,7 @@ public class ExcelApp implements Table3D {
         );
     }
 
-    public static class ExcelAppConstants {
+    public static class ExcelApp_Constants {
         private static final String SHEET_NETWORK_TABLE = "Network table";
         private static final String SHEET_NODE_TABLE = "Node table";
         private static final String SHEET_EDGE_TABLE = "Edge table";
