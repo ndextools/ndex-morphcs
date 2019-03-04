@@ -42,8 +42,6 @@ public class MorphCXTest {
         MorphCX.dispatchByOperation(cfg);
 
         System.setOut(System.out);
-
-        String string = outputStream.toString();
-        Assert.assertTrue(string.contains("usage: java -jar morphcx.jar"));
+        Assert.assertTrue(outputStream.toString().contains("usage: java -jar morphcx.jar"));
     }
 }
