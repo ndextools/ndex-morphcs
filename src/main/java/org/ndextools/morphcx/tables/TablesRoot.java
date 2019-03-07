@@ -52,14 +52,6 @@ public class TablesRoot {
 
             case EXCEL:
 
-                // TODO: BEGIN ****************************************************************
-                // TODO: Remove/comment this code when excel feature is released for testing
-                if ( (cfg.EXCEL_FEATURE_DISABLED) && (!cfg.isDebugMode()) ) {
-                    System.out.println("The Excel feature is being developed!");
-                    return;
-                }
-                // TODO: END ******************************************************************
-
                 if (cfg.outputIsFile()) {
                     setupForPOIAsFile(cfg, niceCX);
                 } else {

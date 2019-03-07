@@ -12,7 +12,6 @@ import org.apache.commons.cli.*;
  * finalizes the runtime configuration used by the application.
  */
 public final class Configuration {
-    public final boolean EXCEL_FEATURE_DISABLED = true;  // TODO: temporary, remove when Excel feature goes alpha
     private String[] args;
     private boolean isHelp;
     private Operation operation;
@@ -363,7 +362,7 @@ public final class Configuration {
         private static final String OPT_SERVER = "S";
 
         private static final String OPT_DEBUG =  "X";
-        private static final String LONG_OPT_DEBUG =  "DEBUG";
+        private static final String LONG_OPT_DEBUG =  "debug";
 
         private static final String CONVERT_CSV = "CSV";
         private static final String CONVERT_TSV = "TSV";
