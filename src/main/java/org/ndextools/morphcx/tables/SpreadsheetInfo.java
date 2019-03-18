@@ -1,7 +1,7 @@
 package org.ndextools.morphcx.tables;
 
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.util.List;
 
@@ -9,15 +9,15 @@ import java.util.List;
  * List of spreadsheets and associated information belonging to Excel Excel workbook object
  */
 public class SpreadsheetInfo {
-    private final XSSFWorkbook workbook;
+    private final SXSSFWorkbook workbook;
     private final String sheetName;
-    private final Sheet sheet;
+    private final SXSSFSheet sheet;
     private final List<String> columnHeadings;
     private int nextRowIdx;
 
-    public SpreadsheetInfo(XSSFWorkbook workbook,
+    public SpreadsheetInfo(SXSSFWorkbook workbook,
                            String sheetName,
-                           Sheet sheet,
+                           SXSSFSheet sheet,
                            List<String> columnHeadings,
                            int nextRowIdx) {
         this.workbook = workbook;
@@ -51,11 +51,11 @@ public class SpreadsheetInfo {
         this.nextRowIdx = getNextRowIdx() + 1;
     }
 
-    public XSSFWorkbook getWorkbook() { return this.workbook; }
+    public SXSSFWorkbook getWorkbook() { return this.workbook; }
 
     public String getSheetName() { return this.sheetName; }
 
-    public Sheet getSheet() { return this.sheet; }
+    public SXSSFSheet getSheet() { return this.sheet; }
 
     public List<String> getColumnHeadings() { return this.columnHeadings; }
 

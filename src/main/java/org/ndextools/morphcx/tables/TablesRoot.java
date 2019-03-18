@@ -1,11 +1,10 @@
 package org.ndextools.morphcx.tables;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.ndexbio.model.cx.NiceCXNetwork;
 import org.ndextools.morphcx.shared.CXReader;
 import org.ndextools.morphcx.shared.Configuration;
@@ -75,7 +74,7 @@ public class TablesRoot {
     void setupForPOIAsFile(Configuration cfg, NiceCXNetwork niceCX) throws Exception {
 
         try (OutputStream outputStream = new FileOutputStream(cfg.getOutputFilename());
-             XSSFWorkbook workbook = new XSSFWorkbook() ) {
+             SXSSFWorkbook workbook = new SXSSFWorkbook() ) {
             TableToPOI writer = new TableToPOI(outputStream, workbook);
             Table3D morph = new ExcelApp(cfg, niceCX, writer, workbook, outputStream);
             morph.morphThisCX();
@@ -87,7 +86,7 @@ public class TablesRoot {
     void setupForPOIAsStdout(Configuration cfg, NiceCXNetwork niceCX) throws Exception {
 
         try (OutputStream outputStream = new PrintStream(System.out);
-             XSSFWorkbook workbook = new XSSFWorkbook() ) {
+             SXSSFWorkbook workbook = new SXSSFWorkbook() ) {
             TableToPOI writer = new TableToPOI(outputStream, workbook);
             Table3D morph = new ExcelApp(cfg, niceCX, writer, workbook, outputStream);
             morph.morphThisCX();

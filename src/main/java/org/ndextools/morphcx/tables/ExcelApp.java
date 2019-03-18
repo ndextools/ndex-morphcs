@@ -1,8 +1,8 @@
 package org.ndextools.morphcx.tables;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.ndexbio.cxio.aspects.datamodels.*;
 import org.ndexbio.model.cx.NiceCXNetwork;
 import org.ndextools.morphcx.shared.Configuration;
@@ -19,14 +19,14 @@ public class ExcelApp implements Table3D {
     private final NiceCXNetwork niceCX;
     private final TableToPOI writer;
     private final OutputStream outStream;
-    private final XSSFWorkbook wb;
+    private final SXSSFWorkbook wb;
 
     private List<SpreadsheetInfo> spreadsheets;
 
     public ExcelApp(Configuration cfg,
                     NiceCXNetwork niceCX,
                     TableToPOI writer,
-                    XSSFWorkbook wb,
+                    SXSSFWorkbook wb,
                     OutputStream outStream) {
         this.cfg = cfg;
         this.niceCX = niceCX;
@@ -51,7 +51,7 @@ public class ExcelApp implements Table3D {
      * @param wb reference to Excel workbook object
      * @return List of spreadsheets and associated information belonging to Excel Excel workbook object
      */
-    public List<SpreadsheetInfo> initializeSpreadsheets(final NiceCXNetwork niceCX, final XSSFWorkbook wb) {
+    public List<SpreadsheetInfo> initializeSpreadsheets(final NiceCXNetwork niceCX, final SXSSFWorkbook wb) {
         List<SpreadsheetInfo> ssInfoList = new ArrayList();
 
         // Create Network Table spreadsheet
@@ -72,11 +72,11 @@ public class ExcelApp implements Table3D {
         return ssInfoList;
     }
 
-    public static SpreadsheetInfo addSSInfoElement(XSSFWorkbook wb,
-                                 String sheetName,
-                                 List<String> columnHeadings)
+    public static SpreadsheetInfo addSSInfoElement(SXSSFWorkbook wb,
+                                                   String sheetName,
+                                                   List<String> columnHeadings)
     {
-        Sheet sheet = wb.createSheet(sheetName);
+        SXSSFSheet sheet = wb.createSheet(sheetName);
         int nextRowIdx = addColumnHeadings(sheet, columnHeadings);
 
         SpreadsheetInfo ssInfo = new SpreadsheetInfo(
@@ -96,7 +96,7 @@ public class ExcelApp implements Table3D {
      * @param wb reference to Excel workbook object
      * @param spreadsheetInfos List of spreadsheets and associated information belonging to Excel Excel workbook object
      */
-    public void processSpreadsheets(final NiceCXNetwork niceCX, final XSSFWorkbook wb, final List<SpreadsheetInfo> spreadsheetInfos) {
+    public void processSpreadsheets(final NiceCXNetwork niceCX, final SXSSFWorkbook wb, final List<SpreadsheetInfo> spreadsheetInfos) {
 
         for (SpreadsheetInfo spreadsheetInfo : spreadsheetInfos) {
             switch (spreadsheetInfo.getSheetName()) {
@@ -118,8 +118,8 @@ public class ExcelApp implements Table3D {
 
         if (naElements.isEmpty()) return;
 
-        Sheet sheet = sheetInfo.getSheet();
-        Row row = sheet.createRow(sheetInfo.getNextRowIdx());
+        SXSSFSheet sheet = sheetInfo.getSheet();
+        SXSSFRow row = sheet.createRow(sheetInfo.getNextRowIdx());
         int columnIdx;
 
         for ( NetworkAttributesElement naElement : naElements ) {
@@ -153,11 +153,11 @@ public class ExcelApp implements Table3D {
 
         if (nodeKeys.isEmpty()) return;
 
-        Sheet sheet = sheetInfo.getSheet();
+        SXSSFSheet sheet = sheetInfo.getSheet();
         int columnIdx;
 
         for ( Long nodeKey : nodeKeys) {
-            Row row = sheet.createRow(sheetInfo.getNextRowIdx());
+            SXSSFRow row = sheet.createRow(sheetInfo.getNextRowIdx());
 
             // Node Elements
             columnIdx = sheetInfo.findColumnIdx(ExcelApp_Constants.NODE_CX_NODE_ID);
@@ -205,12 +205,12 @@ public class ExcelApp implements Table3D {
 
         if (edges.isEmpty()) return;
 
-        Sheet sheet = sheetInfo.getSheet();
+        SXSSFSheet sheet = sheetInfo.getSheet();
         int columnIdx;
 
         for ( Map.Entry<Long, EdgesElement> entry : edges.entrySet() ) {
 
-            Row row = sheet.createRow(sheetInfo.getNextRowIdx());
+            SXSSFRow row = sheet.createRow(sheetInfo.getNextRowIdx());
 
             long edgeId = entry.getValue().getId();
 
@@ -354,11 +354,11 @@ public class ExcelApp implements Table3D {
         return orderedEdgeColumnHeadings;
    }
 
-    static int addColumnHeadings(final Sheet sheet, final List<String> columnHeadings) {
+    static int addColumnHeadings(final SXSSFSheet sheet, final List<String> columnHeadings) {
         int nextRowIdx = 0;
         int columnIdx = 0;
 
-        Row row = sheet.createRow(nextRowIdx);
+        SXSSFRow row = sheet.createRow(nextRowIdx);
 
         for ( String columnHeading : columnHeadings ) {
             row.createCell(columnIdx).setCellValue(columnHeading);

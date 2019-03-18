@@ -1,7 +1,7 @@
 package org.ndextools.morphcx.writers;
 
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.ndextools.morphcx.tables.POICell;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TableToPOI implements POIWritable<POICell> {
     private final OutputStream outputStream;
-    private final XSSFWorkbook workbook;
+    private final SXSSFWorkbook workbook;
 
 
     /**
@@ -23,7 +23,7 @@ public class TableToPOI implements POIWritable<POICell> {
      * @param outputStream reference to the destination output stream.
      * @param workbook reference to an Excel workbook data structure managed by POI.
      */
-    public TableToPOI(OutputStream outputStream, final XSSFWorkbook workbook)
+    public TableToPOI(OutputStream outputStream, final SXSSFWorkbook workbook)
     {
         this.outputStream = outputStream;
         this.workbook = workbook;

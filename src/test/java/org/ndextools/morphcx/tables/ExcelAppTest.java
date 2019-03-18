@@ -1,5 +1,6 @@
 package org.ndextools.morphcx.tables;
 
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.*;
 
@@ -10,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ExcelAppTest {
-    private XSSFWorkbook wb;
+    private SXSSFWorkbook wb;
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     private static final String SHEET_NAME = "Captain Ahab";
@@ -23,7 +24,7 @@ public class ExcelAppTest {
         PrintStream ps;
 
         try (PrintStream printStream = new PrintStream(outContent);
-             XSSFWorkbook workbook = new XSSFWorkbook() )
+             SXSSFWorkbook workbook = new SXSSFWorkbook() )
         {
             this.wb = workbook;
             ps = printStream;

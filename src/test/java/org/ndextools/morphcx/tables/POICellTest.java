@@ -1,7 +1,8 @@
 package org.ndextools.morphcx.tables;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,13 +17,13 @@ public class POICellTest {
     private final int ROW_IDX = 0;
 
     private POICell poiCell;
-    private Workbook workbook;
-    private Sheet sheet;
-    private Row row;
+    private SXSSFWorkbook workbook;
+    private SXSSFSheet sheet;
+    private SXSSFRow row;
 
     @Before
     public void _Setup() {
-        workbook = new XSSFWorkbook();
+        workbook = new SXSSFWorkbook();
         sheet = workbook.createSheet();
         row = sheet.createRow(ROW_IDX);
     }
