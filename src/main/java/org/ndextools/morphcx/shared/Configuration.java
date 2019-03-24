@@ -3,6 +3,7 @@ package org.ndextools.morphcx.shared;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 
 import org.apache.commons.cli.*;
@@ -24,6 +25,7 @@ public final class Configuration {
     private String outputFilename;
     private char delimiter;
     private String newlineAsString;
+    private String processID;
 
     private Utilities util;
     private Options csvParameterOptions;
@@ -256,6 +258,9 @@ public final class Configuration {
             setInputIsFile(false);
             setOutputIsFile(false);
         }
+
+        // used when naming POI SXSSF temporary work files.
+        setProcessID( getPID() );
     }
 
     private final void validate()throws IOException, SecurityException {
@@ -287,6 +292,13 @@ public final class Configuration {
         }
 
         return true;
+    }
+
+    /**
+     * @return processID of this runtime process
+     */
+    public String getPID() {
+        return ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
     }
 
     public void printHelpText() {
@@ -343,6 +355,10 @@ public final class Configuration {
 
     void setNewlineAsString(String newline) { this.newlineAsString = newline; }
 
+    public String getProcessID() { return processID; }
+
+    public void setProcessID(String processID) { this.processID = processID; }
+
     public static class ConfigurationConstants {
         private static final String OPT_CONVERT =  "c";
         private static final String LONG_OPT_CONVERT =  "convert";
@@ -396,6 +412,7 @@ public final class Configuration {
                 "outputFilespec=\'%s\', " +
                 "delimiter=%s, " +
                 "newlineAsString=%s" +
+                "processID=%s, " +
                 "}",
                 this.getClass().getSimpleName(),
                 Arrays.toString(getArgs()),
@@ -408,7 +425,8 @@ public final class Configuration {
                 getInputFilename(),
                 getOutputFilename(),
                 Utilities.delimiterToDescriptionText(getDelimiter()),
-                Utilities.newlineStringToDescriptionText(getNewlineAsString())
+                Utilities.newlineStringToDescriptionText(getNewlineAsString()),
+                getProcessID()
         );
     }
 }

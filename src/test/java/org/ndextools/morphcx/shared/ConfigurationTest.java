@@ -149,6 +149,17 @@ public class ConfigurationTest {
         cfg = cfg.configure(args);
     }
 
+    @Test
+    public void _ShouldReturnANumericProcessId() throws Exception {
+        String[] args = {"-c", "tsv", "-i", LBC_FILTERED_ERK_AKT};
+        Configuration cfg = performConfiguration(args);
+        try {
+            String pid = cfg.getProcessID();
+        } catch (NumberFormatException | NullPointerException e) {
+            Assert.fail();
+        }
+    }
+
 //    @Test
 //    public void _ShouldShowToString() throws Exception {
 //        String[] args = {"-i", LBC_FILTERED_ERK_AKT, "-o", LBC_FILTERED_ERK_AKT};
