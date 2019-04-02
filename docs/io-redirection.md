@@ -14,7 +14,7 @@ This would be an example of piping a JSON-formatted CX network file to this appl
 Linux cat program:
 
 ```text
-cat \home\user1\cxfiles\network1.json | java -jar morphcx.jar -o \home\user1\outdir\network1.tsv
+cat \home\user1\cxfiles\network1.json | java -jar morphcx.jar -c tsv -o \home\user1\outdir\network1.tsv
 ```
 In the above example, the program named cat passes its output (as lines) to this application,
 which in turn produces a tsv file in the outdir directory.  Because the -c keyword option was not used, the output is

@@ -47,7 +47,7 @@ test whether this application has been installed correctly. For a quick test, co
 `${project}/target`directory and sub-directories onto your workstation, make it the current directory, 
 and enter the following from a Terminal or Command-line prompt:
 ```text
-java -jar morphcx.jar -i sample-networks/LBC_FILTERED_ERK_AKT.json -o sample-networks/LBC_FILTERED_ERK_AKT.tsv
+java -jar morphcx.jar -c tsv -i sample-networks/LBC_FILTERED_ERK_AKT.json -o sample-networks/LBC_FILTERED_ERK_AKT.tsv
 ```
 ... which will result in sample-networks/LBC_FILTERED_ERK_AKT.tsv being produced in the sample-networks directory.
 

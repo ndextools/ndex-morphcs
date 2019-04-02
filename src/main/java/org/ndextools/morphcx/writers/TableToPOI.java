@@ -57,7 +57,8 @@ public class TableToPOI implements POIWritable<POICell> {
         try
         {
             workbook.write(outputStream);
-            workbook.close();
+            outputStream.close();
+            workbook.dispose();
         }
         catch (IOException io)
         {
@@ -72,14 +73,15 @@ public class TableToPOI implements POIWritable<POICell> {
     public void close() throws IOException {
         try
         {
-            if (workbook != null)
-            {
-                workbook.close();
-            }
             if (outputStream != null)
             {
                 outputStream.flush();
                 outputStream.close();
+            }
+            if (workbook != null)
+            {
+                workbook.dispose();
+                workbook.close();
             }
         }
         catch (IOException e)

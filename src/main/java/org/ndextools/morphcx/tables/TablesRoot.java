@@ -75,6 +75,7 @@ public class TablesRoot {
 
         try (OutputStream outputStream = new FileOutputStream(cfg.getOutputFilename());
              SXSSFWorkbook workbook = new SXSSFWorkbook() ) {
+            workbook.setCompressTempFiles(true);
             TableToPOI writer = new TableToPOI(outputStream, workbook);
             Table3D morph = new ExcelApp(cfg, niceCX, writer, workbook, outputStream);
             morph.morphThisCX();

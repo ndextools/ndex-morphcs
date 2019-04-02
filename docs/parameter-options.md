@@ -11,6 +11,24 @@ The user can pick from several command-line parser standards:
 Although examplesused in this documentation are given in the POSIX and GNU formats, 
 please use whichever standard you are most accustomed to using.
 
+### Convert
+
+```text
+[-c | --convert] csv | tsv | excel
+```
+The -c and --convert keywords and the filename are case-sensitive. The 
+arguments csv, tsv, and excel are case-insensitive.
+ 
+This parameter option designates whether to morph a CX network into a csv, tsv,
+or excel formatted file.  The default is tsv, i.e. a tsv formatted file
+
+Example:
+```text
+java -jar morphcx -c excel -i sample-network/LBC_FILETERED_ERK_AKT.json -o sample-network/LBC_FILETERED_ERK_AKT.xlsx
+```
+
+The above example morphs a CX network into an Excel worksheet file.
+
 ### Help
 
 ```text
