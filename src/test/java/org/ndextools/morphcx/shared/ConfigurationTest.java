@@ -2,7 +2,7 @@ package org.ndextools.morphcx.shared;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
-
+import static org.ndextools.morphcx.shared.Configuration.ConfigurationConstants.*;
 /**
  * Unit tests for Configuration class.
  */
@@ -92,21 +92,21 @@ public class ConfigurationTest {
     public void _Should_Be_Windows_Newline() throws Exception {
         String[] args = {"-n", "windows", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(ESCAPE_R_ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_Linux_Newline() throws Exception {
         String[] args = {"-n", "linux", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(ESCAPE_N, cfg.getNewlineAsString());
     }
 
     @Test
     public void _Should_Be_OSX_Newline() throws Exception {
         String[] args = {"-n", "osx", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_N, cfg.getNewlineAsString());
+        Assert.assertEquals(ESCAPE_N, cfg.getNewlineAsString());
     }
 
 
@@ -114,7 +114,7 @@ public class ConfigurationTest {
     public void _Should_Be_Oldmac_Newline() throws Exception {
         String[] args = {"-n", "oldmac", "-i", LBC_FILTERED_ERK_AKT};
         Configuration cfg = performConfiguration(args);
-        Assert.assertEquals(Configuration.ConfigurationConstants.ESCAPE_R, cfg.getNewlineAsString());
+        Assert.assertEquals(ESCAPE_R, cfg.getNewlineAsString());
     }
 
     @Test

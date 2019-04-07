@@ -1,5 +1,7 @@
 package org.ndextools.morphcx.shared;
 
+import static org.ndextools.morphcx.shared.Configuration.ConfigurationConstants.*;
+
 /**
  * The Utilities class holds methods commonly used across this application's classes.
  */
@@ -39,10 +41,10 @@ public class Utilities {
 
         String stringDelimiter;
         switch (ch) {
-            case Configuration.ConfigurationConstants.TAB:
+            case TAB:
                 stringDelimiter = "\t";
                 break;
-            case Configuration.ConfigurationConstants.COMMA:
+            case COMMA:
                 stringDelimiter = ",";
                 break;
             default:
@@ -62,10 +64,10 @@ public class Utilities {
 
         String text = "";
         switch (ch) {
-            case Configuration.ConfigurationConstants.TAB:
+            case TAB:
                 text = "TAB_CHARACTER";
                 break;
-            case Configuration.ConfigurationConstants.COMMA:
+            case COMMA:
                 text = "COMMA_CHARACTER";
                 break;
         }
@@ -81,14 +83,14 @@ public class Utilities {
     public static String newlineToStringConvert(String str) {
         String stringNewline;
         switch (str) {
-            case Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N:
-                stringNewline = Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N;
+            case ESCAPE_R_ESCAPE_N:
+                stringNewline = ESCAPE_R_ESCAPE_N;
                 break;
-            case Configuration.ConfigurationConstants.ESCAPE_N:
-                stringNewline = Configuration.ConfigurationConstants.ESCAPE_N;
+            case ESCAPE_N:
+                stringNewline = ESCAPE_N;
                 break;
-            case Configuration.ConfigurationConstants.ESCAPE_R:
-                stringNewline = Configuration.ConfigurationConstants.ESCAPE_R;
+            case ESCAPE_R:
+                stringNewline = ESCAPE_R;
                 break;
             default:
                 stringNewline = str;
@@ -101,19 +103,19 @@ public class Utilities {
         String text = "";
         switch (nl) {
             case WINDOWS:
-                text = Configuration.Newline.WINDOWS.toString();
+                text = WINDOWS;
                 break;
             case LINUX:
-                text = Configuration.Newline.LINUX.toString();
+                text = LINUX;
                 break;
             case OSX:
-                text = Configuration.Newline.OSX.toString();
+                text = OSX;
                 break;
             case OLDMAC:
-                text = Configuration.Newline.OLDMAC.toString();
+                text = OLDMAC;
                 break;
             case SYSTEM:
-                text = Configuration.Newline.SYSTEM.toString();
+                text = SYSTEM;
                 break;
             case NOT_SPECIFIED:
                 text = Configuration.Newline.NOT_SPECIFIED.toString();
@@ -131,13 +133,13 @@ public class Utilities {
     public static String newlineStringToDescriptionText(String str) {
         String viewableString = "";
         switch (str) {
-            case Configuration.ConfigurationConstants.ESCAPE_R_ESCAPE_N:
+            case ESCAPE_R_ESCAPE_N:
                 viewableString = "ESCAPE_R_ESCAPE_N";
                 break;
-            case Configuration.ConfigurationConstants.ESCAPE_N:
+            case ESCAPE_N:
                 viewableString = "ESCAPE_N";
                 break;
-            case Configuration.ConfigurationConstants.ESCAPE_R:
+            case ESCAPE_R:
                 viewableString = "ESCAPE_R";
                 break;
             default:

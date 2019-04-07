@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import static org.ndextools.morphcx.shared.Configuration.ConfigurationConstants.*;
 
 /**
  * Unit tests for Utilities class.
@@ -27,28 +28,28 @@ public class UtilitiesTest {
 
     @Test
     public void _ShouldConvertDelimiterToCommaString() {
-        char delimiter = Configuration.ConfigurationConstants.COMMA;
+        char delimiter = COMMA;
         String strDelimiter = Utilities.delimiterToStringConvert(delimiter);
         Assert.assertEquals(",", strDelimiter);
     }
 
     @Test
     public void _ShouldConvertDelimiterToTabString() {
-        char delimiter = Configuration.ConfigurationConstants.TAB;
+        char delimiter = TAB;
         String strDelimiter = Utilities.delimiterToStringConvert(delimiter);
         Assert.assertEquals("\t", strDelimiter);
     }
 
     @Test
     public void _ShouldConvertDelimiterToCommaText() {
-        char delimiter = Configuration.ConfigurationConstants.COMMA;
+        char delimiter = COMMA;
         String strDelimiter = Utilities.delimiterToDescriptionText(delimiter);
         Assert.assertEquals("COMMA_CHARACTER", strDelimiter);
     }
 
     @Test
     public void _ShouldConvertDelimiterToTabText() {
-        char delimiter = Configuration.ConfigurationConstants.TAB;
+        char delimiter = TAB;
         String strDelimiter = Utilities.delimiterToDescriptionText(delimiter);
         Assert.assertEquals("TAB_CHARACTER", strDelimiter);
     }
