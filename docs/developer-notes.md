@@ -1,7 +1,7 @@
 ## Notes For Developers
 
 This classes and interfaces in this application are not (yet!) designed to be extended.  They are 
-subject to change at any time. More likely than not they absolutely will change in the future without notice.
+subject to change at any time - in fact, you can bet on it!
 
 ### Development Requirements
 * [Oracle Java SE 8.0](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -12,6 +12,7 @@ subject to change at any time. More likely than not they absolutely will change 
 * [GitHub ndexbio/ndex-java-client](https://github.com/ndexbio/ndex-java-client)
 * [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/)
 * [Apache Commons CSV](https://commons.apache.org/proper/commons-csv/)
+* [Apache Commons POI](https://poi.apache.org/index.html)
 
 ### Building The MorphCX Application
 
@@ -29,26 +30,23 @@ This should result in both dependencies being installed into the Maven .M2 local
 
 3. Clone or download this application's GitHub repository to yet another project directory. 
 
-4. Then using a Terminal or Command shell from the project directory, enter the following command:
+4. Then using a Terminal or Command shell from the project directory, enter the following command -
+just as you did with the `ndex-object-model` and `ndex-java-client` dependencies:
 ```text
 mvn clean package
 ```
-The two Apache Commons dependencies should be automatically downloaded by Maven into it's local .M2
-repository.
 
-After execution of the above Maven command, the resulting executable binary files are found 
-in the ${project_dir/src/target} directory.
-The file named `morphcx.jar` contains a fully-formed executable packaged with all dependencies.
-That is the file that needs to be placed in a directory pointed to by the Java PATH or CLASSPATH
-environment variables, or in the present/current working directory from which you invoke the
-application.
+The above command will compile and build this application's executable library (JAR) file, which is 
+found in the ${project_dir/src/target} directory.
+The executable file named `morphcx.jar` contains a fully-formed executable packaged with all dependencies.
+This file should be placed in a directory pointed to by the Java CLASSPATH environment variable, 
+or explicitedly pointed to when the application is invoked through the Java JVM.
 
 Sample CX networks are provided in the ${project_dir/src/target/sample-networks} directory. It is
-possible -- even likely -- that these networks are not the most up to-date CX network.  They are 
-only intended to be used for quickly testing the application.
+possible -- even likely! -- that these networks are not the most up to-date CX network.  The files are 
+only intended to be used to quickly test the application and to verify a successful installation.
 
-A immediate way to test the application is to...
-* Insure the project directory is make the target directory the current directory and enter
+Test the application by making the target ${project_dir/src/target} directory the current directory, then enter
 the following command:
 ```text
 java -jar morphcx.jar -c tsv -i sample-networks/LUMINAL_BREAST_CANCER.json -o sample-networks/LUMINAL_BREAST_CANCER.tsv
@@ -58,3 +56,8 @@ LUMINAL_BREAST_CANCER.tsv in the sample-networks folder.
 
 The -o output parameter can be altogether omitted, and this application will output tab-separated columns onto
 the console. 
+
+Finally, if a Microsoft Excel Workbook file (.xlsx) is desired, then enter this command:
+```text
+java -jar morphcx.jar -c excel -i sample-networks/LUMINAL_BREAST_CANCER.json -o sample-networks/LUMINAL_BREAST_CANCER.tsv
+```
