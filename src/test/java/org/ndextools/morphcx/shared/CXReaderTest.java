@@ -27,7 +27,7 @@ public class CXReaderTest {
 
         Assert.assertEquals(30, niceCX.getEdges().size());
         Assert.assertEquals(12, niceCX.getNodes().size());
-        Assert.assertEquals(9, niceCX.getMetadata().size());
+        Assert.assertEquals(8, niceCX.getMetadata().size());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class CXReaderTest {
 
         Assert.assertEquals(158, niceCX.getEdges().size());
         Assert.assertEquals(32, niceCX.getNodes().size());
-        Assert.assertEquals(10, niceCX.getMetadata().size());
+        Assert.assertEquals(9, niceCX.getMetadata().size());
     }
 
     @Rule
